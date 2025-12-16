@@ -1,0 +1,31 @@
+
+[
+  {
+    "id": 1,
+    "name": "iPhone 14 Pro",
+    "price": "GH₵ 12,500",
+    "image": "https://cdn.shopwice.com/2023/08/Apple-iPhone-14-pro.webp",
+    "description": "Experience peak performance and the Dynamic Island feature."
+  },
+  {
+    "id": 2,
+    "name": "Samsung Galaxy S23",
+    "price": "GH₵ 11,800",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2kl4RC3pxTlXAllKZJeOrSfcloTN5fUvozw&s",
+    "description": "A flagship powerhouse with a stunning AMOLED display."
+  },
+  {
+    "id": 3,
+    "name": "Xiaomi Redmi Note 12",
+    "price": "GH₵ 4,500",
+    "image": "https://images-cdn.ubuy.co.in/6490e19e795b9a77f4106e09-xiaomi-redmi-note-12-120hz-amoled.jpg",
+    "description": "Great camera and excellent battery life at a friendly price."
+  },
+  {
+    "id": 4,
+    "name": "iPhone 16",
+    "price": "GH₵ 14,200",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyJq1eKFxawiwz1UrMdSGhGJ63J7nZJldoGw&s",
+    "description": "The latest and greatest from Apple."
+  }
+]
