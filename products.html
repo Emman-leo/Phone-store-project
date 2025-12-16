@@ -33,25 +33,44 @@
             <h2 class="text-center mb-5 fw-bold">Our Products</h2>
 
             <div class="row g-4" id="product-grid">
-                <!-- Products will be dynamically inserted here -->
+                <!-- Products will be dynamically inserted here by script.js -->
             </div>
         </div>
     </section>
 
     <!-- CHECKOUT MODAL -->
-    <div class="modal fade" id="checkoutModal" tabindex="-1">
+    <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Checkout</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <h5 class="modal-title" id="checkoutModalLabel">Checkout</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <p>To complete your purchase, please send the payment to our mobile money account and we will contact you for delivery.</p>
-                    <p class="fw-bold">Mobile Money Number: +233 24 123 4567</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <div class="modal-body" id="checkoutModalBody">
+                    <p>To complete your purchase, please fill out the form below. We will contact you for delivery and payment.</p>
+                    <form id="checkout-form" action="https://formspree.io/f/mqarvqwr" method="POST">
+                        <input type="hidden" name="product" id="product-name-input">
+                        <div class="mb-3">
+                            <label for="fullName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="fullName" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Delivery Address</label>
+                            <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+                        </div>
+                         <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit Order</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -64,6 +83,6 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="main.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
