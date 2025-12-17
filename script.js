@@ -34,6 +34,24 @@ const products = [
         price: "2999.00",
         image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/MQD83?wid=572&hei=572&fmt=jpeg&qlt=95&.v=1660803570327",
         description: "Richer audio quality, with up to 2x more Active Noise Cancellation, Adaptive Transparency, and Personalized Spatial Audio."
+    },
+    {
+        name: "24-inch iMac",
+        price: "14999.00",
+        image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/imac-24-blue-selection-hero-202310?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1697303732098",
+        description: "A stunningly thin and vibrant all-in-one desktop computer, powered by the M3 chip. It's perfect for work and play."
+    },
+    {
+        name: "Apple Vision Pro",
+        price: "41999.00",
+        image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/apple-vision-pro-pdp-202401?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1704232301255",
+        description: "A revolutionary spatial computer that blends digital content with your physical space. Welcome to the era of spatial computing."
+    },
+    {
+        name: "HomePod",
+        price: "3499.00",
+        image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/homepod-select-midnight-202210?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1670557209827",
+        description: "A powerhouse of a speaker that delivers high-fidelity audio and room-filling sound. It's also a smart home hub."
     }
 ];
 
