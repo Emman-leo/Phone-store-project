@@ -1,4 +1,3 @@
-
 const products = [
     {
         name: "iPhone 15 Pro",
@@ -69,7 +68,7 @@ function renderProducts() {
                             <h5 class="card-title">${product.name}</h5>
                             <p class="card-text">${product.description}</p>
                             <p class="card-text fw-bold mt-auto">GHS ${formatPrice(product.price)}</p>
-                            <button class="btn btn-primary" onclick="openCheckoutModal('''${product.name}''', '''${product.price}''')">Buy Now</button>
+                            <button class="btn btn-primary buy-now-btn" data-product-name="${product.name}" data-product-price="${product.price}">Buy Now</button>
                         </div>
                     </div>
                 </div>
@@ -114,8 +113,8 @@ function payWithPaystack(email, amount, form) {
         email: email,
         amount: parseFloat(amount) * 100, // amount is in pesewas
         currency: 'GHS',
-        ref: ''+Math.floor((Math.random() * 1000000000) + 1),
-        callback: function(response){
+        ref: '' + Math.floor((Math.random() * 1000000000) + 1),
+        callback: function(response) {
             const formAction = 'https://formspree.io/f/mqarvqwr';
             const formData = new FormData(form);
 
@@ -145,7 +144,7 @@ function payWithPaystack(email, amount, form) {
                 console.error(error);
             });
         },
-        onClose: function(){
+        onClose: function() {
             alert('Window closed.');
         }
     });
@@ -155,6 +154,17 @@ function payWithPaystack(email, amount, form) {
 document.addEventListener("DOMContentLoaded", () => {
     renderProducts();
     renderFeaturedProducts();
+
+    const productGrid = document.getElementById('product-grid');
+    if (productGrid) {
+        productGrid.addEventListener('click', (e) => {
+            if (e.target.classList.contains('buy-now-btn')) {
+                const productName = e.target.dataset.productName;
+                const productPrice = e.target.dataset.productPrice;
+                openCheckoutModal(productName, productPrice);
+            }
+        });
+    }
 
     const payNowBtn = document.getElementById('pay-now-btn');
     if (payNowBtn) {
