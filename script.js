@@ -8,7 +8,7 @@ const products = [
     {
         name: "iPhone 15",
         price: "8999.00",
-        image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-finish-select-202309-6-1inch-blue?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1692923777972",
+        image: "https://bestpricegh.com/cdn/shop/files/Frame5.png?crop=center&height=600&v=1706792874&width=600",
         description: "A total powerhouse. With the Dynamic Island, a 48MP Main camera, and USB-C. All in a durable color-infused glass and aluminum design."
     },
     {
