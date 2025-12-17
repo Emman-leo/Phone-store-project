@@ -1,39 +1,39 @@
 const products = [
     {
         name: "iPhone 15 Pro",
-        price: "20985.00",
-        image: "https://www.zdnet.com/a/img/resize/66450c225221ba0724d704497f16e822a1c7b259/2024/01/30/aa011be9-f047-4cd5-87b5-741ba6531aa2/dsc01154.jpg?auto=webp&fit=crop&height=360&width=640",
-        description: "The latest iPhone with a powerful A17 Bionic chip and a stunning Pro-Motion XDR display."
+        price: "11999.00",
+        image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-finish-select-202309-6-1inch-naturaltitanium?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1692845702708",
+        description: "The ultimate iPhone, with the powerful A17 Pro chip, a customizable Action button, and the best iPhone camera system yet."
     },
     {
-        name: "Samsung Galaxy S24 Ultra",
-        price: "19485.00",
-        image: "https://www.livemint.com/lm-img/img/2023/08/03/600x338/iphone_14_pro_max_1691039383219_1691039389911.jpg",
-        description: "The ultimate Android phone with a versatile camera system and a built-in S Pen."
+        name: "iPhone 15",
+        price: "8999.00",
+        image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-finish-select-202309-6-1inch-blue?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1692923777972",
+        description: "A total powerhouse. With the Dynamic Island, a 48MP Main camera, and USB-C. All in a durable color-infused glass and aluminum design."
     },
     {
-        name: "Google Pixel 8 Pro",
-        price: "14985.00",
-        image: "https://static.vecteezy.com/system/resources/previews/042/665/350/non_2x/fast-delivery-logo-with-courier-vector.jpg",
-        description: "The smartest smartphone with a brilliant camera and the best of Google's AI."
+        name: "MacBook Air 15”",
+        price: "14999.00",
+        image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/macbook-air-15-finish-select-202306-starlight?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1684964259432",
+        description: "Impressively big. Impossibly thin. The 15-inch MacBook Air with the M2 chip is a super-portable laptop with a stunning Liquid Retina display."
     },
     {
-        name: "Sony Xperia 1 V",
-        price: "20235.00",
-        image: "https://i.blogs.es/e55115/sony-xperia-1-v-oficial-/1366_2000.jpeg",
-        description: "Pro-level camera co-developed with ZEISS, and a stunning 4K HDR OLED display."
+        name: "iPad Pro",
+        price: "11299.00",
+        image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/ipad-pro-13-select-wifi-spaceblack-202405?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1713509123602",
+        description: "The ultimate iPad experience, with the incredible power of the M4 chip, a breakthrough Ultra Retina XDR display, and superfast Wi-Fi 6E."
     },
     {
-        name: "OnePlus 12",
-        price: "11985.00",
-        image: "https://www.notebookcheck.net/fileadmin/Notebooks/News/_nc3/OnePlus_12_camera_Hasselblad.jpg",
-        description: "Blazing-fast performance with the latest Snapdragon processor and ultra-fast charging."
+        name: "Apple Watch Ultra 2",
+        price: "9499.00",
+        image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/apple-watch-ultra2-digitalmat-gallery-1-202309?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1694539824638",
+        description: "The most rugged and capable Apple Watch. Designed for outdoor adventures and supercharged workouts with a lightweight titanium case."
     },
     {
-        name: "Xiaomi 14 Ultra",
-        price: "19485.00",
-        image: "https://fdn.gsmarena.com/imgroot/news/24/02/xiaomi-14-ultra-ofic/inline/-1200/gsmarena_004.jpg",
-        description: "A camera powerhouse with a Leica-engineered quad-camera system for stunning photos."
+        name: "AirPods Pro (2nd Gen)",
+        price: "2999.00",
+        image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/MQD83?wid=572&hei=572&fmt=jpeg&qlt=95&.v=1660803570327",
+        description: "Richer audio quality, with up to 2x more Active Noise Cancellation, Adaptive Transparency, and Personalized Spatial Audio."
     }
 ];
 
