@@ -4,62 +4,65 @@ const products = [
         name: "iPhone 15 Pro",
         price: "11999.00",
         image: "https://bestpricegh.com/cdn/shop/files/5-iphone-15-pro-max_6fdd8db4-1328-4bc2-9996-c0c31fddcb8f.jpg?crop=center&height=600&v=1695910525&width=600",
-        description: "The ultimate iPhone, with the powerful A17 Pro chip, a customizable Action button, and the best iPhone camera system yet."
+        description: "The ultimate iPhone, with the powerful A17 Pro chip, a customizable Action button, and the best iPhone camera system yet.",
+        featured: true
     },
     {
         name: "iPhone 15",
         price: "8999.00",
         image: "https://bestpricegh.com/cdn/shop/files/Frame5.png?crop=center&height=600&v=1706792874&width=600",
-        description: "A total powerhouse. With the Dynamic Island, a 48MP Main camera, and USB-C. All in a durable color-infused glass and aluminum design."
+        description: "A total powerhouse. With the Dynamic Island, a 48MP Main camera, and USB-C. All in a durable color-infused glass and aluminum design.",
+        featured: false
     },
     {
         name: "MacBook Air 15”",
         price: "14999.00",
         image: "https://i.pcmag.com/imagery/reviews/03Zr1IMIMcjkF0kN3zxL5dv-2.jpg",
-        description: "Impressively big. Impossibly thin. The 15-inch MacBook Air with the M2 chip is a super-portable laptop with a stunning Liquid Retina display."
+        description: "Impressively big. Impossibly thin. The 15-inch MacBook Air with the M2 chip is a super-portable laptop with a stunning Liquid Retina display.",
+        featured: true
     },
     {
         name: "iPad Pro",
         price: "11299.00",
         image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQo_5dfcQRrTonSIfNxFzGkq1ZODmas6QMQ8Q&s",
-        description: "The ultimate iPad experience, with the incredible power of the M4 chip, a breakthrough Ultra Retina XDR display, and superfast Wi-Fi 6E."
+        description: "The ultimate iPad experience, with the incredible power of the M4 chip, a breakthrough Ultra Retina XDR display, and superfast Wi-Fi 6E.",
+        featured: false
     },
     {
         name: "Apple Watch Ultra 2",
         price: "9499.00",
         image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTOQfHW3hImIRvhk5ZRzaX74A9XC6Ol8z4-Q&s",
-        description: "The most rugged and capable Apple Watch. Designed for outdoor adventures and supercharged workouts with a lightweight titanium case."
+        description: "The most rugged and capable Apple Watch. Designed for outdoor adventures and supercharged workouts with a lightweight titanium case.",
+        featured: true
     },
     {
         name: "AirPods Pro (2nd Gen)",
         price: "2999.00",
         image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/MQD83?wid=572&hei=572&fmt=jpeg&qlt=95&.v=1660803570327",
-        description: "Richer audio quality, with up to 2x more Active Noise Cancellation, Adaptive Transparency, and Personalized Spatial Audio."
+        description: "Richer audio quality, with up to 2x more Active Noise Cancellation, Adaptive Transparency, and Personalized Spatial Audio.",
+        featured: false
     },
     {
         name: "24-inch iMac",
         price: "14999.00",
         image: "https://www.slashgear.com/img/gallery/apple-imac-24-inch-review-the-right-mac-for-most-people/l-intro-1650914299.jpg",
-        description: "A stunningly thin and vibrant all-in-one desktop computer, powered by the M3 chip. It's perfect for work and play."
+        description: "A stunningly thin and vibrant all-in-one desktop computer, powered by the M3 chip. It's perfect for work and play.",
+        featured: false
     },
     {
         name: "Apple Vision Pro",
         price: "41999.00",
         image: "https://telefonika.com/cdn/shop/files/Apple-Vision-Pro.jpg?v=1758052832",
-        description: "A revolutionary spatial computer that blends digital content with your physical space. Welcome to the era of spatial computing."
+        description: "A revolutionary spatial computer that blends digital content with your physical space. Welcome to the era of spatial computing.",
+        featured: true
     },
     {
         name: "HomePod",
         price: "3499.00",
         image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwWg9dP0r0Pr_co3FWhf34XYhRggVcvkpLFw&s",
-        description: "A powerhouse of a speaker that delivers high-fidelity audio and room-filling sound. It's also a smart home hub."
+        description: "A powerhouse of a speaker that delivers high-fidelity audio and room-filling sound. It's also a smart home hub.",
+        featured: false
     }
-];
-
-const featuredProducts = [
-    products[3],
-    products[5],
-    products[8]
 ];
 
 function formatPrice(price) {
@@ -113,6 +116,7 @@ function renderFeaturedProducts() {
     const carouselInner = document.getElementById("product-carousel-inner");
     if (carouselInner) {
         carouselInner.innerHTML = ''; // Clear existing items
+        const featuredProducts = products.filter(p => p.featured);
         featuredProducts.forEach((product, index) => {
             const activeClass = index === 0 ? "active" : "";
             const carouselItem = `
