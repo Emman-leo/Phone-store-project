@@ -32,9 +32,12 @@
         <div class="container">
             <h2 class="text-center mb-5 fw-bold">Our Products</h2>
 
-            <!-- SORTING CONTROLS -->
-            <div class="row mb-4">
-                <div class="col-md-4 ms-auto">
+            <!-- SEARCH AND SORT CONTROLS -->
+            <div class="row mb-4 g-3 align-items-center">
+                <div class="col-md-8">
+                    <input type="search" id="search-input" class="form-control" placeholder="Search for phones & gadgets...">
+                </div>
+                <div class="col-md-4">
                     <div class="input-group">
                         <label class="input-group-text" for="sort-products">Sort by:</label>
                         <select class="form-select" id="sort-products">
@@ -50,6 +53,9 @@
 
             <div class="row g-4" id="product-grid">
                 <!-- Products will be dynamically inserted here by script.js -->
+            </div>
+            <div id="no-results" class="text-center d-none">
+                <p class="lead">No products found matching your search.</p>
             </div>
         </div>
     </section>

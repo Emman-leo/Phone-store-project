@@ -57,10 +57,16 @@ function openCheckoutModal(productName, productPrice) {
 
 function renderProducts(productsToRender) {
     const productGrid = document.getElementById("product-grid");
-    if (productGrid) {
-        productGrid.innerHTML = ''; // Clear existing products
+    const noResults = document.getElementById("no-results");
+
+    productGrid.innerHTML = ''; // Clear existing products
+
+    if (productsToRender.length === 0) {
+        noResults.classList.remove('d-none');
+    } else {
+        noResults.classList.add('d-none');
         productsToRender.forEach(product => {
-            const productCard = `
+            const productCardHTML = `
                 <div class="col-md-4 mb-4">
                     <div class="card product-card h-100">
                         <img src="${product.image}" class="card-img-top" alt="${product.name}">
@@ -73,7 +79,7 @@ function renderProducts(productsToRender) {
                     </div>
                 </div>
             `;
-            productGrid.innerHTML += productCard;
+            productGrid.innerHTML += productCardHTML;
         });
     }
 }
@@ -154,33 +160,39 @@ function payWithPaystack(email, amount, form) {
 document.addEventListener("DOMContentLoaded", () => {
     renderFeaturedProducts();
 
-    // Logic for the main products page
     const productGrid = document.getElementById('product-grid');
     if (productGrid) {
-        // Initial render
-        renderProducts(products);
-
-        // Sorting functionality
+        const searchInput = document.getElementById('search-input');
         const sortSelect = document.getElementById('sort-products');
-        sortSelect.addEventListener('change', () => {
+
+        function filterAndRenderProducts() {
+            const searchTerm = searchInput.value.toLowerCase();
             const sortBy = sortSelect.value;
-            let productsToRender = [...products]; // Create a fresh copy to sort
+
+            let filteredProducts = products.filter(product => 
+                product.name.toLowerCase().includes(searchTerm)
+            );
 
             if (sortBy === 'price-asc') {
-                productsToRender.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+                filteredProducts.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
             } else if (sortBy === 'price-desc') {
-                productsToRender.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+                filteredProducts.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
             } else if (sortBy === 'name-asc') {
-                productsToRender.sort((a, b) => a.name.localeCompare(b.name));
+                filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
             } else if (sortBy === 'name-desc') {
-                productsToRender.sort((a, b) => b.name.localeCompare(a.name));
+                filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
             }
-            // If 'default', we use the fresh unsorted copy
+            
+            renderProducts(filteredProducts);
+        }
 
-            renderProducts(productsToRender);
-        });
+        // Initial Render
+        filterAndRenderProducts();
+
+        // Event Listeners
+        searchInput.addEventListener('input', filterAndRenderProducts);
+        sortSelect.addEventListener('change', filterAndRenderProducts);
         
-        // Event listener for "Buy Now" buttons on the products page
         productGrid.addEventListener('click', (e) => {
             if (e.target.classList.contains('buy-now-btn')) {
                 const productName = e.target.dataset.productName;
@@ -190,7 +202,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Event listener for the "Pay Now" button in the checkout modal
     const payNowBtn = document.getElementById('pay-now-btn');
     if (payNowBtn) {
         payNowBtn.addEventListener('click', (e) => {
