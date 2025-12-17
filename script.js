@@ -55,11 +55,11 @@ function openCheckoutModal(productName, productPrice) {
     checkoutModal.show();
 }
 
-function renderProducts() {
+function renderProducts(productsToRender) {
     const productGrid = document.getElementById("product-grid");
     if (productGrid) {
         productGrid.innerHTML = ''; // Clear existing products
-        products.forEach(product => {
+        productsToRender.forEach(product => {
             const productCard = `
                 <div class="col-md-4 mb-4">
                     <div class="card product-card h-100">
@@ -152,11 +152,35 @@ function payWithPaystack(email, amount, form) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    renderProducts();
     renderFeaturedProducts();
 
+    // Logic for the main products page
     const productGrid = document.getElementById('product-grid');
     if (productGrid) {
+        // Initial render
+        renderProducts(products);
+
+        // Sorting functionality
+        const sortSelect = document.getElementById('sort-products');
+        sortSelect.addEventListener('change', () => {
+            const sortBy = sortSelect.value;
+            let productsToRender = [...products]; // Create a fresh copy to sort
+
+            if (sortBy === 'price-asc') {
+                productsToRender.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+            } else if (sortBy === 'price-desc') {
+                productsToRender.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+            } else if (sortBy === 'name-asc') {
+                productsToRender.sort((a, b) => a.name.localeCompare(b.name));
+            } else if (sortBy === 'name-desc') {
+                productsToRender.sort((a, b) => b.name.localeCompare(a.name));
+            }
+            // If 'default', we use the fresh unsorted copy
+
+            renderProducts(productsToRender);
+        });
+        
+        // Event listener for "Buy Now" buttons on the products page
         productGrid.addEventListener('click', (e) => {
             if (e.target.classList.contains('buy-now-btn')) {
                 const productName = e.target.dataset.productName;
@@ -166,6 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Event listener for the "Pay Now" button in the checkout modal
     const payNowBtn = document.getElementById('pay-now-btn');
     if (payNowBtn) {
         payNowBtn.addEventListener('click', (e) => {
