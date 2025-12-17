@@ -14,19 +14,19 @@ const products = [
     {
         name: "MacBook Air 15”",
         price: "14999.00",
-        image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/macbook-air-15-finish-select-202306-starlight?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1684964259432",
+        image: "https://i.pcmag.com/imagery/reviews/03Zr1IMIMcjkF0kN3zxL5dv-2.jpg",
         description: "Impressively big. Impossibly thin. The 15-inch MacBook Air with the M2 chip is a super-portable laptop with a stunning Liquid Retina display."
     },
     {
         name: "iPad Pro",
         price: "11299.00",
-        image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/ipad-pro-13-select-wifi-spaceblack-202405?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1713509123602",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQo_5dfcQRrTonSIfNxFzGkq1ZODmas6QMQ8Q&s",
         description: "The ultimate iPad experience, with the incredible power of the M4 chip, a breakthrough Ultra Retina XDR display, and superfast Wi-Fi 6E."
     },
     {
         name: "Apple Watch Ultra 2",
         price: "9499.00",
-        image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/apple-watch-ultra2-digitalmat-gallery-1-202309?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1694539824638",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTOQfHW3hImIRvhk5ZRzaX74A9XC6Ol8z4-Q&s",
         description: "The most rugged and capable Apple Watch. Designed for outdoor adventures and supercharged workouts with a lightweight titanium case."
     },
     {
@@ -38,19 +38,19 @@ const products = [
     {
         name: "24-inch iMac",
         price: "14999.00",
-        image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/imac-24-blue-selection-hero-202310?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1697303732098",
+        image: "https://www.slashgear.com/img/gallery/apple-imac-24-inch-review-the-right-mac-for-most-people/l-intro-1650914299.jpg",
         description: "A stunningly thin and vibrant all-in-one desktop computer, powered by the M3 chip. It's perfect for work and play."
     },
     {
         name: "Apple Vision Pro",
         price: "41999.00",
-        image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/apple-vision-pro-pdp-202401?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1704232301255",
+        image: "https://telefonika.com/cdn/shop/files/Apple-Vision-Pro.jpg?v=1758052832",
         description: "A revolutionary spatial computer that blends digital content with your physical space. Welcome to the era of spatial computing."
     },
     {
         name: "HomePod",
         price: "3499.00",
-        image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/homepod-select-midnight-202210?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1670557209827",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwWg9dP0r0Pr_co3FWhf34XYhRggVcvkpLFw&s",
         description: "A powerhouse of a speaker that delivers high-fidelity audio and room-filling sound. It's also a smart home hub."
     }
 ];
