@@ -115,7 +115,7 @@ function payWithPaystack(email, amount, form) {
         currency: 'GHS',
         ref: '' + Math.floor((Math.random() * 1000000000) + 1),
         callback: function(response) {
-            const formAction = 'https://formspree.io/f/mqarvqwr';
+            const formAction = 'https://formspree.io/f/mblnnppl';
             const formData = new FormData(form);
 
             fetch(formAction, {
