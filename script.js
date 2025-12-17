@@ -17,21 +17,40 @@ const products = [
         price: "999",
         image: "https://static.vecteezy.com/system/resources/previews/042/665/350/non_2x/fast-delivery-logo-with-courier-vector.jpg",
         description: "The smartest smartphone with a brilliant camera and the best of Google's AI."
+    },
+    {
+        name: "Sony Xperia 1 V",
+        price: "1349",
+        image: "https://i.blogs.es/e55115/sony-xperia-1-v-oficial-/1366_2000.jpeg",
+        description: "Pro-level camera co-developed with ZEISS, and a stunning 4K HDR OLED display."
+    },
+    {
+        name: "OnePlus 12",
+        price: "799",
+        image: "https://www.notebookcheck.net/fileadmin/Notebooks/News/_nc3/OnePlus_12_camera_Hasselblad.jpg",
+        description: "Blazing-fast performance with the latest Snapdragon processor and ultra-fast charging."
+    },
+    {
+        name: "Xiaomi 14 Ultra",
+        price: "1299",
+        image: "https://fdn.gsmarena.com/imgroot/news/24/02/xiaomi-14-ultra-ofic/inline/-1200/gsmarena_004.jpg",
+        description: "A camera powerhouse with a Leica-engineered quad-camera system for stunning photos."
     }
 ];
 
 function renderProducts() {
     const productGrid = document.getElementById("product-grid");
     if (productGrid) {
+        productGrid.innerHTML = ''; // Clear existing products
         products.forEach(product => {
             const productCard = `
-                <div class="col-md-4">
-                    <div class="card product-card">
+                <div class="col-md-4 mb-4">
+                    <div class="card product-card h-100">
                         <img src="${product.image}" class="card-img-top" alt="${product.name}">
-                        <div class="card-body">
+                        <div class="card-body d-flex flex-column">
                             <h5 class="card-title">${product.name}</h5>
                             <p class="card-text">${product.description}</p>
-                            <p class="card-text fw-bold">$${product.price}</p>
+                            <p class="card-text fw-bold mt-auto">$${product.price}</p>
                             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#checkoutModal" data-product-name="${product.name}" data-product-price="${product.price}">Buy Now</button>
                         </div>
                     </div>
@@ -45,17 +64,24 @@ function renderProducts() {
 function renderFeaturedProducts() {
     const carouselInner = document.getElementById("product-carousel-inner");
     if (carouselInner) {
-        products.forEach((product, index) => {
+        carouselInner.innerHTML = ''; // Clear existing items
+        // Show only the first 3 products as featured
+        const featuredProducts = products.slice(0, 3);
+        featuredProducts.forEach((product, index) => {
             const activeClass = index === 0 ? "active" : "";
             const carouselItem = `
                 <div class="carousel-item ${activeClass}">
-                    <div class="card product-card">
-                        <img src="${product.image}" class="card-img-top" alt="${product.name}">
-                        <div class="card-body">
-                            <h5 class="card-title">${product.name}</h5>
-                            <p class="card-text">${product.description}</p>
-                            <p class="card-text fw-bold">$${product.price}</p>
-                            <a href="products.html" class="btn btn-primary">View Product</a>
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                             <div class="card product-card">
+                                <img src="${product.image}" class="card-img-top" alt="${product.name}">
+                                <div class="card-body">
+                                    <h5 class="card-title">${product.name}</h5>
+                                    <p class="card-text">${product.description}</p>
+                                    <p class="card-text fw-bold">$${product.price}</p>
+                                    <a href="products.html" class="btn btn-primary">View Product</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
