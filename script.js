@@ -120,7 +120,7 @@ function renderFeaturedProducts() {
                         <div class="col-md-8">
                              <div class="card product-card">
                                 <img src="${product.image}" class="card-img-top" alt="${product.name}">
-                                <div class="card-body">
+                                <div class="card-body text-center">
                                     <h5 class="card-title">${product.name}</h5>
                                     <p class="card-text">${product.description}</p>
                                     <p class="card-text fw-bold">GHS ${formatPrice(product.price)}</p>
