@@ -1,3 +1,4 @@
+
 const products = [
     {
         name: "iPhone 15 Pro",
@@ -181,6 +182,42 @@ function payWithPaystack(email, amount, form) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+
+    // DARK MODE
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const body = document.body;
+
+    // Function to apply dark mode
+    const enableDarkMode = () => {
+        body.classList.add('dark-mode');
+        localStorage.setItem('darkMode', 'enabled');
+        darkModeToggle.checked = true;
+    };
+
+    // Function to disable dark mode
+    const disableDarkMode = () => {
+        body.classList.remove('dark-mode');
+        localStorage.setItem('darkMode', 'disabled');
+        darkModeToggle.checked = false;
+    };
+
+    // Check for saved user preference
+    if (localStorage.getItem('darkMode') === 'enabled') {
+        enableDarkMode();
+    } else {
+        disableDarkMode();
+    }
+
+    // Toggle dark mode on button click
+    darkModeToggle.addEventListener('change', () => {
+        if (darkModeToggle.checked) {
+            enableDarkMode();
+        } else {
+            disableDarkMode();
+        }
+    });
+
+
     renderFeaturedProducts();
     const carousel = document.getElementById('productCarousel');
     if (carousel) {
