@@ -12,14 +12,14 @@
         "price": "8999.00",
         "image": "https://bestpricegh.com/cdn/shop/files/Frame5.png?crop=center&height=600&v=1706792874&width=600",
         "description": "A total powerhouse. With the Dynamic Island, a 48MP Main camera, and USB-C. All in a durable color-infused glass and aluminum design.",
-        "featured": false
+        "featured": true
     },
     {
         "name": "MacBook Air 15”",
         "price": "14999.00",
         "image": "https://i.pcmag.com/imagery/reviews/03Zr1IMIMcjkF0kN3zxL5dv-2.jpg",
         "description": "Impressively big. Impossibly thin. The 15-inch MacBook Air with the M2 chip is a super-portable laptop with a stunning Liquid Retina display.",
-        "featured": true
+        "featured": false
     },
     {
         "name": "iPad Pro",
