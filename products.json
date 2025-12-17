@@ -54,7 +54,7 @@
         "price": "41999.00",
         "image": "https://www.trustedreviews.com/wp-content/uploads/sites/54/2023/06/Apple-Vision-Pro-2-920x613.jpg",
         "description": "A revolutionary spatial computer that blends digital content with your physical space. Welcome to the era of spatial computing.",
-        "featured": true
+        "featured": false
     },
     {
         "name": "HomePod",
