@@ -30,14 +30,6 @@
     from {transform: translateY(30px); opacity: 0;}
     to {transform: translateY(0); opacity: 1;}
 }
-.feature-card img {
-    height: 200px;
-    object-fit: cover;
-    transition: transform 0.3s;
-}
-.feature-card:hover img {
-    transform: scale(1.05);
-}
 .carousel-item img {
     transition: transform 0.5s;
 }
@@ -120,19 +112,20 @@
     transform: scale(1.2);
 }
 
-
 /* PRODUCT CARD STYLING */
 .product-card img {
     height: 200px;
     object-fit: contain;
 }
 
-/* Hover animation */
-.product-card {
+/* UNIFIED CARD HOVER ANIMATION */
+.product-card,
+.feature-card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.product-card:hover {
+.product-card:hover,
+.feature-card:hover {
     transform: translateY(-6px);
     box-shadow: 0 14px 28px rgba(0,0,0,0.15);
 }
