@@ -38,8 +38,6 @@ const products = [
     }
 ];
 
-let cart = [];
-
 function formatPrice(price) {
     const number = parseFloat(price);
     return number.toLocaleString('en-US', {
@@ -48,13 +46,14 @@ function formatPrice(price) {
     });
 }
 
-function addToCart(productName) {
-    const product = products.find(p => p.name === productName);
-    if (product) {
-        cart.push(product);
-        localStorage.setItem('cart', JSON.stringify(cart));
-        alert(`${product.name} has been added to your cart.`);
-    }
+function openCheckoutModal(productName, productPrice) {
+    const productNameInput = document.getElementById('product-name-input');
+    const productPriceInput = document.getElementById('product-price-input');
+    const checkoutModal = new bootstrap.Modal(document.getElementById('checkoutModal'));
+
+    productNameInput.value = productName;
+    productPriceInput.value = productPrice;
+    checkoutModal.show();
 }
 
 function renderProducts() {
@@ -70,7 +69,7 @@ function renderProducts() {
                             <h5 class="card-title">${product.name}</h5>
                             <p class="card-text">${product.description}</p>
                             <p class="card-text fw-bold mt-auto">GHS ${formatPrice(product.price)}</p>
-                            <button class="btn btn-primary" onclick="addToCart('''${product.name}''')">Add to Cart</button>
+                            <button class="btn btn-primary" onclick="openCheckoutModal('''${product.name}''', '''${product.price}''')">Buy Now</button>
                         </div>
                     </div>
                 </div>
@@ -109,15 +108,66 @@ function renderFeaturedProducts() {
     }
 }
 
-function loadCart() {
-    const storedCart = localStorage.getItem('cart');
-    if (storedCart) {
-        cart = JSON.parse(storedCart);
-    }
+function payWithPaystack(email, amount, form) {
+    const handler = PaystackPop.setup({
+        key: 'YOUR_PAYSTACK_PUBLIC_KEY', // Replace with your public key
+        email: email,
+        amount: parseFloat(amount) * 100, // amount is in pesewas
+        currency: 'GHS',
+        ref: ''+Math.floor((Math.random() * 1000000000) + 1),
+        callback: function(response){
+            const formAction = 'https://formspree.io/f/mqarvqwr';
+            const formData = new FormData(form);
+
+            fetch(formAction, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    alert('Payment successful and order submitted!');
+                    const checkoutModal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
+                    checkoutModal.hide();
+                    form.reset();
+                } else {
+                    response.json().then(data => {
+                        if (Object.hasOwn(data, 'errors')) {
+                            alert(data["errors"].map(error => error["message"]).join(", "));
+                        } else {
+                            alert('Oops! There was a problem submitting your order.');
+                        }
+                    })
+                }
+            }).catch(error => {
+                alert('Oops! There was a problem submitting your order.');
+                console.error(error);
+            });
+        },
+        onClose: function(){
+            alert('Window closed.');
+        }
+    });
+    handler.openIframe();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    loadCart();
     renderProducts();
     renderFeaturedProducts();
+
+    const payNowBtn = document.getElementById('pay-now-btn');
+    if (payNowBtn) {
+        payNowBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const checkoutForm = document.getElementById('checkout-form');
+            if (checkoutForm.checkValidity()) {
+                const email = document.getElementById('email').value;
+                const price = document.getElementById('product-price-input').value;
+                payWithPaystack(email, price, checkoutForm);
+            } else {
+                checkoutForm.reportValidity();
+            }
+        });
+    }
 });
