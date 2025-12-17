@@ -58,6 +58,10 @@ body.dark-mode {
     background-color: #1c1c1c !important;
 }
 
+.dark-mode .bg-white {
+    background-color: #1f1f1f !important;
+}
+
 .dark-mode .text-muted {
     color: #aaa !important;
 }
