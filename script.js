@@ -2,37 +2,37 @@
 const products = [
     {
         name: "iPhone 15 Pro",
-        price: "1399",
+        price: "20985",
         image: "https://www.zdnet.com/a/img/resize/66450c225221ba0724d704497f16e822a1c7b259/2024/01/30/aa011be9-f047-4cd5-87b5-741ba6531aa2/dsc01154.jpg?auto=webp&fit=crop&height=360&width=640",
         description: "The latest iPhone with a powerful A17 Bionic chip and a stunning Pro-Motion XDR display."
     },
     {
         name: "Samsung Galaxy S24 Ultra",
-        price: "1299",
+        price: "19485",
         image: "https://www.livemint.com/lm-img/img/2023/08/03/600x338/iphone_14_pro_max_1691039383219_1691039389911.jpg",
         description: "The ultimate Android phone with a versatile camera system and a built-in S Pen."
     },
     {
         name: "Google Pixel 8 Pro",
-        price: "999",
+        price: "14985",
         image: "https://static.vecteezy.com/system/resources/previews/042/665/350/non_2x/fast-delivery-logo-with-courier-vector.jpg",
         description: "The smartest smartphone with a brilliant camera and the best of Google's AI."
     },
     {
         name: "Sony Xperia 1 V",
-        price: "1349",
+        price: "20235",
         image: "https://i.blogs.es/e55115/sony-xperia-1-v-oficial-/1366_2000.jpeg",
         description: "Pro-level camera co-developed with ZEISS, and a stunning 4K HDR OLED display."
     },
     {
         name: "OnePlus 12",
-        price: "799",
+        price: "11985",
         image: "https://www.notebookcheck.net/fileadmin/Notebooks/News/_nc3/OnePlus_12_camera_Hasselblad.jpg",
         description: "Blazing-fast performance with the latest Snapdragon processor and ultra-fast charging."
     },
     {
         name: "Xiaomi 14 Ultra",
-        price: "1299",
+        price: "19485",
         image: "https://fdn.gsmarena.com/imgroot/news/24/02/xiaomi-14-ultra-ofic/inline/-1200/gsmarena_004.jpg",
         description: "A camera powerhouse with a Leica-engineered quad-camera system for stunning photos."
     }
@@ -50,7 +50,7 @@ function renderProducts() {
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title">${product.name}</h5>
                             <p class="card-text">${product.description}</p>
-                            <p class="card-text fw-bold mt-auto">$${product.price}</p>
+                            <p class="card-text fw-bold mt-auto">GHS ${product.price}</p>
                             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#checkoutModal" data-product-name="${product.name}" data-product-price="${product.price}">Buy Now</button>
                         </div>
                     </div>
@@ -65,7 +65,6 @@ function renderFeaturedProducts() {
     const carouselInner = document.getElementById("product-carousel-inner");
     if (carouselInner) {
         carouselInner.innerHTML = ''; // Clear existing items
-        // Show only the first 3 products as featured
         const featuredProducts = products.slice(0, 3);
         featuredProducts.forEach((product, index) => {
             const activeClass = index === 0 ? "active" : "";
@@ -78,7 +77,7 @@ function renderFeaturedProducts() {
                                 <div class="card-body">
                                     <h5 class="card-title">${product.name}</h5>
                                     <p class="card-text">${product.description}</p>
-                                    <p class="card-text fw-bold">$${product.price}</p>
+                                    <p class="card-text fw-bold">GHS ${product.price}</p>
                                     <a href="products.html" class="btn btn-primary">View Product</a>
                                 </div>
                             </div>
@@ -96,10 +95,9 @@ function payWithPaystack(email, amount, form) {
         key: 'YOUR_PAYSTACK_PUBLIC_KEY', // Replace with your public key
         email: email,
         amount: amount * 100, // amount is in kobo
-        currency: 'GHS', // or your preferred currency
-        ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a unique reference endpoint
+        currency: 'GHS',
+        ref: ''+Math.floor((Math.random() * 1000000000) + 1),
         callback: function(response){
-            // After successful payment, submit the form
             const formAction = 'https://formspree.io/f/mqarvqwr';
             const formData = new FormData(form);
 
