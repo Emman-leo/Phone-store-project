@@ -2,7 +2,7 @@ const products = [
     {
         name: "iPhone 15 Pro",
         price: "11999.00",
-        image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-finish-select-202309-6-1inch-naturaltitanium?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1692845702708",
+        image: "https://bestpricegh.com/cdn/shop/files/5-iphone-15-pro-max_6fdd8db4-1328-4bc2-9996-c0c31fddcb8f.jpg?crop=center&height=600&v=1695910525&width=600",
         description: "The ultimate iPhone, with the powerful A17 Pro chip, a customizable Action button, and the best iPhone camera system yet."
     },
     {
