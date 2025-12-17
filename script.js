@@ -55,6 +55,12 @@ const products = [
     }
 ];
 
+const featuredProducts = [
+    products[3],
+    products[5],
+    products[8]
+];
+
 function formatPrice(price) {
     const number = parseFloat(price);
     return number.toLocaleString('en-US', {
@@ -106,7 +112,6 @@ function renderFeaturedProducts() {
     const carouselInner = document.getElementById("product-carousel-inner");
     if (carouselInner) {
         carouselInner.innerHTML = ''; // Clear existing items
-        const featuredProducts = products.slice(0, 3);
         featuredProducts.forEach((product, index) => {
             const activeClass = index === 0 ? "active" : "";
             const carouselItem = `
@@ -119,7 +124,7 @@ function renderFeaturedProducts() {
                                     <h5 class="card-title">${product.name}</h5>
                                     <p class="card-text">${product.description}</p>
                                     <p class="card-text fw-bold">GHS ${formatPrice(product.price)}</p>
-                                    <a href="products.html" class="btn btn-primary">View Product</a>
+                                    <button class="btn btn-primary buy-now-btn" data-product-name="${product.name}" data-product-price="${product.price}">Purchase Now</button>
                                 </div>
                             </div>
                         </div>
@@ -177,6 +182,16 @@ function payWithPaystack(email, amount, form) {
 
 document.addEventListener("DOMContentLoaded", () => {
     renderFeaturedProducts();
+    const carousel = document.getElementById('productCarousel');
+    if (carousel) {
+        carousel.addEventListener('click', (e) => {
+            if (e.target.classList.contains('buy-now-btn')) {
+                const productName = e.target.dataset.productName;
+                const productPrice = e.target.dataset.productPrice;
+                openCheckoutModal(productName, productPrice);
+            }
+        });
+    }
 
     const productGrid = document.getElementById('product-grid');
     if (productGrid) {
