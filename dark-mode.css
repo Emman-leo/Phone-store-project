@@ -105,3 +105,8 @@ body.dark-mode {
 .dark-mode .dark-mode-toggle .bi-sun-fill {
     display: inline;
 }
+
+/* Fix for contact page text color in dark mode */
+.dark-mode .text-dark {
+    color: #e0e0e0 !important;
+}
