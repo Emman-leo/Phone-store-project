@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.cpagadgetshub.com/index.html</loc>
+    <loc>https://cpagadgets.vercel.app/index.html</loc>
     <lastmod>2024-07-29</lastmod>
   </url>
   <url>
-    <loc>https://www.cpagadgetshub.com/products.html</loc>
+    <loc>https://cpagadgets.vercel.app/products.html</loc>
     <lastmod>2024-07-29</lastmod>
   </url>
   <url>
-    <loc>https://www.cpagadgetshub.com/about.html</loc>
+    <loc>https://cpagadgets.vercel.app/about.html</loc>
     <lastmod>2024-07-29</lastmod>
   </url>
   <url>
-    <loc>https://www.cpagadgetshub.com/contact.html</loc>
+    <loc>https://cpagadgets.vercel.app/contact.html</loc>
     <lastmod>2024-07-29</lastmod>
   </url>
 </urlset>

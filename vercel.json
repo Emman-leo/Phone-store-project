@@ -1,0 +1,9 @@
+
+{
+    "rewrites": [
+      {
+        "source": "/:path((?!sitemap.xml|robots.txt).*)",
+        "destination": "/:path.html"
+      }
+    ]
+  }
