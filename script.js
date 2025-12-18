@@ -76,8 +76,8 @@ function renderFeaturedProducts() {
     }
 }
 
-async function submitFormToFormspree(form) {
-    const formAction = 'https://formspree.io/f/mblnnppl';
+async function submitFormToFormspree(form, formspreeEndpoint) {
+    const formAction = formspreeEndpoint;
     const formData = new FormData(form);
 
     try {
@@ -96,18 +96,18 @@ async function submitFormToFormspree(form) {
             if (Object.hasOwn(data, 'errors')) {
                 alert(data["errors"].map(error => error["message"]).join(", "));
             } else {
-                alert('Oops! There was a problem submitting your order.');
+                alert('Oops! There was a problem submitting your form.');
             }
             return false; // Submission failed
         }
     } catch (error) {
-        alert('Oops! There was a problem submitting your order.');
+        alert('Oops! There was a problem submitting your form.');
         console.error(error);
         return false; // Submission failed
     }
 }
 
-function payWithPaystack(email, amount, form) {
+function payWithPaystack(email, amount) {
     const handler = PaystackPop.setup({
         key: 'YOUR_PAYSTACK_PUBLIC_KEY', // Replace with your public key
         email: email,
@@ -223,12 +223,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const checkoutForm = document.getElementById('checkout-form');
             if (checkoutForm.checkValidity()) {
                 // submit the form to formspree
-                const formSubmitted = await submitFormToFormspree(checkoutForm);
+                const formSubmitted = await submitFormToFormspree(checkoutForm, 'https://formspree.io/f/mblnnppl');
 
                 if (formSubmitted) {
                     const email = document.getElementById('email').value;
                     const price = document.getElementById('product-price-input').value;
-                    payWithPaystack(email, price, checkoutForm);
+                    payWithPaystack(email, price);
 
                     const checkoutModal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
                     checkoutModal.hide();
@@ -236,6 +236,44 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             } else {
                 checkoutForm.reportValidity();
+            }
+        });
+    }
+
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const statusDiv = document.getElementById('contact-form-status');
+            if (contactForm.checkValidity()) {
+                const formSubmitted = await submitFormToFormspree(contactForm, 'https://formspree.io/f/xzznlrjz');
+                if (formSubmitted) {
+                    statusDiv.innerHTML = '<div class="alert alert-success">Thank you for your message!</div>';
+                    contactForm.reset();
+                } else {
+                    statusDiv.innerHTML = '<div class="alert alert-danger">Oops! There was a problem sending your message.</div>';
+                }
+            } else {
+                contactForm.reportValidity();
+            }
+        });
+    }
+
+    const newsletterForm = document.getElementById('newsletter-form');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const statusDiv = document.getElementById('newsletter-form-status');
+            if (newsletterForm.checkValidity()) {
+                const formSubmitted = await submitFormToFormspree(newsletterForm, 'https://formspree.io/f/mqarvqwr');
+                if (formSubmitted) {
+                    statusDiv.innerHTML = '<div class="alert alert-success">Thank you for subscribing!</div>';
+                    newsletterForm.reset();
+                } else {
+                    statusDiv.innerHTML = '<div class="alert alert-danger">Oops! There was a problem subscribing.</div>';
+                }
+            } else {
+                newsletterForm.reportValidity();
             }
         });
     }
