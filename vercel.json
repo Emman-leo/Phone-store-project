@@ -1,8 +1,7 @@
-
 {
     "rewrites": [
       {
-        "source": "/:path((?!sitemap.xml|robots.txt).*)",
+        "source": "/:path((?!sitemap.xml|robots.txt|assets/|style.css|script.js|dark-mode.css).*)",
         "destination": "/:path.html"
       }
     ]
