@@ -76,6 +76,37 @@ function renderFeaturedProducts() {
     }
 }
 
+async function submitFormToFormspree(form) {
+    const formAction = 'https://formspree.io/f/mblnnppl';
+    const formData = new FormData(form);
+
+    try {
+        const response = await fetch(formAction, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            return true; // Submission successful
+        } else {
+            const data = await response.json();
+            if (Object.hasOwn(data, 'errors')) {
+                alert(data["errors"].map(error => error["message"]).join(", "));
+            } else {
+                alert('Oops! There was a problem submitting your order.');
+            }
+            return false; // Submission failed
+        }
+    } catch (error) {
+        alert('Oops! There was a problem submitting your order.');
+        console.error(error);
+        return false; // Submission failed
+    }
+}
+
 function payWithPaystack(email, amount, form) {
     const handler = PaystackPop.setup({
         key: 'YOUR_PAYSTACK_PUBLIC_KEY', // Replace with your public key
@@ -84,34 +115,7 @@ function payWithPaystack(email, amount, form) {
         currency: 'GHS',
         ref: '' + Math.floor((Math.random() * 1000000000) + 1),
         callback: function(response) {
-            const formAction = 'https://formspree.io/f/mblnnppl';
-            const formData = new FormData(form);
-
-            fetch(formAction, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Accept': 'application/json'
-                }
-            }).then(response => {
-                if (response.ok) {
-                    alert('Payment successful and order submitted!');
-                    const checkoutModal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
-                    checkoutModal.hide();
-                    form.reset();
-                } else {
-                    response.json().then(data => {
-                        if (Object.hasOwn(data, 'errors')) {
-                            alert(data["errors"].map(error => error["message"]).join(", "));
-                        } else {
-                            alert('Oops! There was a problem submitting your order.');
-                        }
-                    })
-                }
-            }).catch(error => {
-                alert('Oops! There was a problem submitting your order.');
-                console.error(error);
-            });
+            alert('Payment successful!');
         },
         onClose: function() {
             alert('Window closed.');
@@ -214,13 +218,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const payNowBtn = document.getElementById('pay-now-btn');
     if (payNowBtn) {
-        payNowBtn.addEventListener('click', (e) => {
+        payNowBtn.addEventListener('click', async (e) => {
             e.preventDefault();
             const checkoutForm = document.getElementById('checkout-form');
             if (checkoutForm.checkValidity()) {
-                const email = document.getElementById('email').value;
-                const price = document.getElementById('product-price-input').value;
-                payWithPaystack(email, price, checkoutForm);
+                // submit the form to formspree
+                const formSubmitted = await submitFormToFormspree(checkoutForm);
+
+                if (formSubmitted) {
+                    const email = document.getElementById('email').value;
+                    const price = document.getElementById('product-price-input').value;
+                    payWithPaystack(email, price, checkoutForm);
+
+                    const checkoutModal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
+                    checkoutModal.hide();
+                    checkoutForm.reset();
+                }
             } else {
                 checkoutForm.reportValidity();
             }
