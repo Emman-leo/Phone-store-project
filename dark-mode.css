@@ -110,3 +110,20 @@ body.dark-mode {
 .dark-mode .text-dark {
     color: #e0e0e0 !important;
 }
+
+/* Cart Page Dark Mode Styles */
+.dark-mode .cart-item-card,
+.dark-mode #cart-empty-message .card,
+.dark-mode #order-summary-column .card {
+    background-color: #2c2c2c; /* A slightly lighter shade for nested cards */
+    border-color: #555;
+}
+
+.dark-mode .cart-item-card .form-control {
+    background-color: #333;
+}
+
+.dark-mode .list-group-item {
+    background-color: transparent;
+    border-color: #555;
+}
