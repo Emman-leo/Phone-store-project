@@ -107,21 +107,21 @@ async function submitFormToFormspree(form, formspreeEndpoint) {
     }
 }
 
-function payWithPaystack(orderDetails, checkoutForm, checkoutModal) {
+function payWithPaystack(email, name, price, productName, checkoutForm, checkoutModal) {
     const handler = PaystackPop.setup({
         key: 'pk_test_2fe8bb5c19b3f8662419607eefb26aa6380c5fe7', // Replace with your public key
-        email: orderDetails.email,
-        amount: parseFloat(orderDetails.price) * 100, // amount is in pesewas
+        email: email,
+        amount: parseFloat(price) * 100, // amount is in pesewas
         currency: 'GHS',
         ref: '' + Math.floor((Math.random() * 1000000000) + 1),
         callback: function(response) {
             // Payment successful, now send confirmation email
             const templateParams = {
-                to_name: orderDetails.name,
-                product_name: orderDetails.productName,
-                product_price: formatPrice(orderDetails.price),
+                to_name: name,
+                product_name: productName,
+                product_price: formatPrice(price),
                 transaction_ref: response.reference,
-                to_email: orderDetails.email
+                to_email: email
             };
 
             emailjs.send('service_arfu1ks', 'template_9hh7e6q', templateParams)
@@ -249,15 +249,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 const formSubmitted = await submitFormToFormspree(checkoutForm, 'https://formspree.io/f/mblnnppl');
 
                 if (formSubmitted) {
-                    const orderDetails = {
-                        name: checkoutForm.querySelector('#fullName').value,
-                        email: checkoutForm.querySelector('#email').value,
-                        price: document.getElementById('product-price-input').value,
-                        productName: document.getElementById('product-name-input').value
-                    };
+                    const name = checkoutForm.querySelector('#fullName').value;
+                    const email = checkoutForm.querySelector('#email').value;
+                    const price = document.getElementById('product-price-input').value;
+                    const productName = document.getElementById('product-name-input').value;
                     
                     const checkoutModal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
-                    payWithPaystack(orderDetails, checkoutForm, checkoutModal);
+                    payWithPaystack(email, name, price, productName, checkoutForm, checkoutModal);
                 }
             } else {
                 checkoutForm.reportValidity();
@@ -284,7 +282,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    const newsletterForm = document.getElementById('newsletter-form');
+    const newsletterForm = document.getElementById('newsletter-.form');
     if (newsletterForm) {
         newsletterForm.addEventListener('submit', async (e) => {
             e.preventDefault();
