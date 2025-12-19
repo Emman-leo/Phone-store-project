@@ -130,7 +130,7 @@ function payWithPaystack(orderDetails) {
                     alert('Payment successful! A confirmation email has been sent to you.');
                 }, function(error) {
                     console.log('FAILED...', error);
-                    alert('Payment successful, but we failed to send a confirmation email. Please contact support with your transaction reference: ' + response.reference);
+                    alert('Payment successful, but we failed to send a confirmation email. Error: ' + JSON.stringify(error) + '. Please contact support with your transaction reference: ' + response.reference);
                 });
         },
         onClose: function() {
@@ -251,7 +251,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         price: document.getElementById('product-price-input').value,
                         productName: document.getElementById('product-name-input').value
                     };
-                    
+
                     payWithPaystack(orderDetails);
 
                     const checkoutModal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
