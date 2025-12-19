@@ -235,6 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     loadCart();
     updateCartBadge();
+    renderCartItems();
 
     const checkoutModalElement = document.getElementById('checkoutModal');
     if (checkoutModalElement) {
@@ -247,7 +248,6 @@ document.addEventListener("DOMContentLoaded", () => {
             products = data;
             renderFeaturedProducts();
             filterAndRenderProducts(); // Render all products on load
-            renderCartItems(); // Render cart items on cart page
         })
         .catch(error => console.error('Error fetching products:', error));
 
