@@ -42,44 +42,86 @@ function updateCartBadge() {
 }
 
 function renderCartItems() {
-    const cartItemsContainer = document.getElementById('cart-items-container');
+    const cartContent = document.getElementById('cart-content');
     const cartEmptyMessage = document.getElementById('cart-empty-message');
+    const cartItemsColumn = document.getElementById('cart-items-column');
+    const orderSummaryColumn = document.getElementById('order-summary-column');
 
-    if (cartItemsContainer) {
-        if (cart.length === 0) {
-            if (cartEmptyMessage) cartEmptyMessage.classList.remove('d-none');
-            cartItemsContainer.innerHTML = '';
-        } else {
-            if (cartEmptyMessage) cartEmptyMessage.classList.add('d-none');
-            cartItemsContainer.innerHTML = cart.map(item => `
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <h5 class="card-title">${item.name}</h5>
-                                <p class="card-text">Price: GHS ${formatPrice(item.price)}</p>
+    if (cart.length === 0) {
+        if (cartContent) cartContent.classList.add('d-none');
+        if (cartEmptyMessage) cartEmptyMessage.classList.remove('d-none');
+    } else {
+        if (cartContent) cartContent.classList.remove('d-none');
+        if (cartEmptyMessage) cartEmptyMessage.classList.add('d-none');
+
+        if (cartItemsColumn) {
+            cartItemsColumn.innerHTML = cart.map(item => {
+                const product = products.find(p => p.name === item.name);
+                const itemImage = product ? product.image : 'https://via.placeholder.com/100';
+                return `
+                    <div class="card mb-3 shadow-sm cart-item-card">
+                        <div class="row g-0">
+                            <div class="col-md-3 d-flex align-items-center justify-content-center">
+                                <img src="${itemImage}" class="img-fluid rounded-start cart-item-image" alt="${item.name}">
                             </div>
-                            <div class="d-flex align-items-center">
-                                <button class="btn btn-sm btn-secondary me-2" onclick="decrementQuantity('${item.name}')">-</button>
-                                <span>${item.quantity}</span>
-                                <button class="btn btn-sm btn-secondary ms-2" onclick="incrementQuantity('${item.name}')">+</button>
-                                <button class="btn btn-sm btn-danger ms-3" onclick="removeFromCart('${item.name}')">Remove</button>
+                            <div class="col-md-9">
+                                <div class="card-body">
+                                    <h5 class="card-title fw-bold">${item.name}</h5>
+                                    <p class="card-text text-muted">Price: GHS ${formatPrice(item.price)}</p>
+                                    <div class="d-flex align-items-center mt-3">
+                                        <div class="input-group input-group-sm" style="width: 120px;">
+                                            <button class="btn btn-outline-secondary" type="button" onclick="decrementQuantity('${item.name}')">-</button>
+                                            <input type="text" class="form-control text-center" value="${item.quantity}" readonly>
+                                            <button class="btn btn-outline-secondary" type="button" onclick="incrementQuantity('${item.name}')">+</button>
+                                        </div>
+                                        <button class="btn btn-danger btn-sm ms-4" onclick="removeFromCart('${item.name}')">
+                                            <i class="bi bi-trash-fill"></i> Remove
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
+        }
 
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            cartItemsContainer.innerHTML += `
-                <div class="text-end">
-                    <h4>Total: GHS ${formatPrice(total)}</h4>
-                    <button class="btn btn-primary" id="checkout-btn">Proceed to Checkout</button>
+        if (orderSummaryColumn) {
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            // Assuming a fixed shipping cost for this example
+            const shipping = 50;
+            const total = subtotal + shipping;
+
+            orderSummaryColumn.innerHTML = `
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title fw-bold mb-4">Order Summary</h4>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Subtotal
+                                <span>GHS ${formatPrice(subtotal)}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Shipping
+                                <span>GHS ${formatPrice(shipping)}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center fw-bold fs-5">
+                                Total
+                                <span>GHS ${formatPrice(total)}</span>
+                            </li>
+                        </ul>
+                        <div class="d-grid mt-4">
+                            <button class="btn btn-primary btn-lg" id="checkout-btn">
+                                Proceed to Checkout
+                            </button>
+                        </div>
+                    </div>
                 </div>
             `;
         }
     }
 }
+
 
 function incrementQuantity(productName) {
     const product = cart.find(item => item.name === productName);
@@ -253,14 +295,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     
     loadCartFromLocalStorage();
-    updateCartBadge();
-    renderCartItems();
+
 
 
     fetch('products.json')
         .then(response => response.json())
         .then(data => {
             products = data;
+            updateCartBadge();
+            renderCartItems();
             renderFeaturedProducts();
             filterAndRenderProducts();
         })
