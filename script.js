@@ -107,24 +107,47 @@ async function submitFormToFormspree(form, formspreeEndpoint) {
     }
 }
 
-function payWithPaystack(email, amount) {
+function payWithPaystack(email, name, price, productName, checkoutForm, checkoutModal) {
     const handler = PaystackPop.setup({
         key: 'pk_test_2fe8bb5c19b3f8662419607eefb26aa6380c5fe7', // Replace with your public key
         email: email,
-        amount: parseFloat(amount) * 100, // amount is in pesewas
+        amount: parseFloat(price) * 100, // amount is in pesewas
         currency: 'GHS',
         ref: '' + Math.floor((Math.random() * 1000000000) + 1),
         callback: function(response) {
-            alert('Payment successful!');
+            // Payment successful, now send confirmation email
+            const templateParams = {
+                to_name: name,
+                product_name: productName,
+                product_price: formatPrice(price),
+                transaction_ref: response.reference,
+                to_email: email
+            };
+
+            emailjs.send('service_arfu1ks', 'template_9hh7e6q', templateParams)
+                .then(function(emailResponse) {
+                    console.log('SUCCESS!', emailResponse.status, emailResponse.text);
+                    alert('Payment successful! A confirmation email has been sent to you.');
+                    checkoutModal.hide();
+                    checkoutForm.reset();
+                }, function(error) {
+                    console.log('FAILED...', error);
+                    alert('Payment successful, but we failed to send a confirmation email. Please contact support with your transaction reference: ' + response.reference);
+                    checkoutModal.hide();
+                    checkoutForm.reset();
+                });
         },
         onClose: function() {
-            alert('Window closed.');
+            alert('Payment window closed.');
         }
     });
     handler.openIframe();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    // Initialize EmailJS
+    emailjs.init('2x9OXBEHSO9gJUvwv');
+
     // Fetch product data
     fetch('products.json')
         .then(response => response.json())
@@ -226,13 +249,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 const formSubmitted = await submitFormToFormspree(checkoutForm, 'https://formspree.io/f/mblnnppl');
 
                 if (formSubmitted) {
+                    const name = document.getElementById('fullName').value;
                     const email = document.getElementById('email').value;
                     const price = document.getElementById('product-price-input').value;
-                    payWithPaystack(email, price);
-
+                    const productName = document.getElementById('product-name-input').value;
+                    
                     const checkoutModal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
-                    checkoutModal.hide();
-                    checkoutForm.reset();
+                    payWithPaystack(email, name, price, productName, checkoutForm, checkoutModal);
                 }
             } else {
                 checkoutForm.reportValidity();
