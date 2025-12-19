@@ -107,24 +107,43 @@ async function submitFormToFormspree(form, formspreeEndpoint) {
     }
 }
 
-function payWithPaystack(email, amount) {
+function payWithPaystack(orderDetails) {
     const handler = PaystackPop.setup({
         key: 'pk_test_2fe8bb5c19b3f8662419607eefb26aa6380c5fe7', // Replace with your public key
-        email: email,
-        amount: parseFloat(amount) * 100, // amount is in pesewas
+        email: orderDetails.email,
+        amount: parseFloat(orderDetails.price) * 100, // amount is in pesewas
         currency: 'GHS',
         ref: '' + Math.floor((Math.random() * 1000000000) + 1),
         callback: function(response) {
-            alert('Payment successful!');
+            // Payment successful, now send confirmation email
+            const templateParams = {
+                to_name: orderDetails.name,
+                product_name: orderDetails.productName,
+                product_price: formatPrice(orderDetails.price),
+                transaction_ref: response.reference,
+                to_email: orderDetails.email
+            };
+
+            emailjs.send('service_arfu1ks', 'template_9hh7e6q', templateParams)
+                .then(function(emailResponse) {
+                    console.log('SUCCESS!', emailResponse.status, emailResponse.text);
+                    alert('Payment successful! A confirmation email has been sent to you.');
+                }, function(error) {
+                    console.log('FAILED...', error);
+                    alert('Payment successful, but we failed to send a confirmation email. Please contact support with your transaction reference: ' + response.reference);
+                });
         },
         onClose: function() {
-            alert('Window closed.');
+            alert('Payment window closed.');
         }
     });
     handler.openIframe();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    // Initialize EmailJS
+    emailjs.init('2x9OXBEHSO9gJUvwv');
+
     // Fetch product data
     fetch('products.json')
         .then(response => response.json())
@@ -181,7 +200,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const searchTerm = searchInput.value.toLowerCase();
                     const sortBy = sortSelect.value;
 
-                    let filteredProducts = products.filter(product => 
+                    let filteredProducts = products.filter(product =>
                         product.name.toLowerCase().includes(searchTerm)
                     );
 
@@ -194,7 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     } else if (sortBy === 'name-desc') {
                         filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
                     }
-                    
+
                     renderProducts(filteredProducts);
                 }
 
@@ -204,7 +223,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Event Listeners
                 searchInput.addEventListener('input', filterAndRenderProducts);
                 sortSelect.addEventListener('change', filterAndRenderProducts);
-                
+
                 productGrid.addEventListener('click', (e) => {
                     if (e.target.classList.contains('buy-now-btn')) {
                         const productName = e.target.dataset.productName;
@@ -226,9 +245,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 const formSubmitted = await submitFormToFormspree(checkoutForm, 'https://formspree.io/f/mblnnppl');
 
                 if (formSubmitted) {
-                    const email = document.getElementById('email').value;
-                    const price = document.getElementById('product-price-input').value;
-                    payWithPaystack(email, price);
+                    const orderDetails = {
+                        name: document.getElementById('fullName').value,
+                        email: document.getElementById('email').value,
+                        price: document.getElementById('product-price-input').value,
+                        productName: document.getElementById('product-name-input').value
+                    };
+                    
+                    payWithPaystack(orderDetails);
 
                     const checkoutModal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
                     checkoutModal.hide();
