@@ -49,7 +49,7 @@ function renderProducts(productsToRender) {
                                 <h5 class="card-title">${product.name}</h5>
                                 <p class="card-text">${product.description}</p>
                                 <p class="card-text fw-bold mt-auto">GHS ${formatPrice(product.price)}</p>
-                                <button class="btn btn-primary buy-now-btn" data-product-name="${product.name}" data-product-price="${product.price}">Buy Now</button>
+                                <button class="btn btn-primary add-to-cart-btn" data-product-name="${product.name}" data-product-price="${product.price}">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -77,7 +77,7 @@ function renderFeaturedProducts() {
                                     <h5 class="card-title">${product.name}</h5>
                                     <p class="card-text">${product.description}</p>
                                     <p class="card-text fw-bold">GHS ${formatPrice(product.price)}</p>
-                                    <button class="btn btn-primary buy-now-btn" data-product-name="${product.name}" data-product-price="${product.price}">Purchase Now</button>
+                                    <button class="btn btn-primary add-to-cart-btn" data-product-name="${product.name}" data-product-price="${product.price}">Add to Cart</button>
                                 </div>
                             </div>
                         </div>
@@ -175,7 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // EVENT LISTENERS
     document.body.addEventListener('click', (e) => {
-        if (e.target.classList.contains('buy-now-btn')) {
+        if (e.target.classList.contains('add-to-cart-btn')) {
             const productName = e.target.dataset.productName;
             const productPrice = e.target.dataset.productPrice;
             openCheckoutModal(productName, productPrice);
