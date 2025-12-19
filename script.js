@@ -1,4 +1,5 @@
 let products = [];
+let checkoutModal = null;
 
 function formatPrice(price) {
     const number = parseFloat(price);
@@ -11,11 +12,12 @@ function formatPrice(price) {
 function openCheckoutModal(productName, productPrice) {
     const productNameInput = document.getElementById('product-name-input');
     const productPriceInput = document.getElementById('product-price-input');
-    const checkoutModal = new bootstrap.Modal(document.getElementById('checkoutModal'));
 
     productNameInput.value = productName;
     productPriceInput.value = productPrice;
-    checkoutModal.show();
+    if (checkoutModal) {
+        checkoutModal.show();
+    }
 }
 
 function renderProducts(productsToRender) {
@@ -107,7 +109,7 @@ async function submitFormToFormspree(form, formspreeEndpoint) {
     }
 }
 
-function payWithPaystack(email, name, price, productName, checkoutForm, checkoutModal) {
+function payWithPaystack(email, name, price, productName, checkoutForm) {
     const handler = PaystackPop.setup({
         key: 'pk_test_2fe8bb5c19b3f8662419607eefb26aa6380c5fe7', // Replace with your public key
         email: email,
@@ -128,12 +130,16 @@ function payWithPaystack(email, name, price, productName, checkoutForm, checkout
                 .then(function(emailResponse) {
                     console.log('SUCCESS!', emailResponse.status, emailResponse.text);
                     alert('Payment successful! A confirmation email has been sent to you.');
-                    checkoutModal.hide();
+                    if (checkoutModal) {
+                        checkoutModal.hide();
+                    }
                     checkoutForm.reset();
                 }, function(error) {
                     console.log('FAILED...', error);
                     alert('Payment successful, but we failed to send a confirmation email. Error: ' + JSON.stringify(error) + '. Please contact support with your transaction reference: ' + response.reference);
-                    checkoutModal.hide();
+                    if (checkoutModal) {
+                        checkoutModal.hide();
+                    }
                     checkoutForm.reset();
                 });
         },
@@ -147,6 +153,11 @@ function payWithPaystack(email, name, price, productName, checkoutForm, checkout
 document.addEventListener("DOMContentLoaded", () => {
     // Initialize EmailJS
     emailjs.init('2x9OXBEHSO9gJUvwv');
+
+    const checkoutModalElement = document.getElementById('checkoutModal');
+    if (checkoutModalElement) {
+        checkoutModal = new bootstrap.Modal(checkoutModalElement);
+    }
 
     // Fetch product data
     fetch('products.json')
@@ -254,8 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const price = document.getElementById('product-price-input').value;
                     const productName = document.getElementById('product-name-input').value;
                     
-                    const checkoutModal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
-                    payWithPaystack(email, name, price, productName, checkoutForm, checkoutModal);
+                    payWithPaystack(email, name, price, productName, checkoutForm);
                 }
             } else {
                 checkoutForm.reportValidity();
