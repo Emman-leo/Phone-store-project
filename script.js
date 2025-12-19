@@ -269,6 +269,22 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    const checkoutBtn = document.getElementById('checkout-btn');
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', () => {
+            if (cart.length > 0) {
+                const subtotal = cart.reduce((sum, product) => sum + parseFloat(product.price), 0);
+                const productNames = cart.map(p => p.name).join(', ');
+                if (cartModal) {
+                    cartModal.hide();
+                }
+                openCheckoutModal(productNames, subtotal);
+            } else {
+                showToast("Your cart is empty.");
+            }
+        });
+    }
+
     const payNowBtn = document.getElementById('pay-now-btn');
     if (payNowBtn) {
         payNowBtn.addEventListener('click', async (e) => {
