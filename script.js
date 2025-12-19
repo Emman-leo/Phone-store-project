@@ -132,7 +132,7 @@ function payWithPaystack(email, name, price, productName, checkoutForm, checkout
                     checkoutForm.reset();
                 }, function(error) {
                     console.log('FAILED...', error);
-                    alert('Payment successful, but we failed to send a confirmation email. Please contact support with your transaction reference: ' + response.reference);
+                    alert('Payment successful, but we failed to send a confirmation email. Error: ' + JSON.stringify(error) + '. Please contact support with your transaction reference: ' + response.reference);
                     checkoutModal.hide();
                     checkoutForm.reset();
                 });
@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const searchTerm = searchInput.value.toLowerCase();
                     const sortBy = sortSelect.value;
 
-                    let filteredProducts = products.filter(product => 
+                    let filteredProducts = products.filter(product =>
                         product.name.toLowerCase().includes(searchTerm)
                     );
 
@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     } else if (sortBy === 'name-desc') {
                         filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
                     }
-                    
+
                     renderProducts(filteredProducts);
                 }
 
@@ -227,7 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Event Listeners
                 searchInput.addEventListener('input', filterAndRenderProducts);
                 sortSelect.addEventListener('change', filterAndRenderProducts);
-                
+
                 productGrid.addEventListener('click', (e) => {
                     if (e.target.classList.contains('buy-now-btn')) {
                         const productName = e.target.dataset.productName;
@@ -249,8 +249,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 const formSubmitted = await submitFormToFormspree(checkoutForm, 'https://formspree.io/f/mblnnppl');
 
                 if (formSubmitted) {
-                    const name = document.getElementById('fullName').value;
-                    const email = document.getElementById('email').value;
+                    const name = document.getElementById('checkout_fullName').value;
+                    const email = document.getElementById('checkout_email').value;
                     const price = document.getElementById('product-price-input').value;
                     const productName = document.getElementById('product-name-input').value;
                     
@@ -290,7 +290,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (newsletterForm.checkValidity()) {
                 const formSubmitted = await submitFormToFormspree(newsletterForm, 'https://formspree.io/f/mqarvqwr');
                 if (formSubmitted) {
-                    statusDiv.innerHTML = '<div class="alert alert-success">Thank you for subscribing!</div>';
+                    statusDiv.innerHTML = '<div class="alert alert-success">Thank you for subscribing!</div>
                     newsletterForm.reset();
                 } else {
                     statusDiv.innerHTML = '<div class="alert alert-danger">Oops! There was a problem subscribing.</div>';
