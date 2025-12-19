@@ -1,4 +1,5 @@
 let products = [];
+let cart = [];
 let checkoutModal = null;
 
 function formatPrice(price) {
@@ -7,6 +8,15 @@ function formatPrice(price) {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     });
+}
+
+function addToCart(productName) {
+    const product = products.find(p => p.name === productName);
+    if (product) {
+        cart.push(product);
+        alert(`${product.name} has been added to your cart.`);
+        console.log(cart); // For debugging, we can see the cart contents
+    }
 }
 
 function openCheckoutModal(productName, productPrice) {
@@ -49,7 +59,7 @@ function renderProducts(productsToRender) {
                                 <h5 class="card-title">${product.name}</h5>
                                 <p class="card-text">${product.description}</p>
                                 <p class="card-text fw-bold mt-auto">GHS ${formatPrice(product.price)}</p>
-                                <button class="btn btn-primary add-to-cart-btn" data-product-name="${product.name}" data-product-price="${product.price}">Add to Cart</button>
+                                <button class="btn btn-primary add-to-cart-btn" data-product-name="${product.name}">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -77,7 +87,7 @@ function renderFeaturedProducts() {
                                     <h5 class="card-title">${product.name}</h5>
                                     <p class="card-text">${product.description}</p>
                                     <p class="card-text fw-bold">GHS ${formatPrice(product.price)}</p>
-                                    <button class="btn btn-primary add-to-cart-btn" data-product-name="${product.name}" data-product-price="${product.price}">Add to Cart</button>
+                                    <button class="btn btn-primary add-to-cart-btn" data-product-name="${product.name}">Add to Cart</button>
                                 </div>
                             </div>
                         </div>
@@ -177,8 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.addEventListener('click', (e) => {
         if (e.target.classList.contains('add-to-cart-btn')) {
             const productName = e.target.dataset.productName;
-            const productPrice = e.target.dataset.productPrice;
-            openCheckoutModal(productName, productPrice);
+            addToCart(productName);
         }
     });
 
