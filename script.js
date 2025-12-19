@@ -246,8 +246,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (formSubmitted) {
                     const orderDetails = {
-                        name: document.getElementById('fullName').value,
-                        email: document.getElementById('email').value,
+                        name: checkoutForm.querySelector('#fullName').value,
+                        email: checkoutForm.querySelector('#email').value,
                         price: document.getElementById('product-price-input').value,
                         productName: document.getElementById('product-name-input').value
                     };
