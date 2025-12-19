@@ -290,7 +290,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (newsletterForm.checkValidity()) {
                 const formSubmitted = await submitFormToFormspree(newsletterForm, 'https://formspree.io/f/mqarvqwr');
                 if (formSubmitted) {
-                    statusDiv.innerHTML = '<div class="alert alert-success">Thank you for subscribing!</div>
+                    statusDiv.innerHTML = '<div class="alert alert-success">Thank you for subscribing!</div>';
                     newsletterForm.reset();
                 } else {
                     statusDiv.innerHTML = '<div class="alert alert-danger">Oops! There was a problem subscribing.</div>';
