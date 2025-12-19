@@ -124,11 +124,11 @@ function payWithPaystack(email, name, price, productName, checkoutForm) {
         ref: '' + Math.floor((Math.random() * 1000000000) + 1),
         callback: function(response) {
             const templateParams = {
-                to_name: name,
+                name: name,
                 product_name: productName,
                 product_price: formatPrice(price),
                 transaction_ref: response.reference,
-                to_email: email
+                email: email
             };
             emailjs.send('service_arfu1ks', 'template_9hh7e6q', templateParams)
                 .then(function(emailResponse) {
