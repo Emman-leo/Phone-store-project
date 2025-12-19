@@ -1,5 +1,6 @@
 
 let products = [];
+let cart = [];
 let checkoutModal = null;
 
 function formatPrice(price) {
@@ -20,24 +21,104 @@ function showToast(message) {
     }
 }
 
-function openCheckoutModal(productName, productPrice) {
-    const productNameInput = document.getElementById('product-name-input');
-    const productPriceInput = document.getElementById('product-price-input');
-    
-    if (productNameInput && productPriceInput) {
-        productNameInput.value = productName;
-        productPriceInput.value = productPrice;
+function addToCart(productName, productPrice) {
+    const existingProduct = cart.find(item => item.name === productName);
+    if (existingProduct) {
+        existingProduct.quantity++;
+    } else {
+        cart.push({ name: productName, price: productPrice, quantity: 1 });
     }
+    updateCartBadge();
+    showToast(`${productName} has been added to your cart.`);
+    saveCartToLocalStorage();
+}
 
-    if (!checkoutModal) {
-        const checkoutModalElement = document.getElementById('checkoutModal');
-        if (checkoutModalElement) {
-            checkoutModal = new bootstrap.Modal(checkoutModalElement);
+function updateCartBadge() {
+    const cartBadge = document.getElementById('cart-badge');
+    if (cartBadge) {
+        const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+        cartBadge.textContent = totalItems;
+    }
+}
+
+function renderCartItems() {
+    const cartItemsContainer = document.getElementById('cart-items-container');
+    const cartEmptyMessage = document.getElementById('cart-empty-message');
+
+    if (cartItemsContainer) {
+        if (cart.length === 0) {
+            if (cartEmptyMessage) cartEmptyMessage.classList.remove('d-none');
+            cartItemsContainer.innerHTML = '';
+        } else {
+            if (cartEmptyMessage) cartEmptyMessage.classList.add('d-none');
+            cartItemsContainer.innerHTML = cart.map(item => `
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h5 class="card-title">${item.name}</h5>
+                                <p class="card-text">Price: GHS ${formatPrice(item.price)}</p>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <button class="btn btn-sm btn-secondary me-2" onclick="decrementQuantity('${item.name}')">-</button>
+                                <span>${item.quantity}</span>
+                                <button class="btn btn-sm btn-secondary ms-2" onclick="incrementQuantity('${item.name}')">+</button>
+                                <button class="btn btn-sm btn-danger ms-3" onclick="removeFromCart('${item.name}')">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            cartItemsContainer.innerHTML += `
+                <div class="text-end">
+                    <h4>Total: GHS ${formatPrice(total)}</h4>
+                    <button class="btn btn-primary" id="checkout-btn">Proceed to Checkout</button>
+                </div>
+            `;
         }
     }
+}
 
-    if (checkoutModal) {
-        checkoutModal.show();
+function incrementQuantity(productName) {
+    const product = cart.find(item => item.name === productName);
+    if (product) {
+        product.quantity++;
+    }
+    updateCartBadge();
+    renderCartItems();
+    saveCartToLocalStorage();
+}
+
+function decrementQuantity(productName) {
+    const product = cart.find(item => item.name === productName);
+    if (product && product.quantity > 1) {
+        product.quantity--;
+    } else if (product) {
+        removeFromCart(productName);
+    }
+    updateCartBadge();
+    renderCartItems();
+    saveCartToLocalStorage();
+}
+
+function removeFromCart(productName) {
+    cart = cart.filter(item => item.name !== productName);
+    updateCartBadge();
+    renderCartItems();
+    saveCartToLocalStorage();
+}
+
+
+function saveCartToLocalStorage() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+function loadCartFromLocalStorage() {
+    const storedCart = localStorage.getItem('cart');
+    if (storedCart) {
+        cart = JSON.parse(storedCart);
     }
 }
 
@@ -46,7 +127,7 @@ function renderProducts(productsToRender) {
     const noResults = document.getElementById("no-results");
 
     if (productGrid) {
-        productGrid.innerHTML = ''; 
+        productGrid.innerHTML = '';
         if (productsToRender.length === 0) {
             if(noResults) noResults.classList.remove('d-none');
         } else {
@@ -60,7 +141,7 @@ function renderProducts(productsToRender) {
                                 <h5 class="card-title">${product.name}</h5>
                                 <p class="card-text">${product.description}</p>
                                 <p class="card-text fw-bold mt-auto">GHS ${formatPrice(product.price)}</p>
-                                <button class="btn btn-primary buy-now-btn" data-product-name="${product.name}" data-product-price="${product.price}">Buy Now</button>
+                                <button class="btn btn-primary add-to-cart-btn" data-product-name="${product.name}" data-product-price="${product.price}">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -88,7 +169,7 @@ function renderFeaturedProducts() {
                                     <h5 class="card-title">${product.name}</h5>
                                     <p class="card-text">${product.description}</p>
                                     <p class="card-text fw-bold">GHS ${formatPrice(product.price)}</p>
-                                    <button class="btn btn-primary buy-now-btn" data-product-name="${product.name}" data-product-price="${product.price}">Buy Now</button>
+                                    <button class="btn btn-primary add-to-cart-btn" data-product-name="${product.name}" data-product-price="${product.price}">Add to Cart</button>
                                 </div>
                             </div>
                         </div>
@@ -150,6 +231,10 @@ function payWithPaystack(email, name, price, productName, checkoutForm) {
                 .finally(() => {
                     if (checkoutModal) checkoutModal.hide();
                     if (checkoutForm) checkoutForm.reset();
+                    cart = [];
+                    saveCartToLocalStorage();
+                    updateCartBadge();
+                    renderCartItems();
                 });
         },
         onClose: function() {
@@ -166,6 +251,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (checkoutModalElement) {
         checkoutModal = new bootstrap.Modal(checkoutModalElement);
     }
+    
+    loadCartFromLocalStorage();
+    updateCartBadge();
+    renderCartItems();
+
 
     fetch('products.json')
         .then(response => response.json())
@@ -184,10 +274,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if(darkModeToggle) darkModeToggle.addEventListener('click', () => body.classList.contains('dark-mode') ? disableDarkMode() : enableDarkMode());
 
     document.body.addEventListener('click', (e) => {
-        if (e.target.classList.contains('buy-now-btn')) {
+        if (e.target.classList.contains('add-to-cart-btn')) {
             const productName = e.target.dataset.productName;
             const productPrice = e.target.dataset.productPrice;
-            openCheckoutModal(productName, productPrice);
+            addToCart(productName, productPrice);
         }
     });
 
@@ -201,8 +291,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (formSubmitted) {
                     const name = document.getElementById('checkout_fullName').value;
                     const email = document.getElementById('checkout_email').value;
-                    const price = document.getElementById('product-price-input').value;
-                    const productName = document.getElementById('product-name-input').value;
+                    const price = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    const productName = cart.map(item => `${item.name} (x${item.quantity})`).join(', ');
                     payWithPaystack(email, name, price, productName, checkoutForm);
                 }
             } else if (checkoutForm) {
@@ -239,6 +329,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const sortSelect = document.getElementById('sort-products');
     if(searchInput) searchInput.addEventListener('input', filterAndRenderProducts);
     if(sortSelect) sortSelect.addEventListener('change', filterAndRenderProducts);
+    
+    document.body.addEventListener('click', (e) => {
+        if (e.target.id === 'checkout-btn') {
+            const checkoutModalElement = document.getElementById('checkoutModal');
+            if(checkoutModalElement) {
+                 if (!checkoutModal) {
+                    checkoutModal = new bootstrap.Modal(checkoutModalElement);
+                }
+                checkoutModal.show();
+            }
+        }
+    });
+
 });
 
 function filterAndRenderProducts() {
