@@ -249,8 +249,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 const formSubmitted = await submitFormToFormspree(checkoutForm, 'https://formspree.io/f/mblnnppl');
 
                 if (formSubmitted) {
-                    const name = checkoutForm.querySelector('#fullName').value;
-                    const email = checkoutForm.querySelector('#email').value;
+                    const name = checkoutForm.querySelector('#checkout_fullName').value;
+                    const email = checkoutForm.querySelector('#checkout_email').value;
                     const price = document.getElementById('product-price-input').value;
                     const productName = document.getElementById('product-name-input').value;
                     
@@ -282,7 +282,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    const newsletterForm = document.getElementById('newsletter-.form');
+    const newsletterForm = document.getElementById('newsletter-form');
     if (newsletterForm) {
         newsletterForm.addEventListener('submit', async (e) => {
             e.preventDefault();
