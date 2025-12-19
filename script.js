@@ -1,6 +1,20 @@
+
 let products = [];
 let cart = [];
 let checkoutModal = null;
+
+// Load cart from localStorage
+function loadCart() {
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+        cart = JSON.parse(savedCart);
+    }
+}
+
+// Save cart to localStorage
+function saveCart() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
 
 function formatPrice(price) {
     const number = parseFloat(price);
@@ -61,6 +75,7 @@ function addToCart(productName) {
     const product = products.find(p => p.name === productName);
     if (product) {
         cart.push(product);
+        saveCart();
         updateCartBadge();
         renderCartItems();
         showToast(`${product.name} has been added to your cart.`);
@@ -70,6 +85,7 @@ function addToCart(productName) {
 function removeFromCart(productIndex) {
     if (productIndex >= 0 && productIndex < cart.length) {
         cart.splice(productIndex, 1);
+        saveCart();
         updateCartBadge();
         renderCartItems();
     }
@@ -216,6 +232,9 @@ function payWithPaystack(email, name, price, productName, checkoutForm) {
 
 document.addEventListener("DOMContentLoaded", () => {
     emailjs.init('2x9OXBEHSO9gJUvwv');
+    
+    loadCart();
+    updateCartBadge();
 
     const checkoutModalElement = document.getElementById('checkoutModal');
     if (checkoutModalElement) {
