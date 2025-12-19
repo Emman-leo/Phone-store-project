@@ -1,20 +1,6 @@
 
 let products = [];
-let cart = [];
 let checkoutModal = null;
-
-// Load cart from localStorage
-function loadCart() {
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-        cart = JSON.parse(savedCart);
-    }
-}
-
-// Save cart to localStorage
-function saveCart() {
-    localStorage.setItem('cart', JSON.stringify(cart));
-}
 
 function formatPrice(price) {
     const number = parseFloat(price);
@@ -31,63 +17,6 @@ function showToast(message) {
         toastBody.textContent = message;
         const toast = new bootstrap.Toast(toastEl);
         toast.show();
-    }
-}
-
-function updateCartBadge() {
-    const cartBadge = document.getElementById('cart-badge');
-    if (cartBadge) {
-        cartBadge.textContent = cart.length;
-    }
-}
-
-function renderCartItems() {
-    const cartItemsContainer = document.getElementById('cart-items-container');
-    if (cartItemsContainer) {
-        if (cart.length === 0) {
-            cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
-            return;
-        }
-
-        let cartHTML = '<ul class="list-group">';
-        let subtotal = 0;
-
-        cart.forEach((product, index) => {
-            cartHTML += `
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="my-0">${product.name}</h6>
-                        <small class="text-muted">Price: GHS ${formatPrice(product.price)}</small>
-                    </div>
-                    <button class="btn btn-danger btn-sm remove-from-cart-btn" data-product-index="${index}">Remove</button>
-                </li>
-            `;
-            subtotal += parseFloat(product.price);
-        });
-
-        cartHTML += '</ul>';
-        cartHTML += `<div class="text-end fw-bold mt-3">Subtotal: GHS ${formatPrice(subtotal)}</div>`;
-        cartItemsContainer.innerHTML = cartHTML;
-    }
-}
-
-function addToCart(productName) {
-    const product = products.find(p => p.name === productName);
-    if (product) {
-        cart.push(product);
-        saveCart();
-        updateCartBadge();
-        renderCartItems();
-        showToast(`${product.name} has been added to your cart.`);
-    }
-}
-
-function removeFromCart(productIndex) {
-    if (productIndex >= 0 && productIndex < cart.length) {
-        cart.splice(productIndex, 1);
-        saveCart();
-        updateCartBadge();
-        renderCartItems();
     }
 }
 
@@ -117,7 +46,7 @@ function renderProducts(productsToRender) {
     const noResults = document.getElementById("no-results");
 
     if (productGrid) {
-        productGrid.innerHTML = ''; // Clear existing products
+        productGrid.innerHTML = ''; 
         if (productsToRender.length === 0) {
             if(noResults) noResults.classList.remove('d-none');
         } else {
@@ -131,7 +60,7 @@ function renderProducts(productsToRender) {
                                 <h5 class="card-title">${product.name}</h5>
                                 <p class="card-text">${product.description}</p>
                                 <p class="card-text fw-bold mt-auto">GHS ${formatPrice(product.price)}</p>
-                                <button class="btn btn-primary add-to-cart-btn" data-product-name="${product.name}">Add to Cart</button>
+                                <button class="btn btn-primary buy-now-btn" data-product-name="${product.name}" data-product-price="${product.price}">Buy Now</button>
                             </div>
                         </div>
                     </div>
@@ -159,7 +88,7 @@ function renderFeaturedProducts() {
                                     <h5 class="card-title">${product.name}</h5>
                                     <p class="card-text">${product.description}</p>
                                     <p class="card-text fw-bold">GHS ${formatPrice(product.price)}</p>
-                                    <button class="btn btn-primary add-to-cart-btn" data-product-name="${product.name}">Add to Cart</button>
+                                    <button class="btn btn-primary buy-now-btn" data-product-name="${product.name}" data-product-price="${product.price}">Buy Now</button>
                                 </div>
                             </div>
                         </div>
@@ -233,10 +162,6 @@ function payWithPaystack(email, name, price, productName, checkoutForm) {
 document.addEventListener("DOMContentLoaded", () => {
     emailjs.init('2x9OXBEHSO9gJUvwv');
     
-    loadCart();
-    updateCartBadge();
-    renderCartItems();
-
     const checkoutModalElement = document.getElementById('checkoutModal');
     if (checkoutModalElement) {
         checkoutModal = new bootstrap.Modal(checkoutModalElement);
@@ -247,11 +172,10 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(data => {
             products = data;
             renderFeaturedProducts();
-            filterAndRenderProducts(); // Render all products on load
+            filterAndRenderProducts();
         })
         .catch(error => console.error('Error fetching products:', error));
 
-    // DARK MODE
     const darkModeToggle = document.getElementById('darkModeToggle');
     const body = document.body;
     const enableDarkMode = () => { body.classList.add('dark-mode'); localStorage.setItem('darkMode', 'enabled'); };
@@ -259,31 +183,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (localStorage.getItem('darkMode') === 'enabled') enableDarkMode(); else disableDarkMode();
     if(darkModeToggle) darkModeToggle.addEventListener('click', () => body.classList.contains('dark-mode') ? disableDarkMode() : enableDarkMode());
 
-    // EVENT LISTENERS
     document.body.addEventListener('click', (e) => {
-        if (e.target.classList.contains('add-to-cart-btn')) {
+        if (e.target.classList.contains('buy-now-btn')) {
             const productName = e.target.dataset.productName;
-            addToCart(productName);
-        }
-
-        if (e.target.classList.contains('remove-from-cart-btn')) {
-            const productIndex = e.target.dataset.productIndex;
-            removeFromCart(productIndex);
+            const productPrice = e.target.dataset.productPrice;
+            openCheckoutModal(productName, productPrice);
         }
     });
-
-    const checkoutBtn = document.getElementById('checkout-btn');
-    if (checkoutBtn) {
-        checkoutBtn.addEventListener('click', () => {
-            if (cart.length > 0) {
-                const subtotal = cart.reduce((sum, product) => sum + parseFloat(product.price), 0);
-                const productNames = cart.map(p => p.name).join(', ');
-                openCheckoutModal(productNames, subtotal);
-            } else {
-                showToast("Your cart is empty.");
-            }
-        });
-    }
 
     const payNowBtn = document.getElementById('pay-now-btn');
     if (payNowBtn) {
@@ -305,7 +211,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Generic form submission for contact and newsletter
     const handleFormSubmit = async (form, endpoint, statusDiv) => {
         if (form.checkValidity()) {
             const formSubmitted = await submitFormToFormspree(form, endpoint);
@@ -330,7 +235,6 @@ document.addEventListener("DOMContentLoaded", () => {
         handleFormSubmit(newsletterForm, 'https://formspree.io/f/mqarvqwr', document.getElementById('newsletter-form-status'));
     });
 
-    // Product page specific logic
     const searchInput = document.getElementById('search-input');
     const sortSelect = document.getElementById('sort-products');
     if(searchInput) searchInput.addEventListener('input', filterAndRenderProducts);
