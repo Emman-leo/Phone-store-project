@@ -11,6 +11,16 @@ function formatPrice(price) {
     });
 }
 
+function showToast(message) {
+    const toastBody = document.getElementById('toast-body-content');
+    const toastEl = document.getElementById('cart-toast');
+    if (toastBody && toastEl) {
+        toastBody.textContent = message;
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
+    }
+}
+
 function updateCartBadge() {
     const cartBadge = document.getElementById('cart-badge');
     if (cartBadge) {
@@ -54,7 +64,7 @@ function addToCart(productName) {
         cart.push(product);
         updateCartBadge();
         renderCartItems();
-        alert(`${product.name} has been added to your cart.`);
+        showToast(`${product.name} has been added to your cart.`);
     }
 }
 
