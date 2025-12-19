@@ -12,9 +12,19 @@ function formatPrice(price) {
 function openCheckoutModal(productName, productPrice) {
     const productNameInput = document.getElementById('product-name-input');
     const productPriceInput = document.getElementById('product-price-input');
+    
+    if (productNameInput && productPriceInput) {
+        productNameInput.value = productName;
+        productPriceInput.value = productPrice;
+    }
 
-    productNameInput.value = productName;
-    productPriceInput.value = productPrice;
+    if (!checkoutModal) {
+        const checkoutModalElement = document.getElementById('checkoutModal');
+        if (checkoutModalElement) {
+            checkoutModal = new bootstrap.Modal(checkoutModalElement);
+        }
+    }
+
     if (checkoutModal) {
         checkoutModal.show();
     }
@@ -24,35 +34,36 @@ function renderProducts(productsToRender) {
     const productGrid = document.getElementById("product-grid");
     const noResults = document.getElementById("no-results");
 
-    productGrid.innerHTML = ''; // Clear existing products
-
-    if (productsToRender.length === 0) {
-        noResults.classList.remove('d-none');
-    } else {
-        noResults.classList.add('d-none');
-        productsToRender.forEach(product => {
-            const productCardHTML = `
-                <div class="col-md-4 mb-4">
-                    <div class="card product-card h-100">
-                        <img src="${product.image}" class="card-img-top" alt="${product.name}">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">${product.name}</h5>
-                            <p class="card-text">${product.description}</p>
-                            <p class="card-text fw-bold mt-auto">GHS ${formatPrice(product.price)}</p>
-                            <button class="btn btn-primary buy-now-btn" data-product-name="${product.name}" data-product-price="${product.price}">Buy Now</button>
+    if (productGrid) {
+        productGrid.innerHTML = ''; // Clear existing products
+        if (productsToRender.length === 0) {
+            if(noResults) noResults.classList.remove('d-none');
+        } else {
+            if(noResults) noResults.classList.add('d-none');
+            productsToRender.forEach(product => {
+                const productCardHTML = `
+                    <div class="col-md-4 mb-4">
+                        <div class="card product-card h-100">
+                            <img src="${product.image}" class="card-img-top" alt="${product.name}">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">${product.name}</h5>
+                                <p class="card-text">${product.description}</p>
+                                <p class="card-text fw-bold mt-auto">GHS ${formatPrice(product.price)}</p>
+                                <button class="btn btn-primary buy-now-btn" data-product-name="${product.name}" data-product-price="${product.price}">Buy Now</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `;
-            productGrid.innerHTML += productCardHTML;
-        });
+                `;
+                productGrid.innerHTML += productCardHTML;
+            });
+        }
     }
 }
 
 function renderFeaturedProducts() {
     const carouselInner = document.getElementById("product-carousel-inner");
     if (carouselInner) {
-        carouselInner.innerHTML = ''; // Clear existing items
+        carouselInner.innerHTML = '';
         const featuredProducts = products.filter(p => p.featured);
         featuredProducts.forEach((product, index) => {
             const activeClass = index === 0 ? "active" : "";
@@ -79,45 +90,39 @@ function renderFeaturedProducts() {
 }
 
 async function submitFormToFormspree(form, formspreeEndpoint) {
-    const formAction = formspreeEndpoint;
+    if (!form) return false;
     const formData = new FormData(form);
-
     try {
-        const response = await fetch(formAction, {
+        const response = await fetch(formspreeEndpoint, {
             method: 'POST',
             body: formData,
             headers: {
                 'Accept': 'application/json'
             }
         });
-
-        if (response.ok) {
-            return true; // Submission successful
+        if (response.ok) return true;
+        const data = await response.json();
+        if (Object.hasOwn(data, 'errors')) {
+            alert(data["errors"].map(error => error["message"]).join(", "));
         } else {
-            const data = await response.json();
-            if (Object.hasOwn(data, 'errors')) {
-                alert(data["errors"].map(error => error["message"]).join(", "));
-            } else {
-                alert('Oops! There was a problem submitting your form.');
-            }
-            return false; // Submission failed
+            alert('Oops! There was a problem submitting your form.');
         }
+        return false;
     } catch (error) {
         alert('Oops! There was a problem submitting your form.');
         console.error(error);
-        return false; // Submission failed
+        return false;
     }
 }
 
 function payWithPaystack(email, name, price, productName, checkoutForm) {
     const handler = PaystackPop.setup({
-        key: 'pk_test_2fe8bb5c19b3f8662419607eefb26aa6380c5fe7', // Replace with your public key
+        key: 'pk_test_2fe8bb5c19b3f8662419607eefb26aa6380c5fe7',
         email: email,
-        amount: parseFloat(price) * 100, // amount is in pesewas
+        amount: parseFloat(price) * 100,
         currency: 'GHS',
         ref: '' + Math.floor((Math.random() * 1000000000) + 1),
         callback: function(response) {
-            // Payment successful, now send confirmation email
             const templateParams = {
                 to_name: name,
                 product_name: productName,
@@ -125,22 +130,15 @@ function payWithPaystack(email, name, price, productName, checkoutForm) {
                 transaction_ref: response.reference,
                 to_email: email
             };
-
             emailjs.send('service_arfu1ks', 'template_9hh7e6q', templateParams)
                 .then(function(emailResponse) {
-                    console.log('SUCCESS!', emailResponse.status, emailResponse.text);
                     alert('Payment successful! A confirmation email has been sent to you.');
-                    if (checkoutModal) {
-                        checkoutModal.hide();
-                    }
-                    checkoutForm.reset();
                 }, function(error) {
-                    console.log('FAILED...', error);
-                    alert('Payment successful, but we failed to send a confirmation email. Error: ' + JSON.stringify(error) + '. Please contact support with your transaction reference: ' + response.reference);
-                    if (checkoutModal) {
-                        checkoutModal.hide();
-                    }
-                    checkoutForm.reset();
+                    alert('Payment successful, but we failed to send a confirmation email. Error: ' + JSON.stringify(error));
+                })
+                .finally(() => {
+                    if (checkoutModal) checkoutModal.hide();
+                    if (checkoutForm) checkoutForm.reset();
                 });
         },
         onClose: function() {
@@ -151,7 +149,6 @@ function payWithPaystack(email, name, price, productName, checkoutForm) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Initialize EmailJS
     emailjs.init('2x9OXBEHSO9gJUvwv');
 
     const checkoutModalElement = document.getElementById('checkoutModal');
@@ -159,155 +156,103 @@ document.addEventListener("DOMContentLoaded", () => {
         checkoutModal = new bootstrap.Modal(checkoutModalElement);
     }
 
-    // Fetch product data
     fetch('products.json')
         .then(response => response.json())
         .then(data => {
             products = data;
-            // DARK MODE
-            const darkModeToggle = document.getElementById('darkModeToggle');
-            const body = document.body;
-
-            const enableDarkMode = () => {
-                body.classList.add('dark-mode');
-                localStorage.setItem('darkMode', 'enabled');
-            };
-
-            const disableDarkMode = () => {
-                body.classList.remove('dark-mode');
-                localStorage.setItem('darkMode', 'disabled');
-            };
-
-            // Check for saved user preference
-            if (localStorage.getItem('darkMode') === 'enabled') {
-                enableDarkMode();
-            } else {
-                disableDarkMode();
-            }
-
-            // Toggle dark mode on button click
-            darkModeToggle.addEventListener('click', () => {
-                if (body.classList.contains('dark-mode')) {
-                    disableDarkMode();
-                } else {
-                    enableDarkMode();
-                }
-            });
-
             renderFeaturedProducts();
-            const carousel = document.getElementById('productCarousel');
-            if (carousel) {
-                carousel.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('buy-now-btn')) {
-                        const productName = e.target.dataset.productName;
-                        const productPrice = e.target.dataset.productPrice;
-                        openCheckoutModal(productName, productPrice);
-                    }
-                });
-            }
-
-            const productGrid = document.getElementById('product-grid');
-            if (productGrid) {
-                const searchInput = document.getElementById('search-input');
-                const sortSelect = document.getElementById('sort-products');
-
-                function filterAndRenderProducts() {
-                    const searchTerm = searchInput.value.toLowerCase();
-                    const sortBy = sortSelect.value;
-
-                    let filteredProducts = products.filter(product =>
-                        product.name.toLowerCase().includes(searchTerm)
-                    );
-
-                    if (sortBy === 'price-asc') {
-                        filteredProducts.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
-                    } else if (sortBy === 'price-desc') {
-                        filteredProducts.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
-                    } else if (sortBy === 'name-asc') {
-                        filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
-                    } else if (sortBy === 'name-desc') {
-                        filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
-                    }
-
-                    renderProducts(filteredProducts);
-                }
-
-                // Initial Render
-                filterAndRenderProducts();
-
-                // Event Listeners
-                searchInput.addEventListener('input', filterAndRenderProducts);
-                sortSelect.addEventListener('change', filterAndRenderProducts);
-
-                productGrid.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('buy-now-btn')) {
-                        const productName = e.target.dataset.productName;
-                        const productPrice = e.target.dataset.productPrice;
-                        openCheckoutModal(productName, productPrice);
-                    }
-                });
-            }
+            filterAndRenderProducts(); // Render all products on load
         })
         .catch(error => console.error('Error fetching products:', error));
+
+    // DARK MODE
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const body = document.body;
+    const enableDarkMode = () => { body.classList.add('dark-mode'); localStorage.setItem('darkMode', 'enabled'); };
+    const disableDarkMode = () => { body.classList.remove('dark-mode'); localStorage.setItem('darkMode', 'disabled'); };
+    if (localStorage.getItem('darkMode') === 'enabled') enableDarkMode(); else disableDarkMode();
+    if(darkModeToggle) darkModeToggle.addEventListener('click', () => body.classList.contains('dark-mode') ? disableDarkMode() : enableDarkMode());
+
+    // EVENT LISTENERS
+    document.body.addEventListener('click', (e) => {
+        if (e.target.classList.contains('buy-now-btn')) {
+            const productName = e.target.dataset.productName;
+            const productPrice = e.target.dataset.productPrice;
+            openCheckoutModal(productName, productPrice);
+        }
+    });
 
     const payNowBtn = document.getElementById('pay-now-btn');
     if (payNowBtn) {
         payNowBtn.addEventListener('click', async (e) => {
             e.preventDefault();
             const checkoutForm = document.getElementById('checkout-form');
-            if (checkoutForm.checkValidity()) {
-                // submit the form to formspree
+            if (checkoutForm && checkoutForm.checkValidity()) {
                 const formSubmitted = await submitFormToFormspree(checkoutForm, 'https://formspree.io/f/mblnnppl');
-
                 if (formSubmitted) {
                     const name = document.getElementById('checkout_fullName').value;
                     const email = document.getElementById('checkout_email').value;
                     const price = document.getElementById('product-price-input').value;
                     const productName = document.getElementById('product-name-input').value;
-                    
                     payWithPaystack(email, name, price, productName, checkoutForm);
                 }
-            } else {
+            } else if (checkoutForm) {
                 checkoutForm.reportValidity();
             }
         });
     }
 
+    // Generic form submission for contact and newsletter
+    const handleFormSubmit = async (form, endpoint, statusDiv) => {
+        if (form.checkValidity()) {
+            const formSubmitted = await submitFormToFormspree(form, endpoint);
+            statusDiv.innerHTML = formSubmitted 
+                ? '<div class="alert alert-success">Thank you for your message!</div>'
+                : '<div class="alert alert-danger">Oops! There was a problem.</div>';
+            if(formSubmitted) form.reset();
+        } else {
+            form.reportValidity();
+        }
+    };
+
     const contactForm = document.getElementById('contact-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const statusDiv = document.getElementById('contact-form-status');
-            if (contactForm.checkValidity()) {
-                const formSubmitted = await submitFormToFormspree(contactForm, 'https://formspree.io/f/xzznlrjz');
-                if (formSubmitted) {
-                    statusDiv.innerHTML = '<div class="alert alert-success">Thank you for your message!</div>';
-                    contactForm.reset();
-                } else {
-                    statusDiv.innerHTML = '<div class="alert alert-danger">Oops! There was a problem sending your message.</div>';
-                }
-            } else {
-                contactForm.reportValidity();
-            }
-        });
-    }
+    if(contactForm) contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        handleFormSubmit(contactForm, 'https://formspree.io/f/xzznlrjz', document.getElementById('contact-form-status'));
+    });
 
     const newsletterForm = document.getElementById('newsletter-form');
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const statusDiv = document.getElementById('newsletter-form-status');
-            if (newsletterForm.checkValidity()) {
-                const formSubmitted = await submitFormToFormspree(newsletterForm, 'https://formspree.io/f/mqarvqwr');
-                if (formSubmitted) {
-                    statusDiv.innerHTML = '<div class="alert alert-success">Thank you for subscribing!</div>';
-                    newsletterForm.reset();
-                } else {
-                    statusDiv.innerHTML = '<div class="alert alert-danger">Oops! There was a problem subscribing.</div>';
-                }
-            } else {
-                newsletterForm.reportValidity();
-            }
-        });
-    }
+    if(newsletterForm) newsletterForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        handleFormSubmit(newsletterForm, 'https://formspree.io/f/mqarvqwr', document.getElementById('newsletter-form-status'));
+    });
+
+    // Product page specific logic
+    const searchInput = document.getElementById('search-input');
+    const sortSelect = document.getElementById('sort-products');
+    if(searchInput) searchInput.addEventListener('input', filterAndRenderProducts);
+    if(sortSelect) sortSelect.addEventListener('change', filterAndRenderProducts);
 });
+
+function filterAndRenderProducts() {
+    const searchInput = document.getElementById('search-input');
+    const sortSelect = document.getElementById('sort-products');
+    const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+    const sortBy = sortSelect ? sortSelect.value : 'default';
+
+    let filteredProducts = products.filter(product =>
+        product.name.toLowerCase().includes(searchTerm)
+    );
+
+    if (sortBy === 'price-asc') {
+        filteredProducts.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+    } else if (sortBy === 'price-desc') {
+        filteredProducts.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+    } else if (sortBy === 'name-asc') {
+        filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortBy === 'name-desc') {
+        filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
+    }
+
+    renderProducts(filteredProducts);
+}
