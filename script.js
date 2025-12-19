@@ -107,7 +107,7 @@ async function submitFormToFormspree(form, formspreeEndpoint) {
     }
 }
 
-function payWithPaystack(orderDetails) {
+function payWithPaystack(orderDetails, checkoutForm, checkoutModal) {
     const handler = PaystackPop.setup({
         key: 'pk_test_2fe8bb5c19b3f8662419607eefb26aa6380c5fe7', // Replace with your public key
         email: orderDetails.email,
@@ -128,9 +128,13 @@ function payWithPaystack(orderDetails) {
                 .then(function(emailResponse) {
                     console.log('SUCCESS!', emailResponse.status, emailResponse.text);
                     alert('Payment successful! A confirmation email has been sent to you.');
+                    checkoutModal.hide();
+                    checkoutForm.reset();
                 }, function(error) {
                     console.log('FAILED...', error);
                     alert('Payment successful, but we failed to send a confirmation email. Error: ' + JSON.stringify(error) + '. Please contact support with your transaction reference: ' + response.reference);
+                    checkoutModal.hide();
+                    checkoutForm.reset();
                 });
         },
         onClose: function() {
@@ -251,12 +255,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         price: document.getElementById('product-price-input').value,
                         productName: document.getElementById('product-name-input').value
                     };
-
-                    payWithPaystack(orderDetails);
-
+                    
                     const checkoutModal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
-                    checkoutModal.hide();
-                    checkoutForm.reset();
+                    payWithPaystack(orderDetails, checkoutForm, checkoutModal);
                 }
             } else {
                 checkoutForm.reportValidity();
