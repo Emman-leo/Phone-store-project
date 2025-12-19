@@ -1,7 +1,6 @@
 let products = [];
 let cart = [];
 let checkoutModal = null;
-let cartModal = null;
 
 function formatPrice(price) {
     const number = parseFloat(price);
@@ -223,17 +222,13 @@ document.addEventListener("DOMContentLoaded", () => {
         checkoutModal = new bootstrap.Modal(checkoutModalElement);
     }
 
-    const cartModalElement = document.getElementById('cartModal');
-    if (cartModalElement) {
-        cartModal = new bootstrap.Modal(cartModalElement);
-    }
-
     fetch('products.json')
         .then(response => response.json())
         .then(data => {
             products = data;
             renderFeaturedProducts();
             filterAndRenderProducts(); // Render all products on load
+            renderCartItems(); // Render cart items on cart page
         })
         .catch(error => console.error('Error fetching products:', error));
 
@@ -258,26 +253,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    const cartIcon = document.getElementById('cart-icon');
-    if (cartIcon) {
-        cartIcon.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (cartModal) {
-                renderCartItems();
-                cartModal.show();
-            }
-        });
-    }
-
     const checkoutBtn = document.getElementById('checkout-btn');
     if (checkoutBtn) {
         checkoutBtn.addEventListener('click', () => {
             if (cart.length > 0) {
                 const subtotal = cart.reduce((sum, product) => sum + parseFloat(product.price), 0);
                 const productNames = cart.map(p => p.name).join(', ');
-                if (cartModal) {
-                    cartModal.hide();
-                }
                 openCheckoutModal(productNames, subtotal);
             } else {
                 showToast("Your cart is empty.");
