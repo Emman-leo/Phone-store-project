@@ -109,7 +109,7 @@ async function submitFormToFormspree(form, formspreeEndpoint) {
 
 function payWithPaystack(email, amount) {
     const handler = PaystackPop.setup({
-        key: 'YOUR_PAYSTACK_PUBLIC_KEY', // Replace with your public key
+        key: 'pk_test_2fe8bb5c19b3f8662419607eefb26aa6380c5fe7', // Replace with your public key
         email: email,
         amount: parseFloat(amount) * 100, // amount is in pesewas
         currency: 'GHS',
