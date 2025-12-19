@@ -41,16 +41,55 @@ function updateCartBadge() {
     }
 }
 
+function renderCartItems() {
+    const cartItemsContainer = document.getElementById('cart-items-container');
+    if (cartItemsContainer) {
+        if (cart.length === 0) {
+            cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+            return;
+        }
+
+        let cartHTML = '<ul class="list-group">';
+        let subtotal = 0;
+
+        cart.forEach((product, index) => {
+            cartHTML += `
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="my-0">${product.name}</h6>
+                        <small class="text-muted">Price: GHS ${formatPrice(product.price)}</small>
+                    </div>
+                    <button class="btn btn-danger btn-sm remove-from-cart-btn" data-product-index="${index}">Remove</button>
+                </li>
+            `;
+            subtotal += parseFloat(product.price);
+        });
+
+        cartHTML += '</ul>';
+        cartHTML += `<div class="text-end fw-bold mt-3">Subtotal: GHS ${formatPrice(subtotal)}</div>`;
+        cartItemsContainer.innerHTML = cartHTML;
+    }
+}
+
 function addToCart(productName) {
     const product = products.find(p => p.name === productName);
     if (product) {
         cart.push(product);
         saveCart();
         updateCartBadge();
+        renderCartItems();
         showToast(`${product.name} has been added to your cart.`);
     }
 }
 
+function removeFromCart(productIndex) {
+    if (productIndex >= 0 && productIndex < cart.length) {
+        cart.splice(productIndex, 1);
+        saveCart();
+        updateCartBadge();
+        renderCartItems();
+    }
+}
 
 function openCheckoutModal(productName, productPrice) {
     const productNameInput = document.getElementById('product-name-input');
@@ -196,6 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     loadCart();
     updateCartBadge();
+    renderCartItems();
 
     const checkoutModalElement = document.getElementById('checkoutModal');
     if (checkoutModalElement) {
@@ -225,7 +265,25 @@ document.addEventListener("DOMContentLoaded", () => {
             const productName = e.target.dataset.productName;
             addToCart(productName);
         }
+
+        if (e.target.classList.contains('remove-from-cart-btn')) {
+            const productIndex = e.target.dataset.productIndex;
+            removeFromCart(productIndex);
+        }
     });
+
+    const checkoutBtn = document.getElementById('checkout-btn');
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', () => {
+            if (cart.length > 0) {
+                const subtotal = cart.reduce((sum, product) => sum + parseFloat(product.price), 0);
+                const productNames = cart.map(p => p.name).join(', ');
+                openCheckoutModal(productNames, subtotal);
+            } else {
+                showToast("Your cart is empty.");
+            }
+        });
+    }
 
     const payNowBtn = document.getElementById('pay-now-btn');
     if (payNowBtn) {
