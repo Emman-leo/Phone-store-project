@@ -126,4 +126,5 @@ body.dark-mode {
 .dark-mode .list-group-item {
     background-color: transparent;
     border-color: #555;
+    color: #e0e0e0; /* Explicitly set text color for list items */
 }
