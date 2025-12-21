@@ -1,4 +1,5 @@
 
+const SHIPPING_COST = 50;
 let products = [];
 let cart = [];
 let checkoutModal = null;
@@ -88,8 +89,7 @@ function renderCartItems() {
 
         if (orderSummaryColumn) {
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            // Assuming a fixed shipping cost for this example
-            const shipping = 50;
+            const shipping = SHIPPING_COST;
             const total = subtotal + shipping;
 
             orderSummaryColumn.innerHTML = `
@@ -334,9 +334,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (formSubmitted) {
                     const name = document.getElementById('checkout_fullName').value;
                     const email = document.getElementById('checkout_email').value;
-                    const price = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    const total = subtotal + SHIPPING_COST;
                     const productName = cart.map(item => `${item.name} (x${item.quantity})`).join(', ');
-                    payWithPaystack(email, name, price, productName, checkoutForm);
+                    payWithPaystack(email, name, total, productName, checkoutForm);
                 }
             } else if (checkoutForm) {
                 checkoutForm.reportValidity();
