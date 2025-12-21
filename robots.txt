@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.cpagadgetshub.com/sitemap.xml
+Sitemap: https://cpagadgets.vercel.app/sitemap.xml
