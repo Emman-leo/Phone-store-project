@@ -13,9 +13,14 @@ async function loadComponent(url, elementId) {
         const data = await response.text();
         const element = document.getElementById(elementId);
         if (element) {
-            element.innerHTML = data;
+            const parent = element.parentNode;
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = data;
+            const componentElement = tempDiv.firstElementChild;
+            parent.replaceChild(componentElement, element);
 
-            if (elementId === 'navbar-container') {
+
+            if (componentElement.id === 'navbar') {
                 const darkModeToggle = document.getElementById('darkModeToggle');
                 const body = document.body;
 
@@ -46,7 +51,7 @@ async function loadComponent(url, elementId) {
                 }
                  // Update active nav link
                 const currentPage = window.location.pathname.split('/').pop();
-                const navLinks = element.querySelectorAll('.nav-link');
+                const navLinks = componentElement.querySelectorAll('.nav-link');
                 navLinks.forEach(link => {
                     const linkPage = link.getAttribute('href').split('/').pop();
                     if (linkPage === currentPage) {
@@ -129,11 +134,11 @@ function renderCartItems() {
                                     <p class="card-text text-muted">Price: GHS ${formatPrice(item.price)}</p>
                                     <div class="d-flex align-items-center mt-3">
                                         <div class="input-group input-group-sm" style="width: 120px;">
-                                            <button class="btn btn-outline-secondary" type="button" onclick="decrementQuantity('${item.name}')">-</button>
+                                            <button class="btn btn-outline-secondary" type="button" onclick="decrementQuantity('''${item.name}''')">-</button>
                                             <input type="text" class="form-control text-center" value="${item.quantity}" readonly>
-                                            <button class="btn btn-outline-secondary" type="button" onclick="incrementQuantity('${item.name}')">+</button>
+                                            <button class="btn btn-outline-secondary" type="button" onclick="incrementQuantity('''${item.name}''')">+</button>
                                         </div>
-                                        <button class="btn btn-danger btn-sm ms-4" onclick="removeFromCart('${item.name}')">
+                                        <button class="btn btn-danger btn-sm ms-4" onclick="removeFromCart('''${item.name}''')">
                                             <i class="bi bi-trash-fill"></i> Remove
                                         </button>
                                     </div>
