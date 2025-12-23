@@ -53,32 +53,7 @@
 </head>
 <body>
     <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html">CPA Gadgets Hub</a>
-            <div class="d-flex align-items-center ms-auto">
-                <button class="dark-mode-toggle" id="darkModeToggle">
-                    <i class="bi bi-moon-fill"></i>
-                    <i class="bi bi-sun-fill"></i>
-                </button>
-                <a class="nav-link text-white ms-3" href="cart.html">
-                    <i class="bi bi-cart-fill"></i>
-                    <span class="badge rounded-pill bg-danger" id="cart-badge">0</span>
-                </a>
-                <button class="navbar-toggler ms-3" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
-            <div class="collapse navbar-collapse" id="navMenu">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="about.html">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <div id="navbar-container"></div>
 
     <!-- HERO SECTION -->
     <header class="bg-primary text-white text-center py-5">
@@ -154,62 +129,7 @@
     </div>
 
     <!-- FOOTER -->
-    <footer class="bg-dark text-white pt-5 pb-4">
-        <div class="container text-center text-md-start">
-            <div class="row text-center text-md-start">
-
-                <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-                    <h5 class="text-uppercase mb-4 fw-bold text-primary">CPA Gadgets Hub</h5>
-                    <p>Your one-stop shop for the latest and greatest mobile devices. We are committed to providing quality, value, and unbeatable service.</p>
-                </div>
-
-                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
-                    <h5 class="text-uppercase mb-4 fw-bold text-primary">Quick Links</h5>
-                    <p><a href="index.html" class="text-white" style="text-decoration: none;">Home</a></p>
-                    <p><a href="products.html" class="text-white" style="text-decoration: none;">Products</a></p>
-                    <p><a href="about.html" class="text-white" style="text-decoration: none;">About Us</a></p>
-                    <p><a href="contact.html" class="text-white" style="text-decoration: none;">Contact</a></p>
-                </div>
-
-                <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
-                    <h5 class="text-uppercase mb-4 fw-bold text-primary">Follow Us</h5>
-                    <div>
-                        <a href="#" class="btn btn-primary btn-floating m-1" role="button">
-                            <i class="bi bi-facebook"></i>
-                        </a>
-                        <a href="#" class="btn btn-primary btn-floating m-1" role="button">
-                            <i class="bi bi-twitter"></i>
-                        </a>
-                        <a href="#" class="btn btn-primary btn-floating m-1" role="button">
-                            <i class="bi bi-instagram"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
-                    <h5 class="text-uppercase mb-4 fw-bold text-primary">Subscribe</h5>
-                     <p>Subscribe to our newsletter for exclusive deals.</p>
-                    <form id="newsletter-form" class="row g-2">
-                        <div id="newsletter-form-status"></div>
-                        <div class="col-12">
-                            <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
-                        </div>
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-primary w-100">Subscribe</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <hr class="mb-4">
-
-            <div class="row align-items-center">
-                <div class="col-md-7 col-lg-8">
-                    <p class="text-center text-md-start mb-3 mb-md-0">&copy; 2025 CPA Gadgets Hub. All Rights Reserved.</p>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <div id="footer-container"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>

@@ -4,6 +4,64 @@ let products = [];
 let cart = [];
 let checkoutModal = null;
 
+async function loadComponent(url, elementId) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.text();
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.innerHTML = data;
+
+            if (elementId === 'navbar-container') {
+                const darkModeToggle = document.getElementById('darkModeToggle');
+                const body = document.body;
+
+                const enableDarkMode = () => {
+                    body.classList.add('dark-mode');
+                    localStorage.setItem('darkMode', 'enabled');
+                };
+
+                const disableDarkMode = () => {
+                    body.classList.remove('dark-mode');
+                    localStorage.setItem('darkMode', 'disabled');
+                };
+
+                if (localStorage.getItem('darkMode') === 'enabled') {
+                    enableDarkMode();
+                } else {
+                    disableDarkMode();
+                }
+
+                if (darkModeToggle) {
+                    darkModeToggle.addEventListener('click', () => {
+                        if (body.classList.contains('dark-mode')) {
+                            disableDarkMode();
+                        } else {
+                            enableDarkMode();
+                        }
+                    });
+                }
+                 // Update active nav link
+                const currentPage = window.location.pathname.split('/').pop();
+                const navLinks = element.querySelectorAll('.nav-link');
+                navLinks.forEach(link => {
+                    const linkPage = link.getAttribute('href').split('/').pop();
+                    if (linkPage === currentPage) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+            }
+        }
+    } catch (error) {
+        console.error(`Could not load component from ${url}:`, error);
+    }
+}
+
 function formatPrice(price) {
     const number = parseFloat(price);
     return number.toLocaleString('en-US', {
@@ -287,6 +345,8 @@ function payWithPaystack(email, name, price, productName, checkoutForm) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    loadComponent('navbar.html', 'navbar-container');
+    loadComponent('footer.html', 'footer-container');
     emailjs.init('2x9OXBEHSO9gJUvwv');
     
     const checkoutModalElement = document.getElementById('checkoutModal');
@@ -295,8 +355,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     
     loadCartFromLocalStorage();
-
-
 
     fetch('products.json')
         .then(response => response.json())
@@ -308,13 +366,6 @@ document.addEventListener("DOMContentLoaded", () => {
             filterAndRenderProducts();
         })
         .catch(error => console.error('Error fetching products:', error));
-
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    const body = document.body;
-    const enableDarkMode = () => { body.classList.add('dark-mode'); localStorage.setItem('darkMode', 'enabled'); };
-    const disableDarkMode = () => { body.classList.remove('dark-mode'); localStorage.setItem('darkMode', 'disabled'); };
-    if (localStorage.getItem('darkMode') === 'enabled') enableDarkMode(); else disableDarkMode();
-    if(darkModeToggle) darkModeToggle.addEventListener('click', () => body.classList.contains('dark-mode') ? disableDarkMode() : enableDarkMode());
 
     document.body.addEventListener('click', (e) => {
         if (e.target.classList.contains('add-to-cart-btn')) {
