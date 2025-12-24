@@ -314,7 +314,7 @@ async function submitFormToFormspree(form, formspreeEndpoint) {
 
 function payWithPaystack(email, name, price, productName, checkoutForm) {
     const handler = PaystackPop.setup({
-        key: 'pk_test_2fe8bb5c19b3f8662419607eefb26aa6380c5fe7',
+        key: CONFIG.PAYSTACK_PUBLIC_KEY,
         email: email,
         amount: parseFloat(price) * 100,
         currency: 'GHS',
@@ -327,7 +327,7 @@ function payWithPaystack(email, name, price, productName, checkoutForm) {
                 transaction_ref: response.reference,
                 email: email
             };
-            emailjs.send('service_arfu1ks', 'template_9hh7e6q', templateParams)
+            emailjs.send(CONFIG.EMAILJS_SERVICE_ID, CONFIG.EMAILJS_TEMPLATE_ID, templateParams)
                 .then(function(emailResponse) {
                     alert('Payment successful! A confirmation email has been sent to you.');
                 }, function(error) {
@@ -352,7 +352,7 @@ function payWithPaystack(email, name, price, productName, checkoutForm) {
 document.addEventListener("DOMContentLoaded", () => {
     loadComponent('navbar.html', 'navbar-container');
     loadComponent('footer.html', 'footer-container');
-    emailjs.init('2x9OXBEHSO9gJUvwv');
+    emailjs.init(CONFIG.EMAILJS_USER_ID);
     
     const checkoutModalElement = document.getElementById('checkoutModal');
     if (checkoutModalElement) {
@@ -386,7 +386,7 @@ document.addEventListener("DOMContentLoaded", () => {
             e.preventDefault();
             const checkoutForm = document.getElementById('checkout-form');
             if (checkoutForm && checkoutForm.checkValidity()) {
-                const formSubmitted = await submitFormToFormspree(checkoutForm, 'https://formspree.io/f/mblnnppl');
+                const formSubmitted = await submitFormToFormspree(checkoutForm, CONFIG.FORMSPREE_CHECKOUT_FORM);
                 if (formSubmitted) {
                     const name = document.getElementById('checkout_fullName').value;
                     const email = document.getElementById('checkout_email').value;
@@ -416,13 +416,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const contactForm = document.getElementById('contact-form');
     if(contactForm) contactForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        handleFormSubmit(contactForm, 'https://formspree.io/f/xzznlrjz', document.getElementById('contact-form-status'));
+        handleFormSubmit(contactForm, CONFIG.FORMSPREE_CONTACT_FORM, document.getElementById('contact-form-status'));
     });
 
     const newsletterForm = document.getElementById('newsletter-form');
     if(newsletterForm) newsletterForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        handleFormSubmit(newsletterForm, 'https://formspree.io/f/mqarvqwr', document.getElementById('newsletter-form-status'));
+        handleFormSubmit(newsletterForm, CONFIG.FORMSPREE_NEWSLETTER_FORM, document.getElementById('newsletter-form-status'));
     });
 
     const searchInput = document.getElementById('search-input');
