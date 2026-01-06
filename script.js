@@ -122,6 +122,7 @@ function renderCartItems() {
             cartItemsColumn.innerHTML = cart.map(item => {
                 const product = products.find(p => p.name === item.name);
                 const itemImage = product ? product.image : 'https://via.placeholder.com/100';
+                const escapedItemName = item.name.replace(/'/g, "\'");
                 return `
                     <div class="card mb-3 shadow-sm cart-item-card">
                         <div class="row g-0">
@@ -134,11 +135,11 @@ function renderCartItems() {
                                     <p class="card-text text-muted">Price: GHS ${formatPrice(item.price)}</p>
                                     <div class="d-flex align-items-center mt-3">
                                         <div class="input-group input-group-sm" style="width: 120px;">
-                                            <button class="btn btn-outline-secondary" type="button" onclick="decrementQuantity('''${item.name}''')">-</button>
+                                            <button class="btn btn-outline-secondary" type="button" onclick="decrementQuantity('${escapedItemName}')">-</button>
                                             <input type="text" class="form-control text-center" value="${item.quantity}" readonly>
-                                            <button class="btn btn-outline-secondary" type="button" onclick="incrementQuantity('''${item.name}''')">+</button>
+                                            <button class="btn btn-outline-secondary" type="button" onclick="incrementQuantity('${escapedItemName}')">+</button>
                                         </div>
-                                        <button class="btn btn-danger btn-sm ms-4" onclick="removeFromCart('''${item.name}''')">
+                                        <button class="btn btn-danger btn-sm ms-4" onclick="removeFromCart('${escapedItemName}')">
                                             <i class="bi bi-trash-fill"></i> Remove
                                         </button>
                                     </div>
