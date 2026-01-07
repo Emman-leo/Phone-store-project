@@ -124,7 +124,9 @@ function renderCartItems() {
             cartItemsColumn.innerHTML = cart.map(item => {
                 const product = products.find(p => p.name === item.name);
                 const itemImage = product ? product.image : 'https://via.placeholder.com/100';
-                const escapedItemName = item.name.replace(/'/g, "\'");
+                // Sanitize product name for use in data attributes
+                const safeItemName = item.name.replace(/"/g, '&quot;');
+
                 return `
                     <div class="card mb-3 shadow-sm cart-item-card">
                         <div class="row g-0">
@@ -137,11 +139,11 @@ function renderCartItems() {
                                     <p class="card-text text-muted">Price: GHS ${formatPrice(item.price)}</p>
                                     <div class="d-flex align-items-center mt-3">
                                         <div class="input-group input-group-sm" style="width: 120px;">
-                                            <button class="btn btn-outline-secondary" type="button" onclick="decrementQuantity('${escapedItemName}')">-</button>
+                                            <button class="btn btn-outline-secondary cart-action-btn" type="button" data-action="decrement" data-product-name="${safeItemName}">-</button>
                                             <input type="text" class="form-control text-center" value="${item.quantity}" readonly>
-                                            <button class="btn btn-outline-secondary" type="button" onclick="incrementQuantity('${escapedItemName}')">+</button>
+                                            <button class="btn btn-outline-secondary cart-action-btn" type="button" data-action="increment" data-product-name="${safeItemName}">+</button>
                                         </div>
-                                        <button class="btn btn-danger btn-sm ms-4" onclick="removeFromCart('${escapedItemName}')">
+                                        <button class="btn btn-danger btn-sm ms-4 cart-action-btn" type="button" data-action="remove" data-product-name="${safeItemName}">
                                             <i class="bi bi-trash-fill"></i> Remove
                                         </button>
                                     </div>
@@ -204,7 +206,7 @@ function decrementQuantity(productName) {
     if (product && product.quantity > 1) {
         product.quantity--;
     } else if (product) {
-        removeFromCart(productName);
+        removeFromCart(productName); // Automatically remove if quantity becomes 0
     }
     updateCartBadge();
     renderCartItems();
@@ -414,13 +416,43 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // --- All event listeners should be set up after initial rendering ---
 
+    // Centralized event listener for all body clicks
     document.body.addEventListener('click', (e) => {
+        // Add to Cart button
         if (e.target.classList.contains('add-to-cart-btn')) {
             const productName = e.target.dataset.productName;
             const productPrice = e.target.dataset.productPrice;
             addToCart(productName, productPrice);
+            return; // Exit after handling
+        }
+
+        // Cart action buttons (Increment, Decrement, Remove)
+        const cartButton = e.target.closest('.cart-action-btn');
+        if (cartButton) {
+            const productName = cartButton.dataset.productName;
+            const action = cartButton.dataset.action;
+
+            if (action === 'increment') {
+                incrementQuantity(productName);
+            } else if (action === 'decrement') {
+                decrementQuantity(productName);
+            } else if (action === 'remove') {
+                removeFromCart(productName);
+            }
+            return; // Exit after handling
+        }
+
+        // Checkout button
+        if (e.target.id === 'checkout-btn') {
+            if(checkoutModalElement) {
+                 if (!checkoutModal) {
+                    checkoutModal = new bootstrap.Modal(checkoutModalElement);
+                }
+                checkoutModal.show();
+            }
         }
     });
+
 
     const payNowBtn = document.getElementById('pay-now-btn');
     if (payNowBtn) {
@@ -471,18 +503,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const sortSelect = document.getElementById('sort-products');
     if(searchInput) searchInput.addEventListener('input', filterAndRenderProducts);
     if(sortSelect) sortSelect.addEventListener('change', filterAndRenderProducts);
-    
-    document.body.addEventListener('click', (e) => {
-        if (e.target.id === 'checkout-btn') {
-            const checkoutModalElement = document.getElementById('checkoutModal');
-            if(checkoutModalElement) {
-                 if (!checkoutModal) {
-                    checkoutModal = new bootstrap.Modal(checkoutModalElement);
-                }
-                checkoutModal.show();
-            }
-        }
-    });
 
 });
 
