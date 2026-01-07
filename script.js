@@ -1,4 +1,6 @@
 
+import { supabase } from './supabase-client.js';
+
 const SHIPPING_COST = 50;
 let products = [];
 let cart = [];
@@ -350,6 +352,19 @@ function payWithPaystack(email, name, price, productName, checkoutForm) {
     handler.openIframe();
 }
 
+async function loadProducts() {
+    const { data, error } = await supabase.from('products').select('*');
+    if (error) {
+        console.error('Error fetching products:', error);
+        return;
+    }
+    products = data;
+    updateCartBadge();
+    renderCartItems();
+    renderFeaturedProducts();
+    filterAndRenderProducts();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     loadComponent('navbar.html', 'navbar-container');
     loadComponent('footer.html', 'footer-container');
@@ -362,16 +377,8 @@ document.addEventListener("DOMContentLoaded", () => {
     
     loadCartFromLocalStorage();
 
-    fetch('products.json')
-        .then(response => response.json())
-        .then(data => {
-            products = data;
-            updateCartBadge();
-            renderCartItems();
-            renderFeaturedProducts();
-            filterAndRenderProducts();
-        })
-        .catch(error => console.error('Error fetching products:', error));
+    // Replaced fetch with Supabase call
+    loadProducts();
 
     document.body.addEventListener('click', (e) => {
         if (e.target.classList.contains('add-to-cart-btn')) {
