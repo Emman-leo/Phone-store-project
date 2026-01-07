@@ -353,32 +353,66 @@ function payWithPaystack(email, name, price, productName, checkoutForm) {
 }
 
 async function loadProducts() {
-    const { data, error } = await supabase.from('products').select('*');
-    if (error) {
-        console.error('Error fetching products:', error);
-        return;
+    let loadedProducts = [];
+    try {
+        // First, try to get products from Supabase
+        const { data, error } = await supabase.from('products').select('*');
+        if (error) {
+            throw new Error(`Supabase error: ${error.message}`);
+        }
+        if (data && data.length > 0) {
+            console.log('Products loaded from Supabase');
+            loadedProducts = data;
+        } else {
+            // If Supabase returns no data, trigger the fallback
+            throw new Error('No products in Supabase, falling back to JSON.');
+        }
+    } catch (error) {
+        // If Supabase fails for any reason, log the error and try the local file
+        console.warn(error.message);
+        console.log('Attempting to load from local products.json.');
+        try {
+            const response = await fetch('products.json');
+            if (!response.ok) {
+                 throw new Error('Failed to fetch products.json');
+            }
+            loadedProducts = await response.json();
+            console.log('Products successfully loaded from products.json.');
+        } catch (jsonError) {
+            // If both sources fail, log a critical error
+            console.error('CRITICAL: Failed to load products from both Supabase and local JSON file.', jsonError.message);
+        }
     }
-    products = data;
-    updateCartBadge();
-    renderCartItems();
-    renderFeaturedProducts();
-    filterAndRenderProducts();
+    return loadedProducts;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+    // Load reusable components
     loadComponent('navbar.html', 'navbar-container');
     loadComponent('footer.html', 'footer-container');
+
+    // Initialize services
     emailjs.init('2x9OXBEHSO9gJUvwv');
     
+    // Setup modal
     const checkoutModalElement = document.getElementById('checkoutModal');
     if (checkoutModalElement) {
         checkoutModal = new bootstrap.Modal(checkoutModalElement);
     }
     
+    // Load state
     loadCartFromLocalStorage();
 
-    // Replaced fetch with Supabase call
-    loadProducts();
+    // CRITICAL: Await product loading before proceeding
+    products = await loadProducts();
+
+    // Now that products are loaded, render all page components that depend on them
+    updateCartBadge();
+    renderCartItems();
+    renderFeaturedProducts();
+    filterAndRenderProducts(); // Initial render for product lists
+
+    // --- All event listeners should be set up after initial rendering ---
 
     document.body.addEventListener('click', (e) => {
         if (e.target.classList.contains('add-to-cart-btn')) {
