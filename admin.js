@@ -77,7 +77,7 @@ const openProductModal = (product = null) => {
         productNameInput.value = product.name;
         productDescriptionInput.value = product.description;
         productPriceInput.value = product.price;
-        productImageUrlInput.value = product.image_url;
+        productImageUrlInput.value = product.image;
         productFeaturedInput.checked = product.featured;
     } else {
         modalTitle.textContent = 'Add Product';
@@ -111,7 +111,7 @@ const saveProduct = async (e) => {
         name: productNameInput.value,
         description: productDescriptionInput.value,
         price: parseFloat(productPriceInput.value),
-        image_url: imageUrl,
+        image: imageUrl,
         featured: productFeaturedInput.checked,
     };
 
