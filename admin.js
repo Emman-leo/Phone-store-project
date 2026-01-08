@@ -1,5 +1,7 @@
 import { supabase } from './supabase-client.js';
 
+const CURRENCY = 'GHS';
+
 // DOM elements
 const loginSection = document.getElementById('login-section');
 const adminDashboard = document.getElementById('admin-dashboard');
@@ -18,6 +20,14 @@ const productPriceInput = document.getElementById('product-price');
 const productImageUploadInput = document.getElementById('product-image-upload');
 const productImageUrlInput = document.getElementById('product-image-url');
 const productFeaturedInput = document.getElementById('product-featured');
+
+function formatPrice(price) {
+    const number = parseFloat(price);
+    return number.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+}
 
 const checkUser = async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -41,7 +51,7 @@ const fetchProducts = async () => {
     productList.innerHTML = products.map(product => `
         <tr>
             <td>${product.name}</td>
-            <td>$${product.price.toFixed(2)}</td>
+            <td>${CURRENCY} ${formatPrice(product.price)}</td>
             <td>
                 <button class="btn btn-sm btn-primary edit-btn" data-id="${product.id}">Edit</button>
                 <button class="btn btn-sm btn-danger delete-btn" data-id="${product.id}">Delete</button>
