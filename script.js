@@ -2,6 +2,7 @@
 import { supabase } from './supabase-client.js';
 
 const SHIPPING_COST = 50;
+const CURRENCY = 'GHS';
 let products = [];
 let cart = [];
 let checkoutModal = null;
@@ -136,7 +137,7 @@ function renderCartItems() {
                             <div class="col-md-9">
                                 <div class="card-body">
                                     <h5 class="card-title fw-bold">${item.name}</h5>
-                                    <p class="card-text text-muted">Price: GHS ${formatPrice(item.price)}</p>
+                                    <p class="card-text text-muted">Price: ${CURRENCY} ${formatPrice(item.price)}</p>
                                     <div class="d-flex align-items-center mt-3">
                                         <div class="input-group input-group-sm" style="width: 120px;">
                                             <button class="btn btn-outline-secondary cart-action-btn" type="button" data-action="decrement" data-product-name="${safeItemName}">-</button>
@@ -167,15 +168,15 @@ function renderCartItems() {
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 Subtotal
-                                <span>GHS ${formatPrice(subtotal)}</span>
+                                <span>${CURRENCY} ${formatPrice(subtotal)}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 Shipping
-                                <span>GHS ${formatPrice(shipping)}</span>
+                                <span>${CURRENCY} ${formatPrice(shipping)}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center fw-bold fs-5">
                                 Total
-                                <span>GHS ${formatPrice(total)}</span>
+                                <span>${CURRENCY} ${formatPrice(total)}</span>
                             </li>
                         </ul>
                         <div class="d-grid mt-4">
@@ -250,7 +251,7 @@ function renderProducts(productsToRender) {
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">${product.name}</h5>
                                 <p class="card-text">${product.description}</p>
-                                <p class="card-text fw-bold mt-auto">GHS ${formatPrice(product.price)}</p>
+                                <p class="card-text fw-bold mt-auto">${CURRENCY} ${formatPrice(product.price)}</p>
                                 <button class="btn btn-primary add-to-cart-btn" data-product-name="${product.name}" data-product-price="${product.price}">Add to Cart</button>
                             </div>
                         </div>
@@ -278,7 +279,7 @@ function renderFeaturedProducts() {
                                 <div class="card-body text-center">
                                     <h5 class="card-title">${product.name}</h5>
                                     <p class="card-text">${product.description}</p>
-                                    <p class="card-text fw-bold">GHS ${formatPrice(product.price)}</p>
+                                    <p class="card-text fw-bold">${CURRENCY} ${formatPrice(product.price)}</p>
                                     <button class="btn btn-primary add-to-cart-btn" data-product-name="${product.name}" data-product-price="${product.price}">Add to Cart</button>
                                 </div>
                             </div>
@@ -322,7 +323,7 @@ function payWithPaystack(email, name, price, productName, checkoutForm) {
         key: 'pk_test_2fe8bb5c19b3f8662419607eefb26aa6380c5fe7',
         email: email,
         amount: parseFloat(price) * 100,
-        currency: 'GHS',
+        currency: CURRENCY,
         ref: '' + Math.floor((Math.random() * 1000000000) + 1),
         callback: function(response) {
             const templateParams = {
