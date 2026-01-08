@@ -7,6 +7,69 @@ let products = [];
 let cart = [];
 let checkoutModal = null;
 
+async function loadComponent(url, elementId) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.text();
+        const element = document.getElementById(elementId);
+        if (element) {
+            const parent = element.parentNode;
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = data;
+            const componentElement = tempDiv.firstElementChild;
+            parent.replaceChild(componentElement, element);
+
+
+            if (componentElement.id === 'navbar') {
+                const darkModeToggle = document.getElementById('darkModeToggle');
+                const body = document.body;
+
+                const enableDarkMode = () => {
+                    body.classList.add('dark-mode');
+                    localStorage.setItem('darkMode', 'enabled');
+                };
+
+                const disableDarkMode = () => {
+                    body.classList.remove('dark-mode');
+                    localStorage.setItem('darkMode', 'disabled');
+                };
+
+                if (localStorage.getItem('darkMode') === 'enabled') {
+                    enableDarkMode();
+                } else {
+                    disableDarkMode();
+                }
+
+                if (darkModeToggle) {
+                    darkModeToggle.addEventListener('click', () => {
+                        if (body.classList.contains('dark-mode')) {
+                            disableDarkMode();
+                        } else {
+                            enableDarkMode();
+                        }
+                    });
+                }
+                 // Update active nav link
+                const currentPage = window.location.pathname.split('/').pop();
+                const navLinks = componentElement.querySelectorAll('.nav-link');
+                navLinks.forEach(link => {
+                    const linkPage = link.getAttribute('href').split('/').pop();
+                    if (linkPage === currentPage) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+            }
+        }
+    } catch (error) {
+        console.error(`Could not load component from ${url}:`, error);
+    }
+}
+
 function formatPrice(price) {
     const number = parseFloat(price);
     return number.toLocaleString('en-US', {
@@ -61,7 +124,7 @@ function renderCartItems() {
         if (cartItemsColumn) {
             cartItemsColumn.innerHTML = cart.map(item => {
                 const product = products.find(p => p.name === item.name);
-                const itemImage = product ? product.image_url : 'https://via.placeholder.com/100';
+                const itemImage = product ? product.image : 'https://via.placeholder.com/100';
                 // Sanitize product name for use in data attributes
                 const safeItemName = item.name.replace(/"/g, '&quot;');
 
@@ -184,7 +247,7 @@ function renderProducts(productsToRender) {
                 const productCardHTML = `
                     <div class="col-md-4 mb-4">
                         <div class="card product-card h-100">
-                            <img src="${product.image_url}" class="card-img-top" alt="${product.name}">
+                            <img src="${product.image}" class="card-img-top" alt="${product.name}">
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">${product.name}</h5>
                                 <p class="card-text">${product.description}</p>
@@ -212,7 +275,7 @@ function renderFeaturedProducts() {
                     <div class="row justify-content-center">
                         <div class="col-md-8">
                              <div class="card product-card">
-                                <img src="${product.image_url}" class="card-img-top" alt="${product.name}">
+                                <img src="${product.image}" class="card-img-top" alt="${product.name}">
                                 <div class="card-body text-center">
                                     <h5 class="card-title">${product.name}</h5>
                                     <p class="card-text">${product.description}</p>
@@ -327,6 +390,10 @@ async function loadProducts() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+    // Load reusable components
+    loadComponent('navbar.html', 'navbar-container');
+    loadComponent('footer.html', 'footer-container');
+
     // Initialize services
     emailjs.init('2x9OXBEHSO9gJUvwv');
     
@@ -451,7 +518,7 @@ function filterAndRenderProducts() {
     );
 
     if (sortBy === 'price-asc') {
-        filteredProducts.sort((a, b) => parseFloat(a.price) - parseFloat(a.price));
+        filteredProducts.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
     } else if (sortBy === 'price-desc') {
         filteredProducts.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
     } else if (sortBy === 'name-asc') {

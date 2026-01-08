@@ -3,90 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - CPA Gadgets Hub</title>
+    <meta name="description" content="Get in touch with CPA Gadgets Hub. We're here to answer your questions and provide the support you need. Contact us today!">
+    <meta name="keywords" content="contact us, customer support, CPA Gadgets Hub, get in touch">
+    <meta name="author" content="CPA Gadgets Hub">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://cpagadgets.vercel.app/contact.html">
+    <meta property="og:title" content="Contact CPA Gadgets Hub - We're Here to Help">
+    <meta property="og:description" content="Get in touch with CPA Gadgets Hub. We're here to answer your questions and provide the support you need. Contact us today!">
+    <meta property="og:image" content="https://www.slashgear.com/img/gallery/apple-imac-24-inch-review-the-right-mac-for-most-people/l-intro-1650914299.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://cpagadgets.vercel.app/contact.html">
+    <meta property="twitter:title" content="Contact CPA Gadgets Hub - We're Here to Help">
+    <meta property="twitter:description" content="Get in touch with CPA Gadgets Hub. We're here to answer your questions and provide the support you need. Contact us today!">
+    <meta property="twitter:image" content="https://www.slashgear.com/img/gallery/apple-imac-24-inch-review-the-right-mac-for-most-people/l-intro-1650914299.jpg">
+
+    <link rel="canonical" href="https://cpagadgets.vercel.app/contact.html">
+    <title>Contact - CPA Gadgets Hub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="dark-mode.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      "name": "Contact CPA Gadgets Hub",
+      "description": "Get in touch with CPA Gadgets Hub. We're here to answer your questions and provide the support you need.",
+      "mainEntity": {
+        "@type": "Organization",
+        "name": "CPA Gadgets Hub",
+        "url": "https://cpagadgets.vercel.app/",
+        "logo": "https://cpagadgets.vercel.app/assets/images/logo.png",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Circle",
+          "addressLocality": "Accra",
+          "addressCountry": "GH"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+233-57-251-8869",
+          "email": "emmllampt07@gmail.com",
+          "contactType": "Customer Service"
+        }
+      }
+    }
+    </script>
 </head>
 <body>
     <!-- NAVBAR -->
     <div id="navbar-container"></div>
 
-    <!-- MAIN CONTENT -->
-    <main class="container py-5">
-        <section id="contact-us" class="mb-5">
-            <h1 class="display-4 fw-bold text-center mb-5">Get in Touch</h1>
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center fw-bold mb-5">Contact Us</h2>
             <div class="row g-5">
-                <div class="col-lg-6">
-                    <h2 class="fw-bold">Send Us a Message</h2>
-                    <form id="contact-form" class="needs-validation" novalidate>
-                        <div class="mb-3">
-                            <label for="contact_name" class="form-label">Your Name</label>
-                            <input type="text" class="form-control" id="contact_name" name="name" required>
+                <!-- Contact Information Column -->
+                <div class="col-md-6">
+                    <div class="p-4 h-100 rounded bg-white shadow">
+                        <h3 class="fw-bold mb-4">Get in Touch</h3>
+                        <p class="text-muted mb-4">
+                            We'd love to hear from you! Whether you have a question about our products, need assistance with an order, or just want to give some feedback, please don't hesitate to reach out.
+                        </p>
+                        <ul class="list-unstyled">
+                            <li class="d-flex align-items-center mb-3">
+                                <i class="bi bi-geo-alt-fill fs-4 me-3 text-primary"></i>
+                                <p class="mb-0">Circle, Accra<br>Ghana</p>
+                            </li>
+                            <li class="d-flex align-items-center mb-3">
+                                <i class="bi bi-telephone-fill fs-4 me-3 text-primary"></i>
+                                <p class="mb-0"><a href="tel:+233572518869" class="text-decoration-none text-dark">+233 57 251 8869</a></p>
+                            </li>
+                            <li class="d-flex align-items-center">
+                                <i class="bi bi-envelope-fill fs-4 me-3 text-primary"></i>
+                                <p class="mb-0"><a href="mailto:emmllampt07@gmail.com" class="text-decoration-none text-dark">emmllampt07@gmail.com</a></p>
+                            </li>
+                        </ul>
+                        <div class="mt-4">
+                            <h4 class="fw-bold fs-5 mb-3">Follow Us</h4>
+                            <a href="#" class="text-dark me-3"><i class="bi bi-facebook fs-3"></i></a>
+                            <a href="#" class="text-dark me-3"><i class="bi bi-twitter fs-3"></i></a>
+                            <a href="#" class="text-dark"><i class="bi bi-instagram fs-3"></i></a>
                         </div>
-                        <div class="mb-3">
-                            <label for="contact_email" class="form-label">Your Email</label>
-                            <input type="email" class="form-control" id="contact_email" name="email" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="contact_message" class="form-label">Message</label>
-                            <textarea class="form-control" id="contact_message" name="message" rows="5" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Send Message</button>
-                    </form>
-                    <div id="contact-form-status" class="mt-3"></div>
-                </div>
-                <div class="col-lg-6">
-                    <h2 class="fw-bold">Contact Information</h2>
-                    <p class="lead">Feel free to reach out to us through any of the following channels.</p>
-                    <ul class="list-unstyled">
-                        <li class="mb-3">
-                            <i class="bi bi-geo-alt-fill me-2"></i>
-                            <strong>Address:</strong> 123 Tech Avenue, Accra, Ghana
-                        </li>
-                        <li class="mb-3">
-                            <i class="bi bi-telephone-fill me-2"></i>
-                            <strong>Phone:</strong> <a href="tel:+233244123456">+233 24 412 3456</a>
-                        </li>
-                        <li class="mb-3">
-                            <i class="bi bi-envelope-fill me-2"></i>
-                            <strong>Email:</strong> <a href="mailto:info@cpagadgets.com">info@cpagadgets.com</a>
-                        </li>
-                        <li class="mb-3">
-                            <i class="bi bi-whatsapp me-2"></i>
-                            <strong>WhatsApp:</strong> <a href="https://wa.me/233244123456" target="_blank">+233 24 412 3456</a>
-                        </li>
-                    </ul>
-                    <div class="mt-4">
-                        <h3 class="fw-bold">Follow Us</h3>
-                        <a href="#" class="btn btn-outline-primary btn-lg me-2"><i class="bi bi-facebook"></i></a>
-                        <a href="#" class="btn btn-outline-primary btn-lg me-2"><i class="bi bi-twitter-x"></i></a>
-                        <a href="#" class="btn btn-outline-primary btn-lg"><i class="bi bi-instagram"></i></a>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <section id="map">
-             <h2 class="fw-bold text-center mb-4">Our Location</h2>
-            <div class="card shadow-sm">
-                <div class="card-body p-0">
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3970.781872832961!2d-0.1983!3d5.6037!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfdf9a7a67f4075b%3A0x44f8b9b940e5d89c!2sAccra%2C%20Ghana!5e0!3m2!1sen!2sus!4v1678886400000!5m2!1sen!2sus"
-                        width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <!-- Contact Form Column -->
+                <div class="col-md-6">
+                    <form id="contact-form" class="p-4 shadow rounded bg-white h-100">
+                        <div id="contact-form-status"></div>
+                        <h3 class="fw-bold mb-4">Send a Message</h3>
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" name="name" class="form-control" placeholder="Your Name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" name="email" class="form-control" placeholder="example@mail.com" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Message</label>
+                            <textarea name="message" class="form-control" rows="5" placeholder="Your message..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Send Message</button>
+                    </form>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
+
+    <!-- Toast Notification -->
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1055">
+        <div id="cart-toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">CPA Gadgets Hub</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toast-body-content">
+                <!-- Toast message will be injected here -->
+            </div>
+        </div>
+    </div>
 
     <!-- FOOTER -->
     <div id="footer-container"></div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-    <script src="layout.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="module" src="supabase-client.js"></script>
     <script type="module" src="script.js"></script>
 </body>
 </html>
