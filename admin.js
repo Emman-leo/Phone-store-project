@@ -1,143 +1,171 @@
 import { supabase } from './supabase-client.js';
 
+// DOM elements
 const loginSection = document.getElementById('login-section');
 const adminDashboard = document.getElementById('admin-dashboard');
 const loginForm = document.getElementById('login-form');
 const loginError = document.getElementById('login-error');
-const productList = document.getElementById('product-list');
 const logoutBtn = document.getElementById('logout-btn');
+const productList = document.getElementById('product-list');
 const addProductBtn = document.getElementById('add-product-btn');
-const productModalEl = document.getElementById('product-modal');
-const productModal = new bootstrap.Modal(productModalEl);
+const productModal = new bootstrap.Modal(document.getElementById('product-modal'));
 const productForm = document.getElementById('product-form');
 const modalTitle = document.getElementById('modal-title');
+const productIdInput = document.getElementById('product-id');
+const productNameInput = document.getElementById('product-name');
+const productDescriptionInput = document.getElementById('product-description');
+const productPriceInput = document.getElementById('product-price');
+const productImageUploadInput = document.getElementById('product-image-upload');
+const productImageUrlInput = document.getElementById('product-image-url');
+const productFeaturedInput = document.getElementById('product-featured');
 
-document.addEventListener('DOMContentLoaded', () => {
-    checkUser();
-
-    if (loginForm) {
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            const { error } = await supabase.auth.signInWithPassword({ email, password });
-
-            if (error) {
-                loginError.textContent = error.message;
-            } else {
-                loginSection.classList.add('d-none');
-                adminDashboard.classList.remove('d-none');
-                loadProducts();
-            }
-        });
-    }
-
-    if(logoutBtn) {
-        logoutBtn.addEventListener('click', async () => {
-            await supabase.auth.signOut();
-            location.reload();
-        });
-    }
-
-    if (addProductBtn) {
-        addProductBtn.addEventListener('click', () => {
-            modalTitle.textContent = 'Add New Product';
-            productForm.reset();
-            document.getElementById('product-id').value = '';
-            productModal.show();
-        });
-    }
-
-    productForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const productId = document.getElementById('product-id').value;
-        const productData = {
-            name: document.getElementById('product-name').value,
-            description: document.getElementById('product-description').value,
-            price: parseFloat(document.getElementById('product-price').value),
-            image: document.getElementById('product-image').value,
-            featured: document.getElementById('product-featured').checked,
-        };
-
-        let error;
-        if (productId) {
-            // Update existing product
-            ({ error } = await supabase.from('products').update(productData).match({ id: productId }));
-        } else {
-            // Add new product
-            ({ error } = await supabase.from('products').insert([productData]));
-        }
-
-        if (error) {
-            console.error('Error saving product:', error);
-        } else {
-            productModal.hide();
-            loadProducts();
-        }
-    });
-
-    productList.addEventListener('click', async (e) => {
-        const target = e.target.closest('button');
-        if (!target) return;
-        const productId = target.dataset.id;
-
-        if (target.classList.contains('delete-btn')) {
-            if (confirm('Are you sure you want to delete this product?')) {
-                const { error } = await supabase.from('products').delete().match({ id: productId });
-                if (error) {
-                    console.error('Error deleting product:', error);
-                } else {
-                    loadProducts();
-                }
-            }
-        } else if (target.classList.contains('edit-btn')) {
-            const { data, error } = await supabase.from('products').select('*').eq('id', productId).single();
-
-            if (error) {
-                console.error('Error fetching product for edit:', error);
-                return;
-            }
-
-            modalTitle.textContent = 'Edit Product';
-            document.getElementById('product-id').value = data.id;
-            document.getElementById('product-name').value = data.name;
-            document.getElementById('product-description').value = data.description;
-            document.getElementById('product-price').value = data.price;
-            document.getElementById('product-image').value = data.image;
-            document.getElementById('product-featured').checked = data.featured;
-            
-            productModal.show();
-        }
-    });
-});
-
-async function checkUser() {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) {
+const checkUser = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
         loginSection.classList.add('d-none');
         adminDashboard.classList.remove('d-none');
-        await loadProducts();
+        fetchProducts();
     } else {
         loginSection.classList.remove('d-none');
         adminDashboard.classList.add('d-none');
     }
-}
+};
 
-async function loadProducts() {
-    const { data, error } = await supabase.from('products').select('*').order('id', { ascending: true });
+const fetchProducts = async () => {
+    const { data: products, error } = await supabase.from('products').select('*').order('name');
     if (error) {
-        console.error('Error loading products:', error);
+        console.error('Error fetching products:', error);
         return;
     }
-    productList.innerHTML = data.map(product => `
+
+    productList.innerHTML = products.map(product => `
         <tr>
             <td>${product.name}</td>
-            <td>${product.price}</td>
+            <td>$${product.price.toFixed(2)}</td>
             <td>
-                <button class="btn btn-warning btn-sm edit-btn" data-id="${product.id}">Edit</button>
-                <button class="btn btn-danger btn-sm delete-btn" data-id="${product.id}">Delete</button>
+                <button class="btn btn-sm btn-primary edit-btn" data-id="${product.id}">Edit</button>
+                <button class="btn btn-sm btn-danger delete-btn" data-id="${product.id}">Delete</button>
             </td>
         </tr>
     `).join('');
-}
+};
+
+const handleLogin = async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) {
+        loginError.textContent = error.message;
+    } else {
+        loginError.textContent = '';
+        checkUser();
+    }
+};
+
+const handleLogout = async () => {
+    await supabase.auth.signOut();
+    checkUser();
+};
+
+const openProductModal = (product = null) => {
+    productForm.reset();
+    if (product) {
+        modalTitle.textContent = 'Edit Product';
+        productIdInput.value = product.id;
+        productNameInput.value = product.name;
+        productDescriptionInput.value = product.description;
+        productPriceInput.value = product.price;
+        productImageUrlInput.value = product.image_url;
+        productFeaturedInput.checked = product.featured;
+    } else {
+        modalTitle.textContent = 'Add Product';
+    }
+    productModal.show();
+};
+
+const saveProduct = async (e) => {
+    e.preventDefault();
+
+    let imageUrl = productImageUrlInput.value.trim();
+    const file = productImageUploadInput.files[0];
+
+    if (file) {
+        const fileName = `${Date.now()}-${file.name}`;
+        const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('product-images')
+            .upload(fileName, file);
+
+        if (uploadError) {
+            console.error('Error uploading image:', uploadError);
+            alert('Error uploading image. Please try again.');
+            return;
+        }
+
+        const { data: { publicUrl } } = supabase.storage.from('product-images').getPublicUrl(fileName);
+        imageUrl = publicUrl;
+    }
+
+    const productData = {
+        name: productNameInput.value,
+        description: productDescriptionInput.value,
+        price: parseFloat(productPriceInput.value),
+        image_url: imageUrl,
+        featured: productFeaturedInput.checked,
+    };
+
+    const id = productIdInput.value;
+    let result;
+    if (id) {
+        result = await supabase.from('products').update(productData).eq('id', id);
+    } else {
+        result = await supabase.from('products').insert(productData);
+    }
+
+    if (result.error) {
+        console.error('Error saving product:', result.error);
+        alert('Error saving product. Check the console for details.');
+    } else {
+        productModal.hide();
+        fetchProducts();
+    }
+};
+
+const deleteProduct = async (productId) => {
+    if (!confirm('Are you sure you want to delete this product?')) return;
+
+    const { error } = await supabase.from('products').delete().eq('id', productId);
+    if (error) {
+        console.error('Error deleting product:', error);
+        alert('Error deleting product.');
+    } else {
+        fetchProducts();
+    }
+};
+
+// Event Listeners
+loginForm.addEventListener('submit', handleLogin);
+logoutBtn.addEventListener('click', handleLogout);
+addProductBtn.addEventListener('click', () => openProductModal());
+
+productList.addEventListener('click', async (e) => {
+    if (e.target.classList.contains('edit-btn')) {
+        const productId = e.target.dataset.id;
+        const { data: product, error } = await supabase.from('products').select('*').eq('id', productId).single();
+        if (error) {
+            console.error('Error fetching product for edit:', error);
+        } else {
+            openProductModal(product);
+        }
+    }
+
+    if (e.target.classList.contains('delete-btn')) {
+        const productId = e.target.dataset.id;
+        deleteProduct(productId);
+    }
+});
+
+productForm.addEventListener('submit', saveProduct);
+
+document.addEventListener('DOMContentLoaded', checkUser);
