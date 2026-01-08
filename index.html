@@ -3,178 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Discover the latest gadgets, accessories, and unbeatable deals at CPA Gadgets Hub. We offer fast delivery, the best deals, and premium products.">
-    <meta name="keywords" content="gadgets, mobile phones, accessories, tech, CPA Gadgets Hub">
-    <meta name="author" content="CPA Gadgets Hub">
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://cpagadgets.vercel.app/index.html">
-    <meta property="og:title" content="CPA Gadgets Hub - Your Ultimate Gadget Destination">
-    <meta property="og:description" content="Discover the latest gadgets, accessories, and unbeatable deals at CPA Gadgets Hub. We offer fast delivery, the best deals, and premium products.">
-    <meta property="og:image" content="https://www.slashgear.com/img/gallery/apple-imac-24-inch-review-the-right-mac-for-most-people/l-intro-1650914299.jpg">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://cpagadgets.vercel.app/index.html">
-    <meta property="twitter:title" content="CPA Gadgets Hub - Your Ultimate Gadget Destination">
-    <meta property="twitter:description" content="Discover the latest gadgets, accessories, and unbeatable deals at CPA Gadgets Hub. We offer fast delivery, the best deals, and premium products.">
-    <meta property="twitter:image" content="https://www.slashgear.com/img/gallery/apple-imac-24-inch-review-the-right-mac-for-most-people/l-intro-1650914299.jpg">
-    
-    <link rel="canonical" href="https://cpagadgets.vercel.app/index.html">
-    <title>CPA Gadgets Hub - Home</title>
+    <title>CPA Gadgets Hub - Your One-Stop Tech Shop in Ghana</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="dark-mode.css">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
     <!-- NAVBAR -->
     <div id="navbar-container"></div>
 
-
     <!-- HERO SECTION -->
-    <header class="hero">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1 class="display-4 fw-bold">Get the Latest Gadgets Today!</h1>
-            <p class="lead">Discover premium gadgets, accessories, and unbeatable deals at CPA Gadgets Hub.</p>
-            <a href="products.html" class="btn btn-primary btn-lg me-2">Shop Now</a>
-            <a href="#newsletter" class="btn btn-outline-light btn-lg">Subscribe</a>
+    <header class="hero-section text-center text-white py-5">
+        <div class="container">
+            <h1 class="display-3 fw-bold">Welcome to CPA Gadgets Hub</h1>
+            <p class="lead">Your trusted source for the latest smartphones, laptops, and accessories in Ghana.</p>
+            <a href="products.html" class="btn btn-primary btn-lg">Shop Now</a>
         </div>
     </header>
 
-    <!-- FEATURED PRODUCTS CAROUSEL -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="fw-bold">Featured Products</h2>
-                <p class="text-muted">Check out our top-rated gadgets of the week</p>
+    <!-- MAIN CONTENT -->
+    <main class="container py-5">
+        <!-- FEATURED PRODUCTS -->
+        <section id="featured-products" class="mb-5">
+            <h2 class="text-center fw-bold mb-4">Featured Products</h2>
+            <div id="product-carousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner" id="product-carousel-inner">
+                    <!-- Featured products will be loaded here -->
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#product-carousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#product-carousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
+        </section>
 
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner" id="product-carousel-inner">
-
-                            <!-- Products will be dynamically inserted here -->
-
-                        </div>
-
-                        <button class="carousel-control-prev" type="button"
-                                data-bs-target="#productCarousel" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-
-                        <button class="carousel-control-next" type="button"
-                                data-bs-target="#productCarousel" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-    <!-- FEATURES SECTION -->
-    <section class="py-5">
-        <div class="container">
-            <h2 class="text-center fw-bold mb-4">Why Shop With Us?</h2>
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card feature-card text-center shadow-sm h-100">
-                        <div class="card-body p-4">
-                            <i class="bi bi-truck fs-1 text-primary"></i>
-                            <h5 class="card-title fw-semibold mt-3">Fast Delivery</h5>
-                            <p class="card-text">Get your products delivered quickly and safely right to your doorstep.</p>
+        <!-- WHY CHOOSE US -->
+        <section id="why-choose-us" class="py-5 bg-light rounded">
+            <div class="container">
+                <h2 class="text-center fw-bold mb-4">Why Choose Us?</h2>
+                <div class="row text-center">
+                    <div class="col-md-4">
+                        <div class="card border-0 bg-light">
+                             <div class="card-body">
+                                <i class="bi bi-truck fs-1 text-primary"></i>
+                                <h5 class="card-title fw-bold mt-3">Fast Delivery</h5>
+                                <p class="card-text">Nationwide delivery to your doorstep. Quick, safe, and reliable.</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card feature-card text-center shadow-sm h-100">
-                        <div class="card-body p-4">
-                            <i class="bi bi-tag-fill fs-1 text-primary"></i>
-                            <h5 class="card-title fw-semibold mt-3">Best Deals</h5>
-                            <p class="card-text">Enjoy competitive prices and special discounts on top gadget brands.</p>
+                    <div class="col-md-4">
+                        <div class="card border-0 bg-light">
+                             <div class="card-body">
+                                <i class="bi bi-shield-check fs-1 text-primary"></i>
+                                <h5 class="card-title fw-bold mt-3">Quality Guaranteed</h5>
+                                <p class="card-text">We only source genuine products from trusted manufacturers.</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card feature-card text-center shadow-sm h-100">
-                        <div class="card-body p-4">
-                            <i class="bi bi-shield-check fs-1 text-primary"></i>
-                            <h5 class="card-title fw-semibold mt-3">Premium Products</h5>
-                            <p class="card-text">We provide authentic, high-quality gadgets for all your needs.</p>
+                    <div class="col-md-4">
+                         <div class="card border-0 bg-light">
+                             <div class="card-body">
+                                <i class="bi bi-headset fs-1 text-primary"></i>
+                                <h5 class="card-title fw-bold mt-3">Expert Support</h5>
+                                <p class="card-text">Our team is always ready to help you with any questions.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-    
-    <!-- CHECKOUT MODAL -->
-    <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="checkoutModalLabel">Checkout</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="checkoutModalBody">
-                    <p>To complete your purchase, please fill out the form below and proceed to payment.</p>
-                    <form id="checkout-form">
-                        <input type="hidden" name="product" id="product-name-input">
-                        <input type="hidden" id="product-price-input">
-                        <div class="mb-3">
-                            <label for="checkout_fullName" class="form-label">Full Name</label>
-                            <input type="text" class="form-control" id="checkout_fullName" name="checkout_name" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="checkout_email" class="form-label">Email Address</label>
-                            <input type="email" class="form-control" id="checkout_email" name="checkout_email" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="phone" class="form-label">Phone Number</label>
-                            <input type="tel" class="form-control" id="phone" name="phone" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="address" class="form-label">Delivery Address</label>
-                            <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
-                        </div>
-                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" id="pay-now-btn">Pay Now</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+        </section>
 
-    <!-- Toast Notification -->
-    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1055">
-        <div id="cart-toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+        <!-- NEWSLETTER -->
+        <section id="newsletter" class="py-5 mt-5 text-center">
+            <h2 class="fw-bold">Stay Updated</h2>
+            <p>Subscribe to our newsletter to get the latest deals and product announcements.</p>
+            <form class="row justify-content-center" id="newsletter-form">
+                <div class="col-md-6">
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control" placeholder="Enter your email" name="email" required>
+                        <button class="btn btn-primary" type="submit">Subscribe</button>
+                    </div>
+                </div>
+            </form>
+             <div id="newsletter-form-status" class="mt-3"></div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <div id="footer-container"></div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="cart-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
                 <strong class="me-auto">CPA Gadgets Hub</strong>
+                <small>Just now</small>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body" id="toast-body-content">
-                <!-- Toast message will be injected here -->
+                <!-- Toast message will be inserted here -->
             </div>
         </div>
     </div>
 
-    <!-- FOOTER -->
-   <div id="footer-container"></div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://js.paystack.co/v1/inline.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    <script type="module" src="supabase-client.js"></script>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script src="layout.js"></script>
     <script type="module" src="script.js"></script>
 </body>
 </html>
