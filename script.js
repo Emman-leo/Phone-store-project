@@ -306,47 +306,76 @@ async function submitFormToFormspree(form, formspreeEndpoint) {
         if (response.ok) return true;
         const data = await response.json();
         if (Object.hasOwn(data, 'errors')) {
-            alert(data["errors"].map(error => error["message"]).join(", "));
+            console.error('Formspree errors:', data["errors"]);
         } else {
-            alert('Oops! There was a problem submitting your form.');
+            console.error('Formspree submission error:', data);
         }
         return false;
     } catch (error) {
-        alert('Oops! There was a problem submitting your form.');
-        console.error(error);
+        console.error('Error submitting form to Formspree:', error);
         return false;
     }
 }
 
-function payWithPaystack(email, name, price, productName, checkoutForm) {
+async function payWithPaystack(email, name, phone, address, price, cartItems, checkoutForm) {
     const handler = PaystackPop.setup({
-        key: 'pk_test_2fe8bb5c19b3f8662419607eefb26aa6380c5fe7',
+        key: 'pk_test_2fe8bb5c19b3f8662419607eefb26aa6380c5fe7', // Replace with your public key
         email: email,
-        amount: parseFloat(price) * 100,
+        amount: parseFloat(price) * 100, // Amount in kobo
         currency: CURRENCY,
-        ref: '' + Math.floor((Math.random() * 1000000000) + 1),
-        callback: function(response) {
+        ref: '' + Math.floor((Math.random() * 1000000000) + 1), // Unique ref
+        callback: async function(response) {
+            console.log('Payment successful. Reference: ' + response.reference);
+
+            const orderData = {
+                name: name,
+                email: email,
+                phone: phone,
+                address: address,
+                products: cartItems,
+                total_amount: price,
+                transaction_ref: response.reference
+            };
+
+            try {
+                const { data, error } = await supabase.from('orders').insert([orderData]);
+                if (error) {
+                    throw error;
+                }
+                console.log('Order saved to Supabase:', data);
+                alert('Payment successful! Your order has been placed.');
+
+            } catch (error) {
+                console.error('Error saving order to Supabase:', error);
+                alert('Payment successful, but there was an issue saving your order. Please contact support with transaction reference: ' + response.reference);
+            }
+
+            await submitFormToFormspree(checkoutForm, 'https://formspree.io/f/mblnnppl');
+
+            const productNameString = cartItems.map(item => `${item.name} (x${item.quantity})`).join(', ');
             const templateParams = {
                 name: name,
-                product_name: productName,
+                product_name: productNameString,
                 product_price: formatPrice(price),
                 transaction_ref: response.reference,
                 email: email
             };
+
             emailjs.send('service_arfu1ks', 'template_9hh7e6q', templateParams)
                 .then(function(emailResponse) {
-                    alert('Payment successful! A confirmation email has been sent to you.');
+                    console.log('Confirmation email sent successfully.', emailResponse.status, emailResponse.text);
                 }, function(error) {
-                    alert('Payment successful, but we failed to send a confirmation email. Error: ' + JSON.stringify(error));
-                })
-                .finally(() => {
-                    if (checkoutModal) checkoutModal.hide();
-                    if (checkoutForm) checkoutForm.reset();
-                    cart = [];
-                    saveCartToLocalStorage();
-                    updateCartBadge();
-                    renderCartItems();
+                    console.error('Failed to send confirmation email.', error);
                 });
+
+            if (checkoutModal) checkoutModal.hide();
+            if (checkoutForm) checkoutForm.reset();
+            cart = [];
+            saveCartToLocalStorage();
+            updateCartBadge();
+            if (document.getElementById('cart-items-column')) {
+                renderCartItems();
+            }
         },
         onClose: function() {
             alert('Payment window closed.');
@@ -355,10 +384,10 @@ function payWithPaystack(email, name, price, productName, checkoutForm) {
     handler.openIframe();
 }
 
+
 async function loadProducts() {
     let loadedProducts = [];
     try {
-        // First, try to get products from Supabase
         const { data, error } = await supabase.from('products').select('*');
         if (error) {
             throw new Error(`Supabase error: ${error.message}`);
@@ -367,11 +396,9 @@ async function loadProducts() {
             console.log('Products loaded from Supabase');
             loadedProducts = data;
         } else {
-            // If Supabase returns no data, trigger the fallback
             throw new Error('No products in Supabase, falling back to JSON.');
         }
     } catch (error) {
-        // If Supabase fails for any reason, log the error and try the local file
         console.warn(error.message);
         console.log('Attempting to load from local products.json.');
         try {
@@ -382,7 +409,6 @@ async function loadProducts() {
             loadedProducts = await response.json();
             console.log('Products successfully loaded from products.json.');
         } catch (jsonError) {
-            // If both sources fail, log a critical error
             console.error('CRITICAL: Failed to load products from both Supabase and local JSON file.', jsonError.message);
         }
     }
@@ -390,44 +416,33 @@ async function loadProducts() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-    // Load reusable components
     loadComponent('navbar.html', 'navbar-container');
     loadComponent('footer.html', 'footer-container');
 
-    // Initialize services
     emailjs.init('2x9OXBEHSO9gJUvwv');
     
-    // Setup modal
     const checkoutModalElement = document.getElementById('checkoutModal');
     if (checkoutModalElement) {
         checkoutModal = new bootstrap.Modal(checkoutModalElement);
     }
     
-    // Load state
     loadCartFromLocalStorage();
 
-    // CRITICAL: Await product loading before proceeding
     products = await loadProducts();
 
-    // Now that products are loaded, render all page components that depend on them
     updateCartBadge();
     renderCartItems();
     renderFeaturedProducts();
-    filterAndRenderProducts(); // Initial render for product lists
+    filterAndRenderProducts();
 
-    // --- All event listeners should be set up after initial rendering ---
-
-    // Centralized event listener for all body clicks
     document.body.addEventListener('click', (e) => {
-        // Add to Cart button
         if (e.target.classList.contains('add-to-cart-btn')) {
             const productName = e.target.dataset.productName;
             const productPrice = e.target.dataset.productPrice;
             addToCart(productName, productPrice);
-            return; // Exit after handling
+            return;
         }
 
-        // Cart action buttons (Increment, Decrement, Remove)
         const cartButton = e.target.closest('.cart-action-btn');
         if (cartButton) {
             const productName = cartButton.dataset.productName;
@@ -440,10 +455,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             } else if (action === 'remove') {
                 removeFromCart(productName);
             }
-            return; // Exit after handling
+            return;
         }
 
-        // Checkout button
         if (e.target.id === 'checkout-btn') {
             if(checkoutModalElement) {
                  if (!checkoutModal) {
@@ -461,15 +475,16 @@ document.addEventListener("DOMContentLoaded", async () => {
             e.preventDefault();
             const checkoutForm = document.getElementById('checkout-form');
             if (checkoutForm && checkoutForm.checkValidity()) {
-                const formSubmitted = await submitFormToFormspree(checkoutForm, 'https://formspree.io/f/mblnnppl');
-                if (formSubmitted) {
-                    const name = document.getElementById('checkout_fullName').value;
-                    const email = document.getElementById('checkout_email').value;
-                    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                    const total = subtotal + SHIPPING_COST;
-                    const productName = cart.map(item => `${item.name} (x${item.quantity})`).join(', ');
-                    payWithPaystack(email, name, total, productName, checkoutForm);
-                }
+                const name = document.getElementById('checkout_fullName').value;
+                const email = document.getElementById('checkout_email').value;
+                const phone = document.getElementById('phone').value;
+                const address = document.getElementById('address').value;
+                
+                const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                const total = subtotal + SHIPPING_COST;
+
+                payWithPaystack(email, name, phone, address, total, cart, checkoutForm);
+                
             } else if (checkoutForm) {
                 checkoutForm.reportValidity();
             }
@@ -510,7 +525,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 function filterAndRenderProducts() {
     const searchInput = document.getElementById('search-input');
     const sortSelect = document.getElementById('sort-products');
-    const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+d    const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
     const sortBy = sortSelect ? sortSelect.value : 'default';
 
     let filteredProducts = products.filter(product =>
