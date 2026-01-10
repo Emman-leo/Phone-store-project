@@ -317,6 +317,60 @@ async function submitFormToFormspree(form, formspreeEndpoint) {
     }
 }
 
+async function handleSuccessfulPayment(response, name, email, phone, address, price, cartItems, checkoutForm) {
+    console.log('Payment successful. Reference: ' + response.reference);
+
+    const orderData = {
+        name: name,
+        email: email,
+        phone: phone,
+        address: address,
+        products: cartItems,
+        total_amount: price,
+        transaction_ref: response.reference
+    };
+
+    try {
+        const { data, error } = await supabase.from('orders').insert([orderData]);
+        if (error) {
+            throw error;
+        }
+        console.log('Order saved to Supabase:', data);
+        alert('Payment successful! Your order has been placed.');
+
+    } catch (error) {
+        console.error('Error saving order to Supabase:', error);
+        alert('Payment successful, but there was an issue saving your order. Please contact support with transaction reference: ' + response.reference);
+    }
+
+    await submitFormToFormspree(checkoutForm, 'https://formspree.io/f/mblnnppl');
+
+    const productNameString = cartItems.map(item => `${item.name} (x${item.quantity})`).join(', ');
+    const templateParams = {
+        name: name,
+        product_name: productNameString,
+        product_price: formatPrice(price),
+        transaction_ref: response.reference,
+        email: email
+    };
+
+    emailjs.send('service_arfu1ks', 'template_9hh7e6q', templateParams)
+        .then(function(emailResponse) {
+            console.log('Confirmation email sent successfully.', emailResponse.status, emailResponse.text);
+        }, function(error) {
+            console.error('Failed to send confirmation email.', error);
+        });
+
+    if (checkoutModal) checkoutModal.hide();
+    if (checkoutForm) checkoutForm.reset();
+    cart = [];
+    saveCartToLocalStorage();
+    updateCartBadge();
+    if (document.getElementById('cart-items-column')) {
+        renderCartItems();
+    }
+}
+
 async function payWithPaystack(email, name, phone, address, price, cartItems, checkoutForm) {
     const handler = PaystackPop.setup({
         key: 'pk_test_2fe8bb5c19b3f8662419607eefb26aa6380c5fe7', // Replace with your public key
@@ -324,58 +378,8 @@ async function payWithPaystack(email, name, phone, address, price, cartItems, ch
         amount: parseFloat(price) * 100, // Amount in kobo
         currency: CURRENCY,
         ref: '' + Math.floor((Math.random() * 1000000000) + 1), // Unique ref
-        callback: async function(response) {
-            console.log('Payment successful. Reference: ' + response.reference);
-
-            const orderData = {
-                name: name,
-                email: email,
-                phone: phone,
-                address: address,
-                products: cartItems,
-                total_amount: price,
-                transaction_ref: response.reference
-            };
-
-            try {
-                const { data, error } = await supabase.from('orders').insert([orderData]);
-                if (error) {
-                    throw error;
-                }
-                console.log('Order saved to Supabase:', data);
-                alert('Payment successful! Your order has been placed.');
-
-            } catch (error) {
-                console.error('Error saving order to Supabase:', error);
-                alert('Payment successful, but there was an issue saving your order. Please contact support with transaction reference: ' + response.reference);
-            }
-
-            await submitFormToFormspree(checkoutForm, 'https://formspree.io/f/mblnnppl');
-
-            const productNameString = cartItems.map(item => `${item.name} (x${item.quantity})`).join(', ');
-            const templateParams = {
-                name: name,
-                product_name: productNameString,
-                product_price: formatPrice(price),
-                transaction_ref: response.reference,
-                email: email
-            };
-
-            emailjs.send('service_arfu1ks', 'template_9hh7e6q', templateParams)
-                .then(function(emailResponse) {
-                    console.log('Confirmation email sent successfully.', emailResponse.status, emailResponse.text);
-                }, function(error) {
-                    console.error('Failed to send confirmation email.', error);
-                });
-
-            if (checkoutModal) checkoutModal.hide();
-            if (checkoutForm) checkoutForm.reset();
-            cart = [];
-            saveCartToLocalStorage();
-            updateCartBadge();
-            if (document.getElementById('cart-items-column')) {
-                renderCartItems();
-            }
+        callback: function(response) {
+            handleSuccessfulPayment(response, name, email, phone, address, price, cartItems, checkoutForm);
         },
         onClose: function() {
             alert('Payment window closed.');
