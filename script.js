@@ -525,7 +525,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 function filterAndRenderProducts() {
     const searchInput = document.getElementById('search-input');
     const sortSelect = document.getElementById('sort-products');
-d    const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+    const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
     const sortBy = sortSelect ? sortSelect.value : 'default';
 
     let filteredProducts = products.filter(product =>
