@@ -1,97 +1,248 @@
-
-/* DARK MODE STYLES */
+/* ===================================
+   DARK MODE DESIGN TOKENS
+   =================================== */
 body.dark-mode {
-    background-color: #121212;
-    color: #e0e0e0;
+    /* Dark Mode Color Palette */
+    --primary-color: #818cf8;
+    --primary-hover: #a5b4fc;
+    --primary-light: #c7d2fe;
+    --primary-dark: #6366f1;
+    
+    --accent-color: #fbbf24;
+    --accent-hover: #fcd34d;
+    --success-color: #34d399;
+    --danger-color: #f87171;
+    --warning-color: #fbbf24;
+    
+    --text-primary: #f9fafb;
+    --text-secondary: #d1d5db;
+    --text-muted: #9ca3af;
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --border-color: #334155;
+    
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    
+    --gradient-primary: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%);
+    --gradient-secondary: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    --gradient-hero: linear-gradient(135deg, rgba(129, 140, 248, 0.15) 0%, rgba(167, 139, 250, 0.15) 100%);
+    
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* ===================================
+   DARK MODE NAVIGATION
+   =================================== */
 .dark-mode .navbar {
-    background-color: #1f1f1f !important;
+    background-color: rgba(30, 41, 59, 0.95) !important;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
 }
 
+.dark-mode .nav-link {
+    color: var(--text-secondary) !important;
+    transition: color var(--transition-fast);
+}
+
+.dark-mode .nav-link:hover,
+.dark-mode .nav-link.active {
+    color: var(--primary-color) !important;
+}
+
+/* ===================================
+   DARK MODE CARDS
+   =================================== */
 .dark-mode .card {
-    background-color: #1f1f1f;
-    color: #e0e0e0;
-    border-color: #444;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+    box-shadow: var(--shadow-md);
 }
 
-.dark-mode .product-card {
-    border: 1px solid #444;
-}
-
-/* Ensure carousel product cards have a dark background */
+.dark-mode .product-card,
+.dark-mode .feature-card,
 .dark-mode .carousel-item .product-card {
-    background-color: #1f1f1f;
-    border-color: #444;
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
 }
 
+.dark-mode .product-card:hover,
+.dark-mode .feature-card:hover,
+.dark-mode .carousel-product:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 20px 40px rgba(129, 140, 248, 0.2);
+}
 
+.dark-mode .product-card::before,
+.dark-mode .feature-card::before {
+    background: linear-gradient(135deg, rgba(129, 140, 248, 0.08) 0%, rgba(251, 191, 36, 0.08) 100%);
+}
+
+/* ===================================
+   DARK MODE HERO SECTION
+   =================================== */
+.dark-mode .hero::before {
+    background: var(--gradient-hero);
+}
+
+.dark-mode .hero-overlay {
+    background: radial-gradient(circle at 50% 50%, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.8) 100%);
+}
+
+/* ===================================
+   DARK MODE FEATURED SECTION
+   =================================== */
+.dark-mode .featured-products-section {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+.dark-mode .featured-products-section::before {
+    background: radial-gradient(circle at 20% 50%, rgba(129, 140, 248, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(251, 191, 36, 0.08) 0%, transparent 50%);
+}
+
+.dark-mode .carousel-product {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+/* ===================================
+   DARK MODE FORMS
+   =================================== */
 .dark-mode .form-control {
-    background-color: #2c2c2c;
-    color: #e0e0e0;
-    border-color: #444;
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+    transition: all var(--transition-fast);
+}
+
+.dark-mode .form-control:focus {
+    background-color: var(--bg-tertiary);
+    border-color: var(--primary-color);
+    color: var(--text-primary);
+    box-shadow: 0 0 0 0.25rem rgba(129, 140, 248, 0.25);
 }
 
 .dark-mode .form-control::placeholder {
-    color: #888;
+    color: var(--text-muted);
 }
 
 .dark-mode .form-select {
-    background-color: #2c2c2c;
-    color: #e0e0e0;
-    border-color: #444;
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+.dark-mode .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(129, 140, 248, 0.25);
 }
 
 .dark-mode .input-group-text {
-    background-color: #333;
-    border-color: #444;
-    color: #e0e0e0;
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
 }
 
+/* ===================================
+   DARK MODE MODALS
+   =================================== */
 .dark-mode .modal-content {
-    background-color: #1f1f1f;
-    color: #e0e0e0;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-2xl);
 }
 
 .dark-mode .modal-header,
 .dark-mode .modal-footer {
-    border-color: #444;
+    border-color: var(--border-color);
+}
+
+.dark-mode .modal-header .modal-title {
+    color: var(--text-primary);
 }
 
 .dark-mode .btn-close {
-    filter: invert(1);
+    filter: invert(1) brightness(1.5);
 }
 
+/* ===================================
+   DARK MODE BACKGROUNDS
+   =================================== */
 .dark-mode .bg-light {
-    background-color: #1c1c1c !important;
+    background-color: var(--bg-secondary) !important;
 }
 
 .dark-mode .bg-white {
-    background-color: #1f1f1f !important;
+    background-color: var(--bg-secondary) !important;
 }
 
 .dark-mode .text-muted {
-    color: #aaa !important;
+    color: var(--text-muted) !important;
+}
+
+.dark-mode .text-dark {
+    color: var(--text-primary) !important;
 }
 
 .dark-mode footer.bg-dark {
-    background-color: #2c2c2c !important;
+    background-color: var(--bg-secondary) !important;
+    border-top: 1px solid var(--border-color);
 }
 
-/* Dark Mode Toggle Button */
+/* ===================================
+   DARK MODE CART
+   =================================== */
+.dark-mode .cart-item-card,
+.dark-mode #cart-empty-message .card,
+.dark-mode #order-summary-column .card {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+.dark-mode .cart-item-card:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 10px 30px rgba(129, 140, 248, 0.15);
+}
+
+.dark-mode .cart-item-card .form-control {
+    background-color: var(--bg-tertiary);
+}
+
+.dark-mode .list-group-item {
+    background-color: transparent;
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+/* ===================================
+   DARK MODE TOGGLE BUTTON
+   =================================== */
 .dark-mode-toggle {
     background: none;
     border: none;
-    color: white;
+    color: var(--text-secondary);
     cursor: pointer;
     font-size: 1.25rem;
     padding: 0.5rem;
     border-radius: 50%;
-    transition: background-color 0.3s;
+    transition: all var(--transition-base);
+    position: relative;
 }
 
 .dark-mode-toggle:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(129, 140, 248, 0.1);
+    color: var(--primary-color);
+    transform: rotate(20deg);
 }
 
 .dark-mode-toggle .bi-sun-fill {
@@ -106,25 +257,67 @@ body.dark-mode {
     display: inline;
 }
 
-/* Fix for contact page text color in dark mode */
-.dark-mode .text-dark {
-    color: #e0e0e0 !important;
+.dark-mode .dark-mode-toggle {
+    color: var(--accent-color);
 }
 
-/* Cart Page Dark Mode Styles */
-.dark-mode .cart-item-card,
-.dark-mode #cart-empty-message .card,
-.dark-mode #order-summary-column .card {
-    background-color: #2c2c2c; /* A slightly lighter shade for nested cards */
-    border-color: #555;
+.dark-mode .dark-mode-toggle:hover {
+    background-color: rgba(251, 191, 36, 0.1);
+    color: var(--accent-hover);
 }
 
-.dark-mode .cart-item-card .form-control {
-    background-color: #333;
+/* ===================================
+   DARK MODE TOAST NOTIFICATIONS
+   =================================== */
+.dark-mode .toast {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-xl);
 }
 
-.dark-mode .list-group-item {
-    background-color: transparent;
-    border-color: #555;
-    color: #e0e0e0; /* Explicitly set text color for list items */
+.dark-mode .toast-header {
+    background-color: var(--bg-tertiary);
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.dark-mode .toast-body {
+    color: var(--text-primary);
+}
+
+/* ===================================
+   DARK MODE BUTTONS
+   =================================== */
+.dark-mode .btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #0f172a;
+}
+
+.dark-mode .btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+.dark-mode .btn-outline-secondary {
+    color: var(--text-secondary);
+    border-color: var(--border-color);
+}
+
+.dark-mode .btn-outline-secondary:hover {
+    background-color: var(--bg-tertiary);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* ===================================
+   DARK MODE SMOOTH TRANSITIONS
+   =================================== */
+.dark-mode *,
+.dark-mode *::before,
+.dark-mode *::after {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
 }

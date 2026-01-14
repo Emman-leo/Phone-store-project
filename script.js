@@ -105,6 +105,11 @@ function updateCartBadge() {
     if (cartBadge) {
         const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
         cartBadge.textContent = totalItems;
+        
+        // Add pulse animation
+        cartBadge.classList.remove('badge-pulse');
+        void cartBadge.offsetWidth; // Trigger reflow
+        cartBadge.classList.add('badge-pulse');
     }
 }
 
