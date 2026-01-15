@@ -598,6 +598,29 @@ h6 { font-size: 1rem; }
     .product-card img {
         height: 200px;
     }
+    
+    /* Navbar mobile tweaks */
+    #navbar .navbar-brand img {
+        width: 32px;
+        height: 32px;
+    }
+
+    #navbar .navbar-brand .brand-text {
+        display: none;
+    }
+
+    #navbar .navbar-toggler {
+        padding: 0.25rem 0.5rem;
+    }
+
+    .dark-mode-toggle {
+        font-size: 1.05rem;
+        padding: 0.35rem;
+    }
+
+    #navbar .nav-link {
+        font-size: 0.95rem;
+    }
 }
 
 /* ===================================
