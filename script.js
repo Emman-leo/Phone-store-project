@@ -399,6 +399,37 @@ async function submitFormToFormspree(form, formspreeEndpoint) {
 async function handleSuccessfulPayment(response, name, email, phone, address, price, cartItems, checkoutForm) {
     console.log('Payment successful. Reference: ' + response.reference);
 
+    const payNowBtn = document.getElementById('pay-now-btn');
+    if (payNowBtn) {
+        payNowBtn.classList.remove('checkout-processing');
+        payNowBtn.disabled = false;
+    }
+
+    // Show Success Animation
+    const modalBody = document.getElementById('checkoutModalBody');
+    if (modalBody) {
+        modalBody.innerHTML = `
+            <div class="success-animation-container">
+                <div class="success-icon">
+                    <i class="bi bi-check-lg"></i>
+                </div>
+                <h3 class="fw-bold mb-3">Order Placed!</h3>
+                <p class="text-muted mb-4">Thank you for your purchase, ${name}. We've sent a confirmation email to ${email}.</p>
+                <button type="button" class="btn btn-primary rounded-pill px-5" data-bs-dismiss="modal">Sweet!</button>
+            </div>
+        `;
+        
+        // Fire Confetti!
+        if (typeof confetti === 'function') {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#6366f1', '#818cf8', '#fbbf24', '#34d399']
+            });
+        }
+    }
+
     const orderData = {
         name: name,
         email: email,
@@ -415,11 +446,9 @@ async function handleSuccessfulPayment(response, name, email, phone, address, pr
             throw error;
         }
         console.log('Order saved to Supabase:', data);
-        alert('Payment successful! Your order has been placed.');
 
     } catch (error) {
         console.error('Error saving order to Supabase:', error);
-        alert('Payment successful, but there was an issue saving your order. Please contact support with transaction reference: ' + response.reference);
     }
 
     await submitFormToFormspree(checkoutForm, 'https://formspree.io/f/mblnnppl');
@@ -440,7 +469,6 @@ async function handleSuccessfulPayment(response, name, email, phone, address, pr
             console.error('Failed to send confirmation email.', error);
         });
 
-    if (checkoutModal) checkoutModal.hide();
     if (checkoutForm) checkoutForm.reset();
     cart = [];
     saveCartToLocalStorage();
@@ -451,6 +479,12 @@ async function handleSuccessfulPayment(response, name, email, phone, address, pr
 }
 
 async function payWithPaystack(email, name, phone, address, price, cartItems, checkoutForm) {
+    const payNowBtn = document.getElementById('pay-now-btn');
+    if (payNowBtn) {
+        payNowBtn.classList.add('checkout-processing');
+        payNowBtn.disabled = true;
+    }
+
     const handler = PaystackPop.setup({
         key: 'pk_test_2fe8bb5c19b3f8662419607eefb26aa6380c5fe7', // Replace with your public key
         email: email,
