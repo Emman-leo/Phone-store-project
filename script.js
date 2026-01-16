@@ -425,7 +425,8 @@ async function handleSuccessfulPayment(response, name, email, phone, address, pr
                 particleCount: 150,
                 spread: 70,
                 origin: { y: 0.6 },
-                colors: ['#6366f1', '#818cf8', '#fbbf24', '#34d399']
+                colors: ['#6366f1', '#818cf8', '#fbbf24', '#34d399'],
+                zIndex: 9999
             });
         }
     }
