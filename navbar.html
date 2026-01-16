@@ -1,34 +1,37 @@
-<nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
-        <div class="container">
-            <a class="navbar-brand fw-bold d-flex align-items-center" href="index.html">
-                <img src="assets/images/logo.jpg" alt="CPA Gadgets Hub Logo" width="40" height="40" class="d-inline-block align-text-top me-2">
-                <span class="brand-text brand-text-desktop">CPA Gadgets Hub</span>
-                <span class="brand-text brand-text-mobile">CPA Gadgets</span>
+<nav id="navbar" class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="index.html">
+            <img src="assets/images/logo.jpg" alt="CPA Gadgets Hub Logo" width="40" height="40" class="d-inline-block align-text-top me-2 rounded-circle">
+            <span class="brand-text brand-text-desktop">CPA Gadgets Hub</span>
+            <span class="brand-text brand-text-mobile">CPA Gadgets</span>
+        </a>
+
+        <!-- Control Pill (Cart, Wishlist, Dark Mode) -->
+        <div class="nav-actions-pill ms-auto order-lg-last">
+            <button class="dark-mode-toggle" id="darkModeToggle" title="Toggle Theme">
+                <i class="bi bi-moon-fill"></i>
+                <i class="bi bi-sun-fill"></i>
+            </button>
+            <a class="nav-link position-relative" href="wishlist.html" title="Wishlist">
+                <i class="bi bi-heart-fill"></i>
+                <span class="badge rounded-pill bg-danger d-none" id="wishlist-badge" style="position: absolute; top: -2px; right: -5px; font-size: 0.6rem;">0</span>
             </a>
-            <div class="d-flex align-items-center ms-auto">
-                <button class="dark-mode-toggle" id="darkModeToggle">
-                    <i class="bi bi-moon-fill"></i>
-                    <i class="bi bi-sun-fill"></i>
-                </button>
-                <a class="nav-link text-white ms-3 position-relative" href="wishlist.html" title="Wishlist">
-                    <i class="bi bi-heart-fill"></i>
-                    <span class="badge rounded-pill bg-danger d-none" id="wishlist-badge" style="position: absolute; top: -5px; right: -10px; font-size: 0.65rem;">0</span>
-                </a>
-                <a class="nav-link text-white ms-3" href="cart.html" title="Shopping Cart">
-                    <i class="bi bi-cart-fill"></i>
-                    <span class="badge rounded-pill bg-danger" id="cart-badge">0</span>
-                </a>
-                <button class="navbar-toggler ms-3" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
-            <div class="collapse navbar-collapse" id="navMenu">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
-                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-                </ul>
-            </div>
+            <a class="nav-link position-relative" href="cart.html" title="Shopping Cart">
+                <i class="bi bi-cart-fill"></i>
+                <span class="badge rounded-pill bg-danger" id="cart-badge" style="position: absolute; top: -2px; right: -5px; font-size: 0.6rem;">0</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
         </div>
-    </nav>
+
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
+                <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
