@@ -520,7 +520,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderFeaturedProducts();
     populateCategoryFilter(); // New: Fill the category dropdown
     filterAndRenderProducts();
-    renderWishlistPage();
+    
+    // Render wishlist page AFTER products are loaded
+    if (window.location.pathname.includes('wishlist.html')) {
+        renderWishlistPage();
+    }
 
     document.body.addEventListener('click', (e) => {
         if (e.target.classList.contains('add-to-cart-btn')) {
