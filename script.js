@@ -307,30 +307,24 @@ function renderProducts(productsToRender) {
         } else {
             if(noResults) noResults.classList.add('d-none');
             productsToRender.forEach(product => {
-                const isWishlisted = wishlist.some(item => (item.id === product.id) || (item.name === product.name));
-                const wishlistIcon = isWishlisted ? 'bi-heart-fill text-danger' : 'bi-heart';
+                const categoryBadge = product.category ? `<span class="badge bg-secondary mb-2">${product.category}</span>` : '';
+                const isWishlisted = wishlist.includes(product.name);
+                const wishlistIcon = isWishlisted ? 'bi-heart-fill' : 'bi-heart';
+                const wishlistClass = isWishlisted ? 'active' : '';
 
                 const productCardHTML = `
-                    <div class="col-md-4 mb-4" data-aos="fade-up">
-                        <div class="card product-card h-100 border-0 shadow-sm overflow-hidden" data-id="${product.id}">
-                            <div class="position-relative product-img-container">
-                                <img src="${product.image}" class="card-img-top product-image" alt="${product.name}">
-                                <div class="product-overlay">
-                                    <button class="btn btn-light rounded-circle shadow-sm me-2 wishlist-btn-grid" data-id="${product.id}" data-product-name="${product.name}" title="Add to Wishlist">
-                                        <i class="bi ${wishlistIcon}"></i>
-                                    </button>
-                                </div>
-                                <button class="btn btn-primary rounded-pill px-4 shadow-sm quick-view-btn" data-id="${product.id}">
-                                    <i class="bi bi-eye me-2"></i>Quick View
-                                </button>
-                            </div>
-                            <div class="card-body text-center p-4">
-                                <h5 class="card-title fw-bold mb-2">${product.name}</h5>
-                                <p class="card-text text-muted mb-3">${product.category || 'Gadget'}</p>
-                                <p class="h5 fw-bold text-primary mb-3">${CURRENCY} ${formatPrice(product.price)}</p>
-                                <button class="btn btn-primary w-100 rounded-pill py-2 add-to-cart-btn" data-id="${product.id}" data-product-name="${product.name}" data-product-price="${product.price}">
-                                    <i class="bi bi-cart-plus me-2"></i>Add to Cart
-                                </button>
+                    <div class="col-md-4 mb-4">
+                        <div class="card product-card h-100">
+                            <button class="wishlist-btn ${wishlistClass}" data-product-name="${product.name}" title="Add to Wishlist">
+                                <i class="bi ${wishlistIcon}"></i>
+                            </button>
+                            <img src="${product.image}" class="card-img-top" alt="${product.name}">
+                            <div class="card-body d-flex flex-column">
+                                ${categoryBadge}
+                                <h5 class="card-title">${product.name}</h5>
+                                <p class="card-text">${product.description}</p>
+                                <p class="card-text fw-bold mt-auto">${CURRENCY} ${formatPrice(product.price)}</p>
+                                <button class="btn btn-primary add-to-cart-btn" data-product-name="${product.name}" data-product-price="${product.price}">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -348,22 +342,26 @@ function renderFeaturedProducts() {
         const featuredProducts = products.filter(p => p.featured);
         featuredProducts.forEach((product, index) => {
             const activeClass = index === 0 ? "active" : "";
-            
+            const isWishlisted = wishlist.includes(product.name);
+            const wishlistIcon = isWishlisted ? 'bi-heart-fill' : 'bi-heart';
+            const wishlistClass = isWishlisted ? 'active' : '';
+
             const carouselItem = `
                 <div class="carousel-item ${activeClass}">
-                    <div class="card product-card mx-auto border-0 shadow-sm overflow-hidden" style="max-width: 400px;" data-id="${product.id}">
-                        <div class="position-relative product-img-container">
-                            <img src="${product.image}" class="card-img-top product-image" alt="${product.name}">
-                            <button class="btn btn-primary rounded-pill px-4 shadow-sm quick-view-btn" data-id="${product.id}">
-                                <i class="bi bi-eye me-2"></i>Quick View
-                            </button>
-                        </div>
-                        <div class="card-body text-center p-4">
-                            <h5 class="card-title fw-bold mb-2">${product.name}</h5>
-                            <p class="h5 fw-bold text-primary mb-3">${CURRENCY} ${formatPrice(product.price)}</p>
-                            <button class="btn btn-primary w-100 rounded-pill py-2 add-to-cart-btn" data-id="${product.id}" data-product-name="${product.name}" data-product-price="${product.price}">
-                                <i class="bi bi-cart-plus me-2"></i>Add to Cart
-                            </button>
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                             <div class="card product-card">
+                                <button class="wishlist-btn ${wishlistClass}" data-product-name="${product.name}" title="Add to Wishlist">
+                                    <i class="bi ${wishlistIcon}"></i>
+                                </button>
+                                <img src="${product.image}" class="card-img-top" alt="${product.name}">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">${product.name}</h5>
+                                    <p class="card-text">${product.description}</p>
+                                    <p class="card-text fw-bold">${CURRENCY} ${formatPrice(product.price)}</p>
+                                    <button class="btn btn-primary add-to-cart-btn" data-product-name="${product.name}" data-product-price="${product.price}">Add to Cart</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -371,65 +369,6 @@ function renderFeaturedProducts() {
             carouselInner.innerHTML += carouselItem;
         });
     }
-}
-
-async function showQuickView(productId) {
-    const product = products.find(p => p.id == productId);
-    if (!product) return;
-
-    const modalElement = document.getElementById('quickViewModal');
-    if (!modalElement) return;
-
-    const modalBody = document.getElementById('quickViewModalBody');
-    const modal = new bootstrap.Modal(modalElement);
-
-    // Mock specs for premium feel
-    const specs = [
-        { icon: 'bi-cpu', label: 'Processor', value: 'Octa-core 3.2GHz' },
-        { icon: 'bi-sd-card', label: 'Storage', value: '256GB NVMe' },
-        { icon: 'bi-camera', label: 'Camera', value: '48MP Triple' },
-        { icon: 'bi-battery-charging', label: 'Battery', value: '5000mAh' }
-    ];
-
-    modalBody.innerHTML = `
-        <div class="row g-5 align-items-center">
-            <div class="col-lg-6">
-                <div class="quick-view-img-container">
-                    <img src="${product.image}" class="quick-view-img" alt="${product.name}">
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <span class="badge bg-primary bg-opacity-10 text-primary mb-3 rounded-pill px-3">${product.category || 'Premium Gadget'}</span>
-                <h1 class="fw-bold mb-3">${product.name}</h1>
-                <div class="h2 fw-bold text-primary mb-4">${CURRENCY} ${formatPrice(product.price)}</div>
-                
-                <p class="text-muted mb-5">${product.description || 'Experience the future of mobile technology with our latest premium gadget. Designed for performance, style, and reliability.'}</p>
-                
-                <div class="row g-3 mb-5">
-                    ${specs.map(s => `
-                        <div class="col-6">
-                            <div class="spec-item">
-                                <i class="bi ${s.icon} spec-icon"></i>
-                                <span class="spec-label">${s.label}</span>
-                                <span class="spec-value">${s.value}</span>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-                
-                <div class="d-flex gap-3">
-                    <button class="btn btn-primary rounded-pill px-5 py-3 fw-bold flex-grow-1 add-to-cart-btn" data-id="${product.id}" data-product-name="${product.name}" data-product-price="${product.price}">
-                        <i class="bi bi-cart-plus me-2"></i>Add to Cart
-                    </button>
-                    <button class="btn btn-outline-primary rounded-circle p-3 wishlist-btn-grid" data-id="${product.id}" data-product-name="${product.name}">
-                        <i class="bi ${wishlist.some(item => (item.id === product.id) || (item.name === product.name)) ? 'bi-heart-fill text-danger' : 'bi-heart'}"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    `;
-
-    modal.show();
 }
 
 async function submitFormToFormspree(form, formspreeEndpoint) {
@@ -693,13 +632,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     document.body.addEventListener('click', (e) => {
-        const quickViewBtn = e.target.closest('.quick-view-btn');
-        if (quickViewBtn) {
-            const productId = quickViewBtn.dataset.id;
-            showQuickView(productId);
-            return;
-        }
-
         if (e.target.classList.contains('add-to-cart-btn')) {
             const productName = e.target.dataset.productName;
             const productPrice = e.target.dataset.productPrice;
