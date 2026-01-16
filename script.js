@@ -510,9 +510,67 @@ window.addEventListener('scroll', () => {
     }
 });
 
+function renderProductSkeletons(containerId, count = 3) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    let skeletonHTML = '';
+    for (let i = 0; i < count; i++) {
+        skeletonHTML += `
+            <div class="col-md-4 mb-4">
+                <div class="skeleton-card">
+                    <div class="skeleton skeleton-image"></div>
+                    <div class="skeleton skeleton-title"></div>
+                    <div class="skeleton skeleton-text"></div>
+                    <div class="skeleton skeleton-text" style="width: 70%"></div>
+                    <div class="skeleton skeleton-price"></div>
+                    <div class="skeleton skeleton-button"></div>
+                </div>
+            </div>
+        `;
+    }
+    container.innerHTML = skeletonHTML;
+}
+
+function handleSearchSuggestions(e) {
+    const term = e.target.value.toLowerCase().trim();
+    const suggestionsContainer = document.getElementById('search-suggestions');
+    if (!suggestionsContainer) return;
+
+    if (term.length < 2) {
+        suggestionsContainer.classList.add('d-none');
+        return;
+    }
+
+    const matches = products.filter(p => 
+        p.name.toLowerCase().includes(term) || 
+        (p.category && p.category.toLowerCase().includes(term))
+    ).slice(0, 6); // Max 6 suggestions
+
+    if (matches.length > 0) {
+        suggestionsContainer.innerHTML = matches.map(p => `
+            <div class="suggestion-item" data-product-name="${p.name}">
+                <img src="${p.image}" class="suggestion-img" alt="${p.name}">
+                <div class="suggestion-info">
+                    <p class="suggestion-name">${p.name}</p>
+                    <span class="suggestion-category">${p.category || 'Gadget'}</span>
+                </div>
+                <div class="suggestion-price">${CURRENCY} ${formatPrice(p.price)}</div>
+            </div>
+        `).join('');
+        suggestionsContainer.classList.remove('d-none');
+    } else {
+        suggestionsContainer.classList.add('d-none');
+    }
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
     loadComponent('navbar.html', 'navbar-container');
     loadComponent('footer.html', 'footer-container');
+
+    // Show skeletons immediately
+    renderProductSkeletons('product-grid', 6);
+    renderProductSkeletons('product-carousel-inner', 3);
 
     emailjs.init('2x9OXBEHSO9gJUvwv');
     
@@ -576,6 +634,18 @@ document.addEventListener("DOMContentLoaded", async () => {
                 checkoutModal.show();
             }
         }
+
+        const suggestionItem = e.target.closest('.suggestion-item');
+        if (suggestionItem) {
+            const productName = suggestionItem.dataset.productName;
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                searchInput.value = productName;
+                filterAndRenderProducts();
+                const suggestionsContainer = document.getElementById('search-suggestions');
+                if (suggestionsContainer) suggestionsContainer.classList.add('d-none');
+            }
+        }
     });
 
 
@@ -628,7 +698,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     const searchInput = document.getElementById('search-input');
     const sortSelect = document.getElementById('sort-products');
     const categorySelect = document.getElementById('filter-category'); // New
-    if(searchInput) searchInput.addEventListener('input', filterAndRenderProducts);
+    if(searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            filterAndRenderProducts();
+            handleSearchSuggestions(e);
+        });
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', (e) => {
+            const suggestionsContainer = document.getElementById('search-suggestions');
+            if (suggestionsContainer && !searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+                suggestionsContainer.classList.add('d-none');
+            }
+        });
+    }
     if(sortSelect) sortSelect.addEventListener('change', filterAndRenderProducts);
     if(categorySelect) categorySelect.addEventListener('change', filterAndRenderProducts); // New
 

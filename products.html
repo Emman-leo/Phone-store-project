@@ -45,9 +45,15 @@
             <h2 class="text-center mb-5 fw-bold">Our Products</h2>
 
             <!-- SEARCH AND SORT CONTROLS -->
-            <div class="row mb-4 g-3 align-items-center">
-                <div class="col-md-5">
-                    <input type="search" id="search-input" class="form-control" placeholder="Search for phones & gadgets...">
+            <div class="row mb-5 g-3 align-items-center">
+                <div class="col-md-5 position-relative">
+                    <div class="search-wrapper">
+                        <i class="bi bi-search search-icon"></i>
+                        <input type="search" id="search-input" class="form-control ps-5 py-3" placeholder="Search for phones & gadgets..." autocomplete="off">
+                    </div>
+                    <div id="search-suggestions" class="search-suggestions-container d-none">
+                        <!-- Suggestions will be injected here -->
+                    </div>
                 </div>
                 <div class="col-md-3">
                     <div class="input-group">
