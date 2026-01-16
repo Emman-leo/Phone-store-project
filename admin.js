@@ -196,4 +196,12 @@ productList.addEventListener('click', async (e) => {
 
 productForm.addEventListener('submit', saveProduct);
 
-document.addEventListener('DOMContentLoaded', checkUser);
+document.addEventListener('DOMContentLoaded', () => {
+    checkUser();
+    if (typeof AOS !== 'undefined') {
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+    }
+});

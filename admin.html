@@ -108,52 +108,54 @@
 
     <!-- Product Modal (for Add/Edit) -->
     <div class="modal fade" id="product-modal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modal-title">Add Product</h5>
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-card border-0">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="modal-title">Add Product</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body p-4">
                     <form id="product-form">
                         <input type="hidden" id="product-id">
                         <div class="mb-3">
-                            <label for="product-name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="product-name" required>
+                            <label class="form-label small fw-bold text-muted">Product Name</label>
+                            <input type="text" class="form-control rounded-pill px-3" id="product-name" placeholder="e.g. iPhone 15 Pro" required>
                         </div>
                         <div class="mb-3">
-                            <label for="product-description" class="form-label">Description</label>
-                            <textarea class="form-control" id="product-description" rows="3"></textarea>
+                            <label class="form-label small fw-bold text-muted">Description</label>
+                            <textarea class="form-control rounded-3" id="product-description" rows="3" placeholder="Describe the item..."></textarea>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label class="form-label small fw-bold text-muted">Price (${CURRENCY})</label>
+                                <input type="number" class="form-control rounded-pill px-3" id="product-price" step="0.01" required>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-bold text-muted">Category</label>
+                                <input type="text" class="form-control rounded-pill px-3" id="product-category" list="category-list" placeholder="Select or type">
+                                <datalist id="category-list">
+                                    <option value="Phones">
+                                    <option value="Laptops">
+                                    <option value="Tablets">
+                                    <option value="Wearables">
+                                    <option value="Audio">
+                                    <option value="Accessories">
+                                </datalist>
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <label for="product-price" class="form-label">Price</label>
-                            <input type="number" class="form-control" id="product-price" step="0.01" required>
+                            <label class="form-label small fw-bold text-muted">Image Upload</label>
+                            <input type="file" class="form-control rounded-pill" id="product-image-upload" accept="image/*">
                         </div>
-                        <div class="mb-3">
-                            <label for="product-category" class="form-label">Category</label>
-                            <input type="text" class="form-control" id="product-category" list="category-list" placeholder="e.g. Phones, Laptops, Accessories">
-                            <datalist id="category-list">
-                                <option value="Phones">
-                                <option value="Laptops">
-                                <option value="Tablets">
-                                <option value="Wearables">
-                                <option value="Audio">
-                                <option value="Accessories">
-                            </datalist>
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-muted">Or Image URL</label>
+                            <input type="url" class="form-control rounded-pill px-3" id="product-image-url" placeholder="https://...">
                         </div>
-                        <div class="mb-3">
-                            <label for="product-image-upload" class="form-label">Upload Image</label>
-                            <input type="file" class="form-control" id="product-image-upload" accept="image/*">
-                        </div>
-                        <div class="mb-3">
-                            <label for="product-image-url" class="form-label">Or Image URL</label>
-                            <input type="url" class="form-control" id="product-image-url">
-                        </div>
-                        <div class="form-check mb-3">
+                        <div class="form-check form-switch mb-4">
                             <input class="form-check-input" type="checkbox" id="product-featured">
-                            <label class="form-check-label" for="product-featured">Featured</label>
+                            <label class="form-check-label fw-bold" for="product-featured">Featured Product</label>
                         </div>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill fw-bold shadow-sm">Save Product</button>
                     </form>
                 </div>
             </div>
