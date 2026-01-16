@@ -5,6 +5,7 @@ const SHIPPING_COST = 50;
 const CURRENCY = 'GHS';
 let products = [];
 let cart = [];
+let wishlist = [];
 let checkoutModal = null;
 
 async function loadComponent(url, elementId) {
@@ -99,6 +100,63 @@ function addToCart(productName, productPrice) {
     showToast(`${productName} has been added to your cart.`);
     saveCartToLocalStorage();
 }
+
+function toggleWishlist(productName) {
+    const index = wishlist.indexOf(productName);
+    if (index === -1) {
+        wishlist.push(productName);
+        showToast(`${productName} added to wishlist!`);
+    } else {
+        wishlist.splice(index, 1);
+        showToast(`${productName} removed from wishlist.`);
+    }
+    saveWishlistToLocalStorage();
+    updateWishlistBadge();
+    
+    // Re-render if we are on the wishlist page
+    if (window.location.pathname.includes('wishlist.html')) {
+        renderWishlistPage();
+    } else {
+        // Just update icons on current page
+        const buttons = document.querySelectorAll(`.wishlist-btn[data-product-name="${productName}"]`);
+        buttons.forEach(btn => {
+            const icon = btn.querySelector('i');
+            if (wishlist.includes(productName)) {
+                btn.classList.add('active');
+                icon.classList.remove('bi-heart');
+                icon.classList.add('bi-heart-fill');
+            } else {
+                btn.classList.remove('active');
+                icon.classList.remove('bi-heart-fill');
+                icon.classList.add('bi-heart');
+            }
+        });
+    }
+}
+
+function updateWishlistBadge() {
+    const badge = document.getElementById('wishlist-badge');
+    if (badge) {
+        badge.textContent = wishlist.length;
+        if (wishlist.length > 0) {
+            badge.classList.remove('d-none');
+        } else {
+            badge.classList.add('d-none');
+        }
+    }
+}
+
+function saveWishlistToLocalStorage() {
+    localStorage.setItem('wishlist', JSON.stringify(wishlist));
+}
+
+function loadWishlistFromLocalStorage() {
+    const stored = localStorage.getItem('wishlist');
+    if (stored) {
+        wishlist = JSON.parse(stored);
+    }
+}
+
 
 function updateCartBadge() {
     const cartBadge = document.getElementById('cart-badge');
@@ -249,11 +307,20 @@ function renderProducts(productsToRender) {
         } else {
             if(noResults) noResults.classList.add('d-none');
             productsToRender.forEach(product => {
+                const categoryBadge = product.category ? `<span class="badge bg-secondary mb-2">${product.category}</span>` : '';
+                const isWishlisted = wishlist.includes(product.name);
+                const wishlistIcon = isWishlisted ? 'bi-heart-fill' : 'bi-heart';
+                const wishlistClass = isWishlisted ? 'active' : '';
+
                 const productCardHTML = `
                     <div class="col-md-4 mb-4">
                         <div class="card product-card h-100">
+                            <button class="wishlist-btn ${wishlistClass}" data-product-name="${product.name}" title="Add to Wishlist">
+                                <i class="bi ${wishlistIcon}"></i>
+                            </button>
                             <img src="${product.image}" class="card-img-top" alt="${product.name}">
                             <div class="card-body d-flex flex-column">
+                                ${categoryBadge}
                                 <h5 class="card-title">${product.name}</h5>
                                 <p class="card-text">${product.description}</p>
                                 <p class="card-text fw-bold mt-auto">${CURRENCY} ${formatPrice(product.price)}</p>
@@ -275,11 +342,18 @@ function renderFeaturedProducts() {
         const featuredProducts = products.filter(p => p.featured);
         featuredProducts.forEach((product, index) => {
             const activeClass = index === 0 ? "active" : "";
+            const isWishlisted = wishlist.includes(product.name);
+            const wishlistIcon = isWishlisted ? 'bi-heart-fill' : 'bi-heart';
+            const wishlistClass = isWishlisted ? 'active' : '';
+
             const carouselItem = `
                 <div class="carousel-item ${activeClass}">
                     <div class="row justify-content-center">
                         <div class="col-md-8">
                              <div class="card product-card">
+                                <button class="wishlist-btn ${wishlistClass}" data-product-name="${product.name}" title="Add to Wishlist">
+                                    <i class="bi ${wishlistIcon}"></i>
+                                </button>
                                 <img src="${product.image}" class="card-img-top" alt="${product.name}">
                                 <div class="card-body text-center">
                                     <h5 class="card-title">${product.name}</h5>
@@ -436,19 +510,30 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     
     loadCartFromLocalStorage();
+    loadWishlistFromLocalStorage();
 
     products = await loadProducts();
 
     updateCartBadge();
+    updateWishlistBadge();
     renderCartItems();
     renderFeaturedProducts();
+    populateCategoryFilter(); // New: Fill the category dropdown
     filterAndRenderProducts();
+    renderWishlistPage();
 
     document.body.addEventListener('click', (e) => {
         if (e.target.classList.contains('add-to-cart-btn')) {
             const productName = e.target.dataset.productName;
             const productPrice = e.target.dataset.productPrice;
             addToCart(productName, productPrice);
+            return;
+        }
+
+        const wishlistBtn = e.target.closest('.wishlist-btn');
+        if (wishlistBtn) {
+            const productName = wishlistBtn.dataset.productName;
+            toggleWishlist(productName);
             return;
         }
 
@@ -526,20 +611,49 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const searchInput = document.getElementById('search-input');
     const sortSelect = document.getElementById('sort-products');
+    const categorySelect = document.getElementById('filter-category'); // New
     if(searchInput) searchInput.addEventListener('input', filterAndRenderProducts);
     if(sortSelect) sortSelect.addEventListener('change', filterAndRenderProducts);
+    if(categorySelect) categorySelect.addEventListener('change', filterAndRenderProducts); // New
 
 });
+
+function populateCategoryFilter() {
+    const categorySelect = document.getElementById('filter-category');
+    if (!categorySelect) return;
+
+    // Extract unique categories from products
+    const categories = [...new Set(products.map(p => p.category).filter(Boolean))];
+    
+    // Sort them alphabetically
+    categories.sort();
+
+    // Clear existing options except "All Categories"
+    categorySelect.innerHTML = '<option value="all">All Categories</option>';
+    
+    // Add categories to dropdown
+    categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        categorySelect.appendChild(option);
+    });
+}
 
 function filterAndRenderProducts() {
     const searchInput = document.getElementById('search-input');
     const sortSelect = document.getElementById('sort-products');
+    const categorySelect = document.getElementById('filter-category'); // New
+    
     const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
     const sortBy = sortSelect ? sortSelect.value : 'default';
+    const selectedCategory = categorySelect ? categorySelect.value : 'all'; // New
 
-    let filteredProducts = products.filter(product =>
-        product.name.toLowerCase().includes(searchTerm)
-    );
+    let filteredProducts = products.filter(product => {
+        const matchesSearch = product.name.toLowerCase().includes(searchTerm);
+        const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
+        return matchesSearch && matchesCategory;
+    });
 
     if (sortBy === 'price-asc') {
         filteredProducts.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
@@ -553,3 +667,41 @@ function filterAndRenderProducts() {
 
     renderProducts(filteredProducts);
 }
+
+function renderWishlistPage() {
+    const wishlistGrid = document.getElementById('wishlist-grid');
+    const wishlistEmpty = document.getElementById('wishlist-empty-message');
+    if (!wishlistGrid) return;
+
+    const wishlistedProducts = products.filter(p => wishlist.includes(p.name));
+
+    if (wishlistedProducts.length === 0) {
+        wishlistGrid.innerHTML = '';
+        if (wishlistEmpty) wishlistEmpty.classList.remove('d-none');
+    } else {
+        if (wishlistEmpty) wishlistEmpty.classList.add('d-none');
+        wishlistGrid.innerHTML = '';
+        wishlistedProducts.forEach(product => {
+            const categoryBadge = product.category ? `<span class="badge bg-secondary mb-2">${product.category}</span>` : '';
+            const productCardHTML = `
+                <div class="col-md-4 mb-4">
+                    <div class="card product-card h-100">
+                        <button class="wishlist-btn active" data-product-name="${product.name}" title="Remove from Wishlist">
+                            <i class="bi bi-heart-fill"></i>
+                        </button>
+                        <img src="${product.image}" class="card-img-top" alt="${product.name}">
+                        <div class="card-body d-flex flex-column">
+                            ${categoryBadge}
+                            <h5 class="card-title">${product.name}</h5>
+                            <p class="card-text">${product.description}</p>
+                            <p class="card-text fw-bold mt-auto">${CURRENCY} ${formatPrice(product.price)}</p>
+                            <button class="btn btn-primary add-to-cart-btn" data-product-name="${product.name}" data-product-price="${product.price}">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            wishlistGrid.innerHTML += productCardHTML;
+        });
+    }
+}
+

@@ -46,8 +46,17 @@
 
             <!-- SEARCH AND SORT CONTROLS -->
             <div class="row mb-4 g-3 align-items-center">
-                <div class="col-md-8">
+                <div class="col-md-5">
                     <input type="search" id="search-input" class="form-control" placeholder="Search for phones & gadgets...">
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <label class="input-group-text" for="filter-category">Category:</label>
+                        <select class="form-select" id="filter-category">
+                            <option value="all">All Categories</option>
+                            <!-- Categories will be dynamically inserted here -->
+                        </select>
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <div class="input-group">

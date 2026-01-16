@@ -459,6 +459,44 @@ h6 { font-size: 1rem; }
     box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
 }
 
+/* Wishlist Button */
+.wishlist-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-base);
+    z-index: 5;
+    color: var(--text-secondary);
+}
+
+.wishlist-btn:hover {
+    transform: scale(1.1);
+    color: var(--danger-color);
+}
+
+.wishlist-btn.active {
+    color: var(--danger-color);
+}
+
+.dark-mode .wishlist-btn {
+    background: var(--bg-tertiary);
+    color: var(--text-muted);
+}
+
+.dark-mode .wishlist-btn.active {
+    color: var(--danger-color);
+}
+
+
 /* Feature Cards */
 .feature-card {
     border-radius: var(--radius-xl);

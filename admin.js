@@ -19,6 +19,7 @@ const productDescriptionInput = document.getElementById('product-description');
 const productPriceInput = document.getElementById('product-price');
 const productImageUploadInput = document.getElementById('product-image-upload');
 const productImageUrlInput = document.getElementById('product-image-url');
+const productCategoryInput = document.getElementById('product-category');
 const productFeaturedInput = document.getElementById('product-featured');
 
 function formatPrice(price) {
@@ -88,6 +89,7 @@ const openProductModal = (product = null) => {
         productDescriptionInput.value = product.description;
         productPriceInput.value = product.price;
         productImageUrlInput.value = product.image;
+        productCategoryInput.value = product.category || '';
         productFeaturedInput.checked = product.featured;
     } else {
         modalTitle.textContent = 'Add Product';
@@ -122,6 +124,7 @@ const saveProduct = async (e) => {
         description: productDescriptionInput.value,
         price: parseFloat(productPriceInput.value),
         image: imageUrl,
+        category: productCategoryInput.value.trim() || 'Uncategorized',
         featured: productFeaturedInput.checked,
     };
 

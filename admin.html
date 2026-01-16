@@ -91,6 +91,18 @@
                             <input type="number" class="form-control" id="product-price" step="0.01" required>
                         </div>
                         <div class="mb-3">
+                            <label for="product-category" class="form-label">Category</label>
+                            <input type="text" class="form-control" id="product-category" list="category-list" placeholder="e.g. Phones, Laptops, Accessories">
+                            <datalist id="category-list">
+                                <option value="Phones">
+                                <option value="Laptops">
+                                <option value="Tablets">
+                                <option value="Wearables">
+                                <option value="Audio">
+                                <option value="Accessories">
+                            </datalist>
+                        </div>
+                        <div class="mb-3">
                             <label for="product-image-upload" class="form-label">Upload Image</label>
                             <input type="file" class="form-control" id="product-image-upload" accept="image/*">
                         </div>
