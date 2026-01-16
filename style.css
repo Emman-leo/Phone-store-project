@@ -166,6 +166,14 @@ h6 { font-size: 1rem; }
     letter-spacing: 0.1em;
     position: relative;
     overflow: hidden;
+    white-space: nowrap; /* Keep text on one line */
+}
+
+.hero-btns-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: nowrap; /* Force side-by-side */
 }
 
 .hero-content .btn-primary {
@@ -236,12 +244,28 @@ h6 { font-size: 1rem; }
 }
 
 @media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2.2rem; /* Slightly smaller for mobile layout */
+    }
+
+    .hero-btns-container {
+        gap: 0.5rem;
+    }
+
+    .hero-content .btn {
+        padding: 0.8rem 1.2rem;
+        font-size: 0.85rem;
+        flex: 1; /* Equal width buttons */
+    }
+
     .carousel-control-prev,
     .carousel-control-next {
-        width: 42px;
-        height: 42px;
+        width: 38px;
+        height: 38px;
+        top: 30%; /* Move up to align with image */
         margin: 0 5px;
         opacity: 0.9;
+        background: rgba(255, 255, 255, 0.9) !important;
     }
 }
 
