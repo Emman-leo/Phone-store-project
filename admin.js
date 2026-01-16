@@ -49,13 +49,28 @@ const fetchProducts = async () => {
         return;
     }
 
+    // Update Stats
+    document.getElementById('stat-total-products').textContent = products.length;
+    document.getElementById('stat-featured-items').textContent = products.filter(p => p.featured).length;
+    const categories = new Set(products.map(p => p.category).filter(Boolean));
+    document.getElementById('stat-categories').textContent = categories.size;
+
     productList.innerHTML = products.map(product => `
         <tr>
-            <td>${product.name}</td>
-            <td>${CURRENCY} ${formatPrice(product.price)}</td>
             <td>
-                <button class="btn btn-sm btn-primary edit-btn" data-id="${product.id}">Edit</button>
-                <button class="btn btn-sm btn-danger delete-btn" data-id="${product.id}">Delete</button>
+                <div class="d-flex align-items-center">
+                    <img src="${product.image}" class="admin-product-img" alt="">
+                    <div>
+                        <div class="fw-bold">${product.name}</div>
+                        ${product.featured ? '<span class="featured-badge"><i class="bi bi-star-fill me-1"></i>Featured</span>' : ''}
+                    </div>
+                </div>
+            </td>
+            <td><span class="badge bg-light text-dark rounded-pill px-3">${product.category || 'Uncategorized'}</span></td>
+            <td><span class="fw-bold text-primary">${CURRENCY} ${formatPrice(product.price)}</span></td>
+            <td class="text-end">
+                <button class="btn btn-sm btn-light border edit-btn me-1" data-id="${product.id}"><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-sm btn-light border text-danger delete-btn" data-id="${product.id}"><i class="bi bi-trash"></i></button>
             </td>
         </tr>
     `).join('');

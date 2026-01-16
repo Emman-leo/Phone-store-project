@@ -1137,8 +1137,99 @@ body.dark-mode .search-suggestions-container {
     to { transform: scale(1); opacity: 1; }
 }
 
-@keyframes pulseCheck {
-    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.4); }
-    70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(52, 211, 153, 0); }
-    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+/* ===================================
+   ADMIN DASHBOARD - PREMIUM GLASS
+   =================================== */
+.admin-login-container {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-xl);
+}
+
+body.dark-mode .glass-card {
+    background: rgba(30, 41, 59, 0.7) !important;
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+.stat-card {
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-xl);
+    background: white;
+    box-shadow: var(--shadow-md);
+    transition: transform var(--transition-base);
+    border-left: 5px solid var(--primary-color);
+}
+
+body.dark-mode .stat-card {
+    background: var(--bg-secondary);
+    border-color: transparent;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary-color);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.admin-table {
+    background: transparent !important;
+}
+
+.admin-table thead th {
+    background: rgba(0, 0, 0, 0.02);
+    border-bottom: 2px solid var(--border-color);
+    color: var(--text-secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    padding: 1rem;
+}
+
+body.dark-mode .admin-table thead th {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.admin-table tbody td {
+    padding: 1.25rem 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.admin-product-img {
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    margin-right: 1rem;
+}
+
+.featured-badge {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--accent-color);
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-full);
+    font-weight: 700;
 }
