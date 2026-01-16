@@ -675,9 +675,16 @@ function filterAndRenderProducts() {
 function renderWishlistPage() {
     const wishlistGrid = document.getElementById('wishlist-grid');
     const wishlistEmpty = document.getElementById('wishlist-empty-message');
+    
+    console.log('renderWishlistPage called');
+    console.log('Wishlist:', wishlist);
+    console.log('Products loaded:', products.length);
+    console.log('wishlistGrid element:', wishlistGrid);
+    
     if (!wishlistGrid) return;
 
     const wishlistedProducts = products.filter(p => wishlist.includes(p.name));
+    console.log('Wishlisted products:', wishlistedProducts);
 
     if (wishlistedProducts.length === 0) {
         wishlistGrid.innerHTML = '';
