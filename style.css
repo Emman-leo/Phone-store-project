@@ -1234,8 +1234,98 @@ body.dark-mode .admin-table thead th {
     font-weight: 700;
 }
 
-/* Mobile Admin Optimizations - Premium Dashboard Feel */
+/* ===================================
+   PRODUCT QUICK VIEW - GLASS MODAL
+   =================================== */
+.quick-view-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -20%);
+    opacity: 0;
+    transition: all var(--transition-base);
+    z-index: 10;
+    white-space: nowrap;
+}
+
+.product-card:hover .quick-view-btn {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+}
+
+.quick-view-glass {
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    border-radius: var(--radius-2xl) !important;
+}
+
+body.dark-mode .quick-view-glass {
+    background: rgba(15, 23, 42, 0.7) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.quick-view-img-container {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+body.dark-mode .quick-view-img-container {
+    background: rgba(30, 41, 59, 0.5);
+}
+
+.quick-view-img {
+    max-width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+    filter: drop-shadow(0 20px 30px rgba(0,0,0,0.1));
+}
+
+.spec-item {
+    background: rgba(99, 102, 241, 0.05);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    height: 100%;
+    border: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+body.dark-mode .spec-item {
+    background: rgba(99, 102, 241, 0.08);
+    border-color: rgba(99, 102, 241, 0.2);
+}
+
+.spec-icon {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.spec-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+}
+
+.spec-value {
+    font-weight: 600;
+    color: var(--text-primary);
+    display: block;
+}
+
 @media (max-width: 768px) {
+    .quick-view-btn {
+        display: none; /* Keep mobile simple */
+    }
+    
     .admin-login-container {
         padding: 1.5rem;
     }
