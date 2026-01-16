@@ -153,40 +153,94 @@ h6 { font-size: 1rem; }
     color: rgba(255, 255, 255, 0.9);
 }
 
+/* ===================================
+   HERO BUTTONS POLISH
+   =================================== */
 .hero-content .btn {
-    padding: 1rem 2.5rem;
-    font-size: 1.1rem;
-    font-weight: 600;
+    padding: 1.1rem 2.8rem;
+    font-size: 1.05rem;
+    font-weight: 700;
     border-radius: var(--radius-full);
-    transition: all var(--transition-base);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    box-shadow: var(--shadow-lg);
+    letter-spacing: 0.1em;
+    position: relative;
+    overflow: hidden;
 }
 
 .hero-content .btn-primary {
     background: var(--primary-color);
     border: none;
-    transform: translateY(0);
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
 }
 
 .hero-content .btn-primary:hover {
     background: var(--primary-hover);
-    transform: translateY(-3px);
-    box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4);
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 20px 40px rgba(99, 102, 241, 0.5);
 }
 
 .hero-content .btn-outline-light {
-    border: 2px solid rgba(255,255,255,0.9);
+    border: 2px solid rgba(255,255,255,0.8);
     background: rgba(255,255,255,0.1);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 .hero-content .btn-outline-light:hover {
-    background: rgba(255,255,255,0.95);
-    color: var(--primary-color);
-    transform: translateY(-3px);
-    box-shadow: 0 15px 30px rgba(255,255,255,0.3);
+    background: white;
+    color: var(--primary-dark) !important;
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 20px 40px rgba(255,255,255,0.25);
+}
+
+/* ===================================
+   CAROUSEL CONTROLS REDESIGN
+   =================================== */
+.carousel-control-prev,
+.carousel-control-next {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: all var(--transition-base);
+    margin: 0 20px;
+}
+
+#productCarousel:hover .carousel-control-prev,
+#productCarousel:hover .carousel-control-next {
+    opacity: 1;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    transform: translateY(-50%) scale(1.1);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    width: 24px;
+    height: 24px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+@media (max-width: 768px) {
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 45px;
+        height: 45px;
+        margin: 0 10px;
+        opacity: 0.8; /* Always show slightly on mobile */
+    }
 }
 
 @keyframes fadeIn {
