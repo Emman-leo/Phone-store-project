@@ -786,83 +786,8 @@ h6 { font-size: 1rem; }
     border-radius: var(--radius-full);
 }
 
-/* ===================================
-   FOOTER REDESIGN - GLASSMORHPISM
-   =================================== */
-#footer-container footer {
-    background: rgba(255, 255, 255, 0.8) !important;
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border-top: 1px solid rgba(255, 255, 255, 0.3);
-    color: var(--text-primary) !important;
-    padding: 5rem 0 2rem 0 !important;
-    margin-top: 5rem;
-}
-
-body.dark-mode #footer-container footer {
-    background: rgba(15, 23, 42, 0.8) !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-#footer-container footer h5 {
-    font-size: 1.1rem;
-    letter-spacing: 0.05em;
-    margin-bottom: 1.5rem !important;
-}
-
-#footer-container footer p {
-    color: var(--text-secondary);
-    line-height: 1.8;
-}
-
-#footer-container footer a {
-    color: var(--text-secondary) !important;
-    transition: all var(--transition-fast);
-    display: inline-block;
-    margin-bottom: 0.5rem;
-}
-
-#footer-container footer a:hover {
-    color: var(--primary-color) !important;
-    transform: translateX(5px);
-}
-
-.footer-social-btn {
-    width: 40px;
-    height: 40px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: rgba(99, 102, 241, 0.1);
-    color: var(--primary-color) !important;
-    transition: all var(--transition-base);
-    border: 1px solid rgba(99, 102, 241, 0.1);
-}
-
-.footer-social-btn:hover {
-    background: var(--primary-color);
-    color: white !important;
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
-}
-
-#newsletter-form .form-control {
-    background: rgba(255, 255, 255, 0.5);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    padding: 0.75rem 1rem;
-    border-radius: var(--radius-lg);
-}
-
-body.dark-mode #newsletter-form .form-control {
-    background: rgba(30, 41, 59, 0.5);
-    border-color: rgba(255, 255, 255, 0.1);
-}
-
-#newsletter-form .btn-primary {
-    border-radius: var(--radius-lg);
-    padding: 0.75rem;
-    font-weight: 600;
+#navbar .nav-link.active::after {
+    width: 20px;
 }
 
 /* Functional Icon Cluster (The Pill) */
