@@ -1268,20 +1268,57 @@ body.dark-mode .admin-table thead th {
     }
 
     .admin-table tbody td {
-        display: block;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         width: 100% !important;
-        padding: 0.5rem 0 !important;
+        padding: 0.75rem 0 !important;
         border: none !important;
-        text-align: left !important;
+        border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+    }
+
+    body.dark-mode .admin-table tbody td {
+        border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+    }
+
+    .admin-table tbody td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+    }
+
+    .admin-table tbody td[data-label="Product"] {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .admin-table tbody td[data-label="Product"]::before {
+        margin-bottom: 0.5rem;
     }
 
     .admin-table tbody td:last-child {
-        text-align: right !important;
-        margin-top: 0.5rem;
+        justify-content: flex-end;
+        border-bottom: none !important;
     }
 
     .admin-product-img {
         width: 60px;
         height: 60px;
+    }
+
+    /* Modal Adjustments */
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+
+    .modal-body {
+        padding: 1.5rem !important;
+    }
+
+    .modal-body .row > div {
+        width: 100%;
+        margin-bottom: 1rem;
     }
 }
