@@ -194,52 +194,54 @@ h6 { font-size: 1rem; }
     box-shadow: 0 20px 40px rgba(255,255,255,0.25);
 }
 
+.hero-content .btn-primary:hover i {
+    transform: translateX(5px);
+    transition: transform 0.3s ease;
+}
+
 /* ===================================
    CAROUSEL CONTROLS REDESIGN
    =================================== */
 .carousel-control-prev,
 .carousel-control-next {
-    width: 60px;
-    height: 60px;
-    background: rgba(255, 255, 255, 0.15) !important;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 54px;
+    height: 54px;
+    background: white !important;
+    border: 1px solid rgba(0, 0, 0, 0.05);
     border-radius: 50%;
     top: 50%;
     transform: translateY(-50%);
-    opacity: 0;
-    transition: all var(--transition-base);
-    margin: 0 20px;
-}
-
-#productCarousel:hover .carousel-control-prev,
-#productCarousel:hover .carousel-control-next {
-    opacity: 1;
+    opacity: 0.7; /* Always visible */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin: 0 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    z-index: 10;
 }
 
 .carousel-control-prev:hover,
 .carousel-control-next:hover {
-    background: rgba(255, 255, 255, 0.3) !important;
+    opacity: 1;
+    background: white !important;
     transform: translateY(-50%) scale(1.1);
-    border-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
 }
 
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
-    width: 24px;
-    height: 24px;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+.carousel-control-prev i,
+.carousel-control-next i {
+    color: var(--text-primary) !important;
+    font-size: 1.25rem !important;
 }
 
 @media (max-width: 768px) {
     .carousel-control-prev,
     .carousel-control-next {
-        width: 45px;
-        height: 45px;
-        margin: 0 10px;
-        opacity: 0.8; /* Always show slightly on mobile */
+        width: 42px;
+        height: 42px;
+        margin: 0 5px;
+        opacity: 0.9;
     }
 }
 
