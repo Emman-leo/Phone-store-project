@@ -57,7 +57,7 @@ const fetchProducts = async () => {
 
     productList.innerHTML = products.map(product => `
         <tr>
-            <td>
+            <td data-label="Product">
                 <div class="d-flex align-items-center">
                     <img src="${product.image}" class="admin-product-img" alt="">
                     <div>
@@ -66,8 +66,8 @@ const fetchProducts = async () => {
                     </div>
                 </div>
             </td>
-            <td><span class="badge bg-light text-dark rounded-pill px-3">${product.category || 'Uncategorized'}</span></td>
-            <td><span class="fw-bold text-primary">${CURRENCY} ${formatPrice(product.price)}</span></td>
+            <td data-label="Category"><span class="badge bg-light text-dark rounded-pill px-3">${product.category || 'Uncategorized'}</span></td>
+            <td data-label="Price"><span class="fw-bold text-primary">${CURRENCY} ${formatPrice(product.price)}</span></td>
             <td class="text-end">
                 <button class="btn btn-sm btn-light border edit-btn me-1" data-id="${product.id}"><i class="bi bi-pencil"></i></button>
                 <button class="btn btn-sm btn-light border text-danger delete-btn" data-id="${product.id}"><i class="bi bi-trash"></i></button>
