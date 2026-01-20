@@ -1251,20 +1251,19 @@ body.dark-mode .form-floating > .form-control:focus {
 }
 
 /* ===================================
-   SIDE CART DRAWER - GLASSMORPHISM
+   SIDE CART DRAWER - SOLID THEME
    =================================== */
 .side-cart-drawer {
-    background: rgba(255, 255, 255, 0.75) !important;
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
-    border-left: 1px solid rgba(255, 255, 255, 0.4) !important;
+    background: white !important;
+    border-left: 1px solid var(--border-color) !important;
     width: 400px !important;
+    box-shadow: var(--shadow-2xl) !important;
 }
 
 body.dark-mode .side-cart-drawer {
-    background: rgba(15, 23, 42, 0.9) !important;
-    border-left-color: rgba(255, 255, 255, 0.08) !important;
-    color: #f8fafc !important;
+    background: var(--bg-primary) !important;
+    border-left-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
 }
 
 body.dark-mode .side-cart-drawer .offcanvas-title,
@@ -1345,12 +1344,8 @@ body.dark-mode .side-cart-img {
 }
 
 .side-cart-footer {
-    background: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(10px);
-}
-
-body.dark-mode .side-cart-footer {
-    background: rgba(30, 41, 59, 0.5);
+    background: var(--bg-primary);
+    border-top: 1px solid var(--border-color) !important;
 }
 
 /* ===================================

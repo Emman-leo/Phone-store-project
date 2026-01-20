@@ -184,6 +184,8 @@ function renderSideCart() {
     const sideCartItems = document.getElementById('side-cart-items');
     const sideCartEmpty = document.getElementById('side-cart-empty');
     const sideCartFooter = document.getElementById('side-cart-footer');
+    const sideCartSubtotal = document.getElementById('side-cart-subtotal');
+    const sideCartShipping = document.getElementById('side-cart-shipping');
     const sideCartTotal = document.getElementById('side-cart-total');
 
     if (!sideCartItems) return;
@@ -223,7 +225,12 @@ function renderSideCart() {
         }).join('');
 
         const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        sideCartTotal.textContent = `${CURRENCY} ${formatPrice(subtotal)}`;
+        const shipping = SHIPPING_COST;
+        const total = subtotal + shipping;
+
+        if (sideCartSubtotal) sideCartSubtotal.textContent = `${CURRENCY} ${formatPrice(subtotal)}`;
+        if (sideCartShipping) sideCartShipping.textContent = `${CURRENCY} ${formatPrice(shipping)}`;
+        if (sideCartTotal) sideCartTotal.textContent = `${CURRENCY} ${formatPrice(total)}`;
     }
 }
 

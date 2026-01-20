@@ -53,9 +53,17 @@
         </div>
     </div>
     <div class="offcanvas-footer p-4 border-0" id="side-cart-footer">
+        <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Subtotal</span>
+            <span class="fw-semibold" id="side-cart-subtotal">$0.00</span>
+        </div>
         <div class="d-flex justify-content-between mb-3">
-            <span class="text-muted fw-semibold">Subtotal</span>
-            <span class="fw-bold h5 mb-0" id="side-cart-total">$0.00</span>
+            <span class="text-muted">Shipping</span>
+            <span class="fw-semibold" id="side-cart-shipping">$0.00</span>
+        </div>
+        <div class="d-flex justify-content-between mb-4 pt-3 border-top">
+            <span class="fw-bold h5 mb-0">Total</span>
+            <span class="fw-bold h4 mb-0 text-primary" id="side-cart-total">$0.00</span>
         </div>
         <div class="d-grid gap-2">
             <button class="btn btn-primary btn-lg rounded-pill py-3 fw-bold shadow-sm" id="side-cart-checkout-btn">
