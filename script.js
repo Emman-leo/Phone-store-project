@@ -7,6 +7,7 @@ let products = [];
 let cart = [];
 let wishlist = [];
 let checkoutModal = null;
+let sideCart = null;
 
 async function loadComponent(url, elementId) {
     try {
@@ -168,6 +169,54 @@ function updateCartBadge() {
         cartBadge.classList.remove('badge-pulse');
         void cartBadge.offsetWidth; // Trigger reflow
         cartBadge.classList.add('badge-pulse');
+    }
+    renderSideCart();
+}
+
+function renderSideCart() {
+    const sideCartItems = document.getElementById('side-cart-items');
+    const sideCartEmpty = document.getElementById('side-cart-empty');
+    const sideCartFooter = document.getElementById('side-cart-footer');
+    const sideCartTotal = document.getElementById('side-cart-total');
+
+    if (!sideCartItems) return;
+
+    if (cart.length === 0) {
+        sideCartItems.innerHTML = '';
+        sideCartEmpty.classList.remove('d-none');
+        sideCartFooter.classList.add('d-none');
+    } else {
+        sideCartEmpty.classList.add('d-none');
+        sideCartFooter.classList.remove('d-none');
+
+        sideCartItems.innerHTML = cart.map(item => {
+            const product = products.find(p => p.name === item.name);
+            const itemImage = product ? product.image : 'https://via.placeholder.com/100';
+            const safeItemName = item.name.replace(/"/g, '&quot;');
+
+            return `
+                <div class="side-cart-item">
+                    <img src="${itemImage}" class="side-cart-img" alt="${item.name}">
+                    <div class="side-cart-info">
+                        <div class="side-cart-name">${item.name}</div>
+                        <div class="side-cart-price">${CURRENCY} ${formatPrice(item.price)}</div>
+                        <div class="side-cart-actions">
+                            <div class="side-cart-qty-pill">
+                                <button class="cart-action-btn" data-action="decrement" data-product-name="${safeItemName}">-</button>
+                                <span>${item.quantity}</span>
+                                <button class="cart-action-btn" data-action="increment" data-product-name="${safeItemName}">+</button>
+                            </div>
+                            <button class="btn btn-link text-danger p-0 cart-action-btn" data-action="remove" data-product-name="${safeItemName}">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        sideCartTotal.textContent = `${CURRENCY} ${formatPrice(subtotal)}`;
     }
 }
 
@@ -600,8 +649,8 @@ function handleSearchSuggestions(e) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-    loadComponent('navbar.html', 'navbar-container');
-    loadComponent('footer.html', 'footer-container');
+    await loadComponent('navbar.html', 'navbar-container');
+    await loadComponent('footer.html', 'footer-container');
 
     // Show skeletons immediately
     renderProductSkeletons('product-grid', 6);
@@ -612,6 +661,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     const checkoutModalElement = document.getElementById('checkoutModal');
     if (checkoutModalElement) {
         checkoutModal = new bootstrap.Modal(checkoutModalElement);
+    }
+
+    const sideCartElement = document.getElementById('sideCartDrawer');
+    if (sideCartElement) {
+        sideCart = new bootstrap.Offcanvas(sideCartElement);
     }
     
     loadCartFromLocalStorage();
@@ -646,6 +700,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
+        const sideCartTrigger = e.target.closest('#side-cart-trigger');
+        if (sideCartTrigger) {
+            e.preventDefault();
+            if (sideCart) sideCart.show();
+            return;
+        }
+
         const cartButton = e.target.closest('.cart-action-btn');
         if (cartButton) {
             const productName = cartButton.dataset.productName;
@@ -661,7 +722,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
-        if (e.target.id === 'checkout-btn') {
+        if (e.target.id === 'checkout-btn' || e.target.id === 'side-cart-checkout-btn') {
+            if (sideCart) sideCart.hide();
             if(checkoutModalElement) {
                 // Update Order Summary in Modal
                 const summaryName = document.getElementById('summaryProductName');

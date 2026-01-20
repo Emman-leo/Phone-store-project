@@ -1251,6 +1251,97 @@ body.dark-mode .form-floating > .form-control:focus {
 }
 
 /* ===================================
+   SIDE CART DRAWER - GLASSMORPHISM
+   =================================== */
+.side-cart-drawer {
+    background: rgba(255, 255, 255, 0.75) !important;
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border-left: 1px solid rgba(255, 255, 255, 0.4) !important;
+    width: 400px !important;
+}
+
+body.dark-mode .side-cart-drawer {
+    background: rgba(15, 23, 42, 0.8) !important;
+    border-left-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+@media (max-width: 576px) {
+    .side-cart-drawer {
+        width: 100% !important;
+    }
+}
+
+.side-cart-item {
+    display: flex;
+    gap: 1.25rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.side-cart-img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    background: white;
+    padding: 5px;
+    border-radius: var(--radius-lg);
+}
+
+body.dark-mode .side-cart-img {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.side-cart-info {
+    flex: 1;
+}
+
+.side-cart-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+}
+
+.side-cart-price {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.side-cart-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.75rem;
+}
+
+.side-cart-qty-pill {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-pill);
+    padding: 4px 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.side-cart-qty-pill button {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    padding: 0 5px;
+    font-weight: bold;
+}
+
+.side-cart-footer {
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+}
+
+body.dark-mode .side-cart-footer {
+    background: rgba(30, 41, 59, 0.5);
+}
+
+/* ===================================
    ADMIN DASHBOARD - PREMIUM GLASS
    =================================== */
 .admin-login-container {

@@ -16,7 +16,7 @@
                 <i class="bi bi-heart-fill"></i>
                 <span class="badge rounded-pill bg-danger d-none" id="wishlist-badge" style="position: absolute; top: -2px; right: -5px; font-size: 0.6rem;">0</span>
             </a>
-            <a class="nav-link position-relative" href="cart.html" title="Shopping Cart">
+            <a class="nav-link position-relative" href="#" id="side-cart-trigger" title="Shopping Cart">
                 <i class="bi bi-cart-fill"></i>
                 <span class="badge rounded-pill bg-danger" id="cart-badge" style="position: absolute; top: -2px; right: -5px; font-size: 0.6rem;">0</span>
             </a>
@@ -35,3 +35,33 @@
         </div>
     </div>
 </nav>
+
+<!-- SIDE CART DRAWER -->
+<div class="offcanvas offcanvas-end side-cart-drawer" tabindex="-1" id="sideCartDrawer" aria-labelledby="sideCartDrawerLabel">
+    <div class="offcanvas-header border-0 pb-0">
+        <h5 class="offcanvas-title fw-bold" id="sideCartDrawerLabel">Your Cart</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-4">
+        <div id="side-cart-items">
+            <!-- Items injected here -->
+        </div>
+        <div id="side-cart-empty" class="text-center py-5 d-none">
+            <i class="bi bi-cart3 display-1 text-muted opacity-25"></i>
+            <p class="mt-3 text-muted">Your cart is empty</p>
+            <a href="products.html" class="btn btn-primary rounded-pill mt-2">Start Shopping</a>
+        </div>
+    </div>
+    <div class="offcanvas-footer p-4 border-0" id="side-cart-footer">
+        <div class="d-flex justify-content-between mb-3">
+            <span class="text-muted fw-semibold">Subtotal</span>
+            <span class="fw-bold h5 mb-0" id="side-cart-total">$0.00</span>
+        </div>
+        <div class="d-grid gap-2">
+            <button class="btn btn-primary btn-lg rounded-pill py-3 fw-bold shadow-sm" id="side-cart-checkout-btn">
+                Checkout Now
+            </button>
+            <a href="cart.html" class="btn btn-link text-muted text-decoration-none btn-sm">View Full Cart</a>
+        </div>
+    </div>
+</div>
