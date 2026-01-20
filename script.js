@@ -663,7 +663,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (e.target.id === 'checkout-btn') {
             if(checkoutModalElement) {
-                 if (!checkoutModal) {
+                // Update Order Summary in Modal
+                const summaryName = document.getElementById('summaryProductName');
+                const summaryPrice = document.getElementById('summaryProductPrice');
+                
+                if (summaryName && summaryPrice) {
+                    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    const total = subtotal + SHIPPING_COST;
+                    
+                    if (cart.length === 1) {
+                        summaryName.textContent = cart[0].name + (cart[0].quantity > 1 ? ` (x${cart[0].quantity})` : '');
+                    } else {
+                        summaryName.textContent = `${cart.length} Items in Cart`;
+                    }
+                    summaryPrice.textContent = `Total: ${CURRENCY} ${formatPrice(total)}`;
+                }
+
+                if (!checkoutModal) {
                     checkoutModal = new bootstrap.Modal(checkoutModalElement);
                 }
                 checkoutModal.show();

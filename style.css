@@ -1132,9 +1132,122 @@ body.dark-mode .search-suggestions-container {
     animation: pulseCheck 2s infinite;
 }
 
-@keyframes scaleIn {
-    from { transform: scale(0.8); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
+@keyframes pulseCheck {
+    0% { transform: scale(1); box-shadow: 0 10px 25px rgba(52, 211, 153, 0.3); }
+    50% { transform: scale(1.05); box-shadow: 0 15px 35px rgba(52, 211, 153, 0.5); }
+    100% { transform: scale(1); box-shadow: 0 10px 25px rgba(52, 211, 153, 0.3); }
+}
+
+/* ===================================
+   CHECKOUT MODAL - PREMIUM POLISH
+   =================================== */
+.checkout-modal-glass {
+    background: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    border-radius: var(--radius-2xl) !important;
+    overflow: hidden;
+}
+
+body.dark-mode .checkout-modal-glass {
+    background: rgba(15, 23, 42, 0.8) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.order-summary-box {
+    background: rgba(99, 102, 241, 0.05);
+    border-radius: var(--radius-xl);
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    border: 1px dashed rgba(99, 102, 241, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+body.dark-mode .order-summary-box {
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.summary-icon {
+    width: 50px;
+    height: 50px;
+    background: white;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    box-shadow: var(--shadow-sm);
+}
+
+body.dark-mode .summary-icon {
+    background: var(--bg-secondary);
+}
+
+.summary-details h6 {
+    margin: 0;
+    font-weight: 700;
+}
+
+.summary-details p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* Floating Label Polishing */
+.form-floating > .form-control {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .form-floating > .form-control {
+    background: rgba(30, 41, 59, 0.5);
+}
+
+.form-floating > .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    background: white;
+}
+
+body.dark-mode .form-floating > .form-control:focus {
+    background: var(--bg-secondary);
+}
+
+.form-floating > label {
+    padding-left: 1rem;
+    color: var(--text-muted);
+}
+
+/* Input Icon Wrappers */
+.input-group-glass {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.input-group-glass i {
+    position: absolute;
+    left: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    color: var(--primary-color);
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.input-group-glass .form-control {
+    padding-left: 3.25rem !important;
+}
+
+.input-group-glass .form-floating > label {
+    left: 2.25rem;
 }
 
 /* ===================================
