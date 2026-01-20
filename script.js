@@ -62,8 +62,8 @@ async function loadComponent(url, elementId) {
                     });
                 }
                  // Update active nav link
-                const currentPage = window.location.pathname.split('/').pop();
-                const navLinks = componentElement.querySelectorAll('.nav-link');
+                const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+                const navLinks = navbarElement.querySelectorAll('.nav-link');
                 navLinks.forEach(link => {
                     const linkPage = link.getAttribute('href').split('/').pop();
                     if (linkPage === currentPage) {
