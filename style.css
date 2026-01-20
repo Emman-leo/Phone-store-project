@@ -1262,8 +1262,20 @@ body.dark-mode .form-floating > .form-control:focus {
 }
 
 body.dark-mode .side-cart-drawer {
-    background: rgba(15, 23, 42, 0.8) !important;
+    background: rgba(15, 23, 42, 0.9) !important;
     border-left-color: rgba(255, 255, 255, 0.08) !important;
+    color: #f8fafc !important;
+}
+
+body.dark-mode .side-cart-drawer .offcanvas-title,
+body.dark-mode .side-cart-drawer .side-cart-name,
+body.dark-mode .side-cart-drawer .fw-bold,
+body.dark-mode .side-cart-drawer .text-muted {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+body.dark-mode .side-cart-drawer .text-muted {
+    color: rgba(255, 255, 255, 0.6) !important;
 }
 
 @media (max-width: 576px) {
