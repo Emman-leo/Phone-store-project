@@ -21,11 +21,18 @@ async function loadComponent(url, elementId) {
             const parent = element.parentNode;
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = data;
-            const componentElement = tempDiv.firstElementChild;
-            parent.replaceChild(componentElement, element);
 
+            // Find the navbar for theme logic before moving nodes
+            const navbarElement = tempDiv.querySelector('#navbar');
 
-            if (componentElement.id === 'navbar') {
+            // Move all nodes from tempDiv to the parent
+            const fragment = document.createDocumentFragment();
+            while (tempDiv.firstChild) {
+                fragment.appendChild(tempDiv.firstChild);
+            }
+            parent.replaceChild(fragment, element);
+
+            if (navbarElement) {
                 const darkModeToggle = document.getElementById('darkModeToggle');
                 const body = document.body;
 
